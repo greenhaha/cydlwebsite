@@ -1,0 +1,84 @@
+<template>
+  <n-menu :options="menuOptions" mode="horizontal" class="topMenu" responsive  v-model:value="activeKey"/>
+</template>
+
+<script lang="ts">
+import { Home as HomeIcon, WomanSharp as ModelIcon } from '@vicons/ionicons5';
+import type { MenuOption } from 'naive-ui';
+import { NIcon, NMenu } from 'naive-ui';
+import type { Component } from 'vue';
+
+import { defineComponent, h, ref } from 'vue';
+import { RouterLink } from 'vue-router';
+
+function renderIcon(icon: Component) {
+  return () => h(NIcon, null, { default: () => h(icon), })
+}
+
+const menuOptions: MenuOption[] = [
+  { 
+    
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'home',
+            params: {
+              lang: 'zh-CN',
+            },
+          },
+        },
+        { default: () => '首页' },
+      ),
+    key: 'go-back-home',
+    icon: renderIcon(HomeIcon),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/zh-CN/os-theme/components/code',
+          },
+        },
+        { default: () => '模型图鉴' },
+      ),
+    key: 'go-to-work',
+    icon: renderIcon(ModelIcon),
+  },
+]
+
+export default defineComponent({
+  components: {
+    NMenu,
+  },
+  setup() {
+    return {
+      activeKey: ref<string | null>(null),
+      menuOptions,
+    }
+  },
+})
+</script>
+
+<style scoped>
+.topMenu {
+  display: flex;  
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中（可选，根据需求） */
+  height: 100%; /* 确保菜单占满父容器的高度 */
+}
+
+
+
+</style>
+<style>
+.topMenu .v-overflow{
+  align-items: center;
+}
+.topMenu .n-menu-item-content__icon{
+  color: white;
+}
+</style>
