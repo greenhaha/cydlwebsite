@@ -45,7 +45,7 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            path: '/zh-CN/os-theme/components/code',
+            path: '/models',
           },
         },
         { default: () => '模型图鉴' },

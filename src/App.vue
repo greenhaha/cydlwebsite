@@ -1,16 +1,11 @@
 <script setup lang="ts">
+import type { GlobalThemeOverrides } from 'naive-ui'
+import { NConfigProvider } from 'naive-ui'
 import { RouterView } from 'vue-router'
 import AppFooter from './components/Layout/AppFooter.vue'
 import HeaderMenu from './components/Layout/HeaderMenu.vue'
-import { NConfigProvider, GlobalThemeOverrides } from 'naive-ui'
 
 const themeOverrides: GlobalThemeOverrides = {
-  common: {
-    primaryColor: '#FF0000',
-  },
-  Button: {
-    textColor: '#FF0000',
-  },
   Menu: {
     itemColorActiveHoverHorizontal: 'rgba(22, 119, 255, 1)',
     itemTextColorHoverHorizontal: 'rgba(255, 255, 255, 1)',
@@ -20,7 +15,6 @@ const themeOverrides: GlobalThemeOverrides = {
     itemTextColorChildActiveHorizontal: '#FFFFFFFF',
     itemTextColorChildActiveHoverHorizontal: '#FFFFFFFF',
     itemTextColorHorizontal: 'rgba(255, 255, 255, 0.65)',
-    itemColorActiveHoverHorizontal: 'rgba(22, 119, 255, 1)',
     itemColorHoverHorizontal: 'rgba(22, 119, 255, 1)',
     itemIconColor: 'rgba(255, 255, 255, 0.65)',
     itemIconColorHoverHorizontal: 'rgba(255, 255, 255, 1)',
@@ -33,7 +27,7 @@ const themeOverrides: GlobalThemeOverrides = {
 <template>
   <n-config-provider preflight-style-disabled :theme-overrides="themeOverrides">
     <n-space vertical size="large">
-      <n-layout>
+      <n-layout class="relative">
         <n-layout-header class="n-layout-header absolute top-0 left-0 right-0 z-1">
           <div class="w-full flex align-middle"><HeaderMenu /></div>
 
@@ -43,7 +37,7 @@ const themeOverrides: GlobalThemeOverrides = {
         <n-layout-content class="flex justify-center">
           <RouterView />
         </n-layout-content>
-        <n-layout-footer class="absolute bottom-0 left-0 right-0"><AppFooter /></n-layout-footer>
+        <n-layout-footer class="absolute left-0 right-0"><AppFooter /></n-layout-footer>
       </n-layout>
     </n-space>
   </n-config-provider>
@@ -83,5 +77,11 @@ n-layout-content {
 }
 n-layout {
   min-height: 100vh;
+}
+</style>
+
+<style>
+body {
+  overflow-x: hidden; /* 确保整个页面没有横向滚动条 */
 }
 </style>
