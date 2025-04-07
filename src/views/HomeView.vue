@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="absolute inset-0 w-full h-full">
+  <div class="fixed inset-0 w-full h-full">
     <div class="pointer-events-none absolute inset-0">
       <video
         src="../assets/bg/hecheng1.mp4"
@@ -14,7 +14,7 @@
       ></video>
     </div>
   </div>
-  <div class="home-grass pointer-events-none absolute inset-0 z-0"></div>
+  <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
   <div class="absolute inset-0 h-full top-[0px] z-0 flex flex-col items-center justify-center">
     <n-h1 class="text-[48px]">HLYM CS2 社区服务器</n-h1>
     <n-h5 class="text-[24px]">面向所有CS2玩家的公益服务器，所有内容均免费！</n-h5>
@@ -101,15 +101,15 @@
 }
 </style>
 <script lang="ts">
-import { NCard, NButton } from 'naive-ui'
-import { defineComponent } from 'vue'
 import {
-  Server as ServerIcon,
   GameController as GameIcon,
+  Server as ServerIcon,
+  ShareSocial as ShareIcon,
   Shirt as ShirtIcon,
   LogoWechat as WechatIcon,
-  ShareSocial as ShareIcon,
 } from '@vicons/ionicons5'
+import { NButton, NCard } from 'naive-ui'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   components: {
