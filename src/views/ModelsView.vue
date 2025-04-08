@@ -164,7 +164,7 @@ export default defineComponent({
   overflow-x: hidden; /* 防止横向滚动条 */
 }
 .home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.6), #f5f5f5);
 }
 </style>
 <style>
