@@ -23,6 +23,13 @@
           <n-select v-model:value="selectedTag" :options="tags" placeholder="选择标签" />
         </n-grid-item>
         <n-grid-item>
+          <n-radio-group v-model:value="selectedFaction" name="factionGroup">
+            <n-radio value="1">T</n-radio>
+            <n-radio value="2">CT</n-radio>
+            <n-radio value="">全部</n-radio>
+          </n-radio-group>
+        </n-grid-item>
+        <n-grid-item>
           <n-button @click="filterModels" type="info">搜索</n-button>
         </n-grid-item>
       </n-grid>
@@ -46,9 +53,12 @@
               @click="showImage(model.previewUrl)"
             />
             <p>积分: {{ model.price }}</p>
+            <p>阵营: {{ model.faction === '1' ? 'T' : 'CT' }}</p>
             <p>
               标签:
-              <n-tag v-for="tag in model.tags" :key="tag" class="!mr-[4px]"> {{ tag }} </n-tag>
+              <n-tag v-for="tag in model.tags" :key="tag" class="!mr-[4px]" :type="tagsType(tag)">
+                {{ tag }}
+              </n-tag>
             </p>
           </n-card>
         </n-grid-item>
@@ -66,6 +76,8 @@ import {
   NGridItem,
   NImage,
   NInput,
+  NRadio,
+  NRadioGroup,
   NSelect,
   NTag,
 } from 'naive-ui'
@@ -83,10 +95,13 @@ export default defineComponent({
     NImage,
     NEllipsis,
     NTag,
+    NRadio,
+    NRadioGroup,
   },
   setup() {
     const searchQuery = ref('')
     const selectedTag = ref('')
+    const selectedFaction = ref('')
     const dialogVisible = ref(false)
     const dialogImage = ref('')
     const filteredModels = ref([...modelList]) // 存储筛选后的模型数据
@@ -96,7 +111,13 @@ export default defineComponent({
       modelList.forEach((model) => model.tags.forEach((tag) => allTags.add(tag)))
       return Array.from(allTags).map((tag) => ({ label: tag, value: tag, type: 'default' }))
     })
-
+    const tagsType = (tag: string) => {
+      if (tag === '捐赠') return 'info'
+      if (tag === 'hlym转模') return 'warning'
+      if (tag === '个人专属') return 'error'
+      if (tag === '专属模型') return 'success'
+      return 'default'
+    }
     const filterModels = () => {
       const query = searchQuery.value.toLowerCase()
       console.log('searchQuery:', searchQuery.value)
@@ -104,8 +125,9 @@ export default defineComponent({
         const matchesName = model.modelName.toLowerCase().includes(query)
         const matchesPoints = model.price.toString().includes(query)
         const matchesTag = selectedTag.value ? model.tags.includes(selectedTag.value) : true
-
-        return (matchesName || matchesPoints) && matchesTag
+        const matchesFaction =
+          selectedFaction.value === '' || model.faction === selectedFaction.value
+        return (matchesName || matchesPoints) && matchesTag && matchesFaction
       })
     }
 
@@ -117,12 +139,14 @@ export default defineComponent({
     return {
       searchQuery,
       selectedTag,
+      selectedFaction,
       tags,
       filteredModels,
       filterModels,
       dialogVisible,
       dialogImage,
       showImage,
+      tagsType,
     }
   },
 })
@@ -141,5 +165,10 @@ export default defineComponent({
 }
 .home-grass {
   background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+}
+</style>
+<style>
+.pointer-events-none {
+  pointer-events: none;
 }
 </style>

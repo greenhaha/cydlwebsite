@@ -9,7 +9,11 @@
 </template>
 
 <script lang="ts">
-import { Home as HomeIcon, WomanSharp as ModelIcon } from '@vicons/ionicons5'
+import {
+  AlertCircle as AlertCircleIcon,
+  Home as HomeIcon,
+  WomanSharp as ModelIcon,
+} from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
 import { NIcon, NMenu } from 'naive-ui'
 import type { Component } from 'vue'
@@ -50,8 +54,22 @@ const menuOptions: MenuOption[] = [
         },
         { default: () => '模型图鉴' },
       ),
-    key: 'go-to-work',
+    key: 'models-page',
     icon: renderIcon(ModelIcon),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/faq',
+          },
+        },
+        { default: () => '常见问题' },
+      ),
+    key: 'faq-page',
+    icon: renderIcon(AlertCircleIcon),
   },
 ]
 
