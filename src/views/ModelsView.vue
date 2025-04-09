@@ -15,7 +15,7 @@
     </div>
     <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
     <div class="grid-containerSearch mt-4 py-[24px]">
-      <n-grid :cols="4" x-gap="24" y-gap="24" class="w-full">
+      <n-grid cols="4 xs:1 s:1 m:1 l:4 " x-gap="24" y-gap="24" responsive="screen">
         <n-grid-item>
           <n-input v-model:value="searchQuery" placeholder="搜索模型名称、积分、价格" />
         </n-grid-item>
@@ -36,11 +36,11 @@
     </div>
 
     <div class="grid-container mt-4">
-      <n-grid :cols="4" x-gap="16" y-gap="16">
+      <n-grid cols="4 xs:2 s:2 m:3 l:4 " x-gap="16" y-gap="16" responsive="screen">
         <n-grid-item v-for="model in filteredModels" :key="model.modelId">
           <n-card>
             <template #header>
-              <n-ellipsis style="max-width: 240px">
+              <n-ellipsis>
                 {{ model.modelName }}
               </n-ellipsis>
             </template>
@@ -157,11 +157,14 @@ export default defineComponent({
   max-width: 1280px;
   margin: 0 auto;
   overflow-x: hidden; /* 防止横向滚动条 */
+  padding: 0 8px;
 }
 .grid-containerSearch {
-  width: 1280px;
+  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   overflow-x: hidden; /* 防止横向滚动条 */
+  padding: 12px 8px;
 }
 .home-grass {
   background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.6), #f5f5f5);

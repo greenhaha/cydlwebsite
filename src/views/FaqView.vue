@@ -14,7 +14,9 @@
       </div>
     </div>
     <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
-    <div class="grid-containerSearch mt-4 py-[24px]"></div>
+    <div class="grid-containerSearch mt-4 py-[24px] z-1">
+      <n-h1 class="text-center">常见问题</n-h1>
+    </div>
     <div class="grid-container mt-4 bg-[white] rounded-[4px]">
       <n-collapse default-expanded-names="1" accordion class="p-4">
         <n-collapse-item title="如何绑定Steam账号？" name="1">
@@ -92,7 +94,7 @@
 </template>
 
 <script lang="ts">
-import { NButton, NCollapse, NCollapseItem } from 'naive-ui'
+import { NButton, NCollapse, NCollapseItem, NH1 } from 'naive-ui'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -100,6 +102,7 @@ export default defineComponent({
     NCollapse,
     NCollapseItem,
     NButton,
+    NH1,
   },
   setup() {
     return {}
@@ -110,14 +113,16 @@ export default defineComponent({
 <style scoped>
 .grid-container {
   max-width: 1280px;
-  width: 1280px;
+  width: 100%;
+
   margin: 0 auto;
   overflow-x: hidden; /* 防止横向滚动条 */
   position: relative;
   z-index: 10;
 }
 .grid-containerSearch {
-  width: 1280px;
+  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
   overflow-x: hidden; /* 防止横向滚动条 */
 }

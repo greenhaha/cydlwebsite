@@ -11,6 +11,7 @@
 <script lang="ts">
 import {
   AlertCircle as AlertCircleIcon,
+  Book as BookIcon,
   Home as HomeIcon,
   WomanSharp as ModelIcon,
 } from '@vicons/ionicons5'
@@ -70,6 +71,20 @@ const menuOptions: MenuOption[] = [
       ),
     key: 'faq-page',
     icon: renderIcon(AlertCircleIcon),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/about',
+          },
+        },
+        { default: () => '关于' },
+      ),
+    key: 'about-page',
+    icon: renderIcon(BookIcon),
   },
 ]
 
