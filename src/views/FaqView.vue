@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full h-full pt-[60px]">
+  <div class="flex flex-col items-center justify-center w-full h-full pt-[60px] pb-16">
     <div class="fixed inset-0 w-full h-full">
       <div class="pointer-events-none absolute inset-0">
         <video

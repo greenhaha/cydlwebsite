@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import type { GlobalThemeOverrides } from 'naive-ui'
-import { NConfigProvider } from 'naive-ui'
+import {
+  NConfigProvider,
+  NLayout,
+  NLayoutContent,
+  NLayoutFooter,
+  NLayoutHeader,
+  NSpace,
+} from 'naive-ui'
 import { RouterView } from 'vue-router'
 import AppFooter from './components/Layout/AppFooter.vue'
 import HeaderMenu from './components/Layout/HeaderMenu.vue'
@@ -34,22 +41,27 @@ const themeOverrides: GlobalThemeOverrides = {
           <!-- <div><RouterLink to="/">Home</RouterLink></div>
           <div><RouterLink to="/about">About</RouterLink></div> -->
         </n-layout-header>
-        <n-layout-content class="flex justify-center">
+        <n-layout-content class="min-h-[calc(100vh)]">
           <RouterView />
         </n-layout-content>
-        <n-layout-footer class="absolute left-0 right-0"><AppFooter /></n-layout-footer>
+        <n-layout-footer class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
       </n-layout>
     </n-space>
   </n-config-provider>
 </template>
 
 <script lang="ts">
-// import { NButton } from 'naive-ui'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   components: {
     // NButton,
+    HeaderMenu,
+    NLayoutContent,
+    NLayout,
+    NLayoutHeader,
+    NLayoutFooter,
+    NSpace,
   },
 })
 </script>

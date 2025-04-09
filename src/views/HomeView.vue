@@ -15,15 +15,13 @@
     </div>
   </div>
   <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
-  <div
-    class="inset-0 h-full top-[0px] z-0 flex flex-col items-center justify-center overflow-x-hidden"
-  >
-    <div class="!mt-24 z-1 overflow-x-hidden">
+  <div class="inset-0 h-full top-[0px] z-0 flex flex-col items-center justify-center pb-16">
+    <div class="!mt-24 z-1">
       <n-h1 class="text-center">HLYM CS2 社区服务器</n-h1>
       <n-h5>面向所有CS2玩家的公益服务器，所有内容均免费！</n-h5>
     </div>
 
-    <div class="flex flex-wrap justify-center mt-4 w-full pt-20 max-w-[1200px] overflow-x-hidden">
+    <div class="flex flex-wrap justify-center mt-4 w-full pt6 max-w-[1200px]">
       <n-grid cols="4 xs:2 s:2 m:4 l:4 " x-gap="24" y-gap="24" responsive="screen">
         <n-grid-item
           ><n-card hoverable>
@@ -67,7 +65,7 @@
         >
       </n-grid>
     </div>
-    <div class="flex flex-wrap justify-around mt-4 w-full pt-10">
+    <div class="flex flex-wrap justify-around mt-4 w-full pt-24 max-w-[1200px] z-1">
       <n-grid cols="4 xs:3 s:3 m:3 l:3 " x-gap="24" y-gap="24" responsive="screen">
         <n-grid-item
           ><div>
@@ -89,7 +87,7 @@
         >
       </n-grid>
     </div>
-    <div class="mt-4 w-full pt-20">
+    <div class="mt-4 w-full pt-24 max-w-[1200px] z-1">
       <div class="text-[24px] w-full text-center">立即加入我们</div>
       <div class="text-[16px] w-full text-center">
         点击上方的"服务器状态"按钮来查询服务器并加入游戏
