@@ -23,7 +23,7 @@ const themeOverrides: GlobalThemeOverrides = {
     itemTextColorChildActiveHoverHorizontal: '#FFFFFFFF',
     itemTextColorHorizontal: 'rgba(255, 255, 255, 0.65)',
     itemColorHoverHorizontal: 'rgba(22, 119, 255, 1)',
-    itemIconColor: 'rgba(255, 255, 255, 0.65)',
+    itemIconColor: '#999',
     itemIconColorHoverHorizontal: 'rgba(255, 255, 255, 1)',
     itemIconColorActiveHorizontal: '#FFFFFFFF',
     itemIconColorActiveHoverHorizontal: '#FFFFFFFF',

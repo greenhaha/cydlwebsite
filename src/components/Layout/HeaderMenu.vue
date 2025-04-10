@@ -33,6 +33,7 @@
 import {
   AlertCircle as AlertCircleIcon,
   Book as BookIcon,
+  Gift as GiftIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
   WomanSharp as ModelIcon,
@@ -107,6 +108,20 @@ const menuOptions: MenuOption[] = [
       ),
     key: 'registration-page',
     icon: renderIcon(BookIcon),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/gifts',
+          },
+        },
+        { default: () => '礼物' },
+      ),
+    key: 'gift-page',
+    icon: renderIcon(GiftIcon),
   },
 ]
 
