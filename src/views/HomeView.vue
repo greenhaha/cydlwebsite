@@ -17,11 +17,11 @@
   <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
   <div class="inset-0 h-full top-[0px] z-0 flex flex-col items-center justify-center pb-16">
     <div class="!mt-24 z-1">
-      <n-h1 class="text-center">HLYM CS2 社区服务器</n-h1>
-      <n-h5>面向所有CS2玩家的公益服务器，所有内容均免费！</n-h5>
+      <n-h1 class="text-center !text-[38px]">HLYM CS2 社区服务器</n-h1>
+      <n-h5 class="text-center">面向所有CS2玩家的公益服务器，所有内容均免费！</n-h5>
     </div>
 
-    <div class="flex flex-wrap justify-center mt-4 w-full pt6 max-w-[1200px]">
+    <div class="flex flex-wrap justify-center mt-4 w-full pt-16 max-w-[1200px]">
       <n-grid cols="4 xs:2 s:2 m:4 l:4 " x-gap="24" y-gap="24" responsive="screen">
         <n-grid-item
           ><n-card hoverable>
