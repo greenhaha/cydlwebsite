@@ -18,7 +18,7 @@
       <n-h1 class="text-center">常见问题</n-h1>
     </div>
     <div class="grid-container mt-4 bg-[white] rounded-[4px]">
-      <n-collapse default-expanded-names="1" accordion class="p-4">
+      <n-collapse accordion class="p-4">
         <n-collapse-item title="如何绑定Steam账号？" name="1">
           <div>
             在绑定页面中请点击页面上的“获取Steam 64位
