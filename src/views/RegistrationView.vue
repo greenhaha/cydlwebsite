@@ -12,6 +12,7 @@
       ></video>
     </div>
   </div>
+  <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
   <div class="registration-container !z-1">
     <n-card title="每日签到" class="registration-card">
       <div class="content">
@@ -103,7 +104,9 @@ export default defineComponent({
   padding: 16px;
   background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
 }
-
+.home-grass {
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+}
 .registration-card {
   max-width: 400px;
   width: 100%;
