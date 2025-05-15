@@ -32,6 +32,7 @@
           type="primary"
           size="large"
           :disabled="hasSignedIn || !qqNumber"
+          :loading="isLoading"
           @click="handleSignIn"
         >
           {{ hasSignedIn ? '已签到' : '点击签到' }}
@@ -63,24 +64,71 @@ export default defineComponent({
     const hasSignedIn = ref(false)
     const gainedPoints = ref(0)
     const errorMessage = ref('')
+    const isLoading = ref(false)
 
     const handleSignIn = async () => {
       if (!qqNumber.value) {
         errorMessage.value = '请输入有效的QQ号'
         return
       }
-
+      
+      isLoading.value = true
+      errorMessage.value = ''
+      
       try {
-        const response = await axios.post('/registration', { qq: qqNumber.value })
+        const response = await axios.post('/api/v1/signin', { userId: qqNumber.value })
         if (response.data.success) {
           hasSignedIn.value = true
           gainedPoints.value = response.data.points
-          errorMessage.value = ''
         } else {
-          errorMessage.value = response.data.message || '签到失败，请稍后重试'
+          // 处理业务逻辑错误
+          const errorMsg = response.data.error || response.data.message
+          if (errorMsg.includes('already signed in')) {
+            errorMessage.value = '您今天已经签到过了，明天再来吧~'
+          } else if (errorMsg.includes('invalid user')) {
+            errorMessage.value = '无效的用户ID，请检查QQ号是否正确'
+          } else {
+            errorMessage.value = errorMsg || '签到失败，请稍后重试'
+          }
         }
-      } catch {
-        errorMessage.value = '网络错误，请稍后重试'
+      } catch (error) {
+        console.error('签到请求失败:', error)
+        // 处理网络错误
+        if (axios.isAxiosError(error)) {
+          if (error.response) {
+            console.log(error.response.status)
+            // 服务器返回了错误状态码
+            switch (error.response.status) {
+              case 400:
+                errorMessage.value = error.response.data.error
+                break
+              case 401:
+                errorMessage.value = '未授权，请先登录'
+                break
+              case 403:
+                errorMessage.value = '没有权限进行此操作'
+                break
+              case 404:
+                errorMessage.value = '签到服务暂时不可用'
+                break
+              case 500:
+                errorMessage.value = error.response.data.error
+                break
+              default:
+                errorMessage.value = `请求失败 (${error.response.status})，请稍后重试`
+            }
+          } else if (error.request) {
+            // 请求已发出但没有收到响应
+            errorMessage.value = '网络连接失败，请检查网络设置'
+          } else {
+            // 请求配置出错
+            errorMessage.value = '请求配置错误，请刷新页面重试'
+          }
+        } else {
+          errorMessage.value = '发生未知错误，请稍后重试'
+        }
+      } finally {
+        isLoading.value = false
       }
     }
 
@@ -89,6 +137,7 @@ export default defineComponent({
       hasSignedIn,
       gainedPoints,
       errorMessage,
+      isLoading,
       handleSignIn,
     }
   },

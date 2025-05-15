@@ -17,7 +17,15 @@
     <div class="grid-container !mt-7 rounded-[4px]">
       <n-tabs type="segment" animated>
         <n-tab-pane name="chap1" tab="直播间" class="!p-4">
+          <n-alert v-if="liveRooms.length === 0" type="info" title="通知">
+    <n-marquee>
+      <div style="margin-right: 64px">
+        欢迎各位主播上架自己的直播间
+      </div>
+    </n-marquee>
+  </n-alert>
           <div class="live-room-grid">
+            
             <n-card
               v-for="room in liveRooms"
               :key="room.id"
@@ -40,7 +48,13 @@
             </n-card>
           </div>
         </n-tab-pane>
-        <n-tab-pane name="chap2" tab="礼物"> 礼物正在制作中 🎁 </n-tab-pane>
+        <n-tab-pane name="chap2" tab="礼物"> <n-alert v-if="liveRooms.length === 0" type="info" title="通知">
+    <n-marquee>
+      <div style="margin-right: 64px">
+        礼物正在制作中 🎁
+      </div>
+    </n-marquee>
+  </n-alert> </n-tab-pane>
         <n-tab-pane name="chap3" tab="更多" disabled> 更多内容正在制作中，敬请期待！ </n-tab-pane>
       </n-tabs>
     </div>
@@ -48,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { NCard, NEllipsis, NImage, NTabPane, NTabs } from 'naive-ui'
+import { NCard, NEllipsis, NImage, NTabPane, NTabs, NAlert, NMarquee } from 'naive-ui'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -58,25 +72,27 @@ export default defineComponent({
     NCard,
     NImage,
     NEllipsis,
+    NAlert,
+    NMarquee
   },
   setup() {
-    const liveRooms = [
-      {
-        id: 1,
-        title: '直播间标题1',
-        author: '主播1',
-        cover:
-          'https://hlymmodelslist.oss-cn-beijing.aliyuncs.com/models/CT/saber_wedding_personal.png',
-        url: 'https://live.bilibili.com/1',
-      },
-      {
-        id: 2,
-        title: '直播间标题2',
-        author: '主播2',
-        cover:
-          'https://hlymmodelslist.oss-cn-beijing.aliyuncs.com/models/CT/saber_wedding_personal.png',
-        url: 'https://live.bilibili.com/2',
-      },
+    const liveRooms: { id: number; title: string; author: string; cover: string; url: string }[] = [
+      // {
+      //   id: 1,
+      //   title: '直播间标题1',
+      //   author: '主播1',
+      //   cover:
+      //     'https://hlymmodelslist.oss-cn-beijing.aliyuncs.com/models/CT/saber_wedding_personal.png',
+      //   url: 'https://live.bilibili.com/1',
+      // },
+      // {
+      //   id: 2,
+      //   title: '直播间标题2',
+      //   author: '主播2',
+      //   cover:
+      //     'https://hlymmodelslist.oss-cn-beijing.aliyuncs.com/models/CT/saber_wedding_personal.png',
+      //   url: 'https://live.bilibili.com/2',
+      // },
       // 添加更多直播间数据
     ]
     const goToLiveRoom = (url: string) => {
