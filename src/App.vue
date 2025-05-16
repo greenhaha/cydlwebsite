@@ -7,6 +7,7 @@ import {
   NLayoutFooter,
   NLayoutHeader,
   NSpace,
+  NMessageProvider,
 } from 'naive-ui'
 import { RouterView } from 'vue-router'
 import AppFooter from './components/Layout/AppFooter.vue'
@@ -32,22 +33,24 @@ const themeOverrides: GlobalThemeOverrides = {
 </script>
 
 <template>
-  <n-config-provider preflight-style-disabled :theme-overrides="themeOverrides">
-    <n-space vertical size="large">
-      <n-layout class="relative">
-        <n-layout-header class="n-layout-header absolute top-0 left-0 right-0 z-1">
-          <div class="w-full flex align-middle"><HeaderMenu /></div>
+  <n-message-provider>
+    <n-config-provider preflight-style-disabled :theme-overrides="themeOverrides">
+      <n-space vertical size="large">
+        <n-layout class="relative">
+          <n-layout-header class="n-layout-header absolute top-0 left-0 right-0 z-1">
+            <div class="w-full flex align-middle"><HeaderMenu /></div>
 
-          <!-- <div><RouterLink to="/">Home</RouterLink></div>
-          <div><RouterLink to="/about">About</RouterLink></div> -->
-        </n-layout-header>
-        <n-layout-content class="min-h-[calc(100vh)]">
-          <RouterView />
-        </n-layout-content>
-        <n-layout-footer class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
-      </n-layout>
-    </n-space>
-  </n-config-provider>
+            <!-- <div><RouterLink to="/">Home</RouterLink></div>
+            <div><RouterLink to="/about">About</RouterLink></div> -->
+          </n-layout-header>
+          <n-layout-content class="min-h-[calc(100vh)]">
+            <RouterView />
+          </n-layout-content>
+          <n-layout-footer class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
+        </n-layout>
+      </n-space>
+    </n-config-provider>
+  </n-message-provider>
 </template>
 
 <script lang="ts">

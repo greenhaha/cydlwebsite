@@ -1,31 +1,58 @@
 <template>
-  <div class="flex items-center">
-    <n-menu
-      v-if="!isMobile"
-      :options="menuOptions"
-      mode="horizontal"
-      class="topMenu"
-      responsive
-      v-model:value="activeKey"
-    />
-    <n-drawer v-else v-model:show="drawerVisible" placement="left" width="240">
-      <template #header>
-        <div class="drawer-header">菜单</div>
-      </template>
+  <div class="flex items-center justify-between w-full">
+    <div class="flex items-center h-full">
       <n-menu
+        v-if="!isMobile"
         :options="menuOptions"
-        mode="vertical"
+        mode="horizontal"
+        class="topMenu"
+        responsive
         v-model:value="activeKey"
-        class="drawer-menu"
       />
-    </n-drawer>
-    <n-button v-if="isMobile" @click="drawerVisible = true" class="menu-button" color="#2080f0">
-      <template #icon>
-        <n-icon>
-          <MenuIcon />
-        </n-icon>
+      <n-drawer v-else v-model:show="drawerVisible" placement="left" width="240">
+        <template #header>
+          <div class="drawer-header">菜单</div>
+        </template>
+        <n-menu
+          :options="menuOptions"
+          mode="vertical"
+          v-model:value="activeKey"
+          class="drawer-menu"
+        />
+      </n-drawer>
+      <n-button v-if="isMobile" @click="drawerVisible = true" class="menu-button" color="#2080f0">
+        <template #icon>
+          <n-icon>
+            <MenuIcon />
+          </n-icon>
+        </template>
+      </n-button>
+    </div>
+    <!-- 登录/注册 或 用户信息 -->
+    <div class="flex items-center">
+      <template v-if="!userStore.isLoggedIn">
+        <n-button text  class="!text-white   !mr-2" @click="$router.push('/login')">登录</n-button>
+        <n-button   class="!text-white border border-white ml-2" @click="$router.push('/register')">注册</n-button>
       </template>
-    </n-button>
+      <template v-else>
+        <n-dropdown
+          trigger="click"
+          :options="dropdownOptions"
+          @select="handleDropdownSelect"
+        >
+          <div class="flex items-center cursor-pointer select-none">
+            <n-avatar
+              :size="36"
+              :src="userStore.userInfo?.avatar || ''"
+              class="mr-2"
+            >
+              {{ userStore.userInfo?.username?.charAt(0) || 'U' }}
+            </n-avatar>
+            <span v-if="!isMobile" class="font-medium text-white">{{ userStore.userInfo?.username || '用户' }}</span>
+          </div>
+        </n-dropdown>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -39,11 +66,13 @@ import {
   WomanSharp as ModelIcon,
 } from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
-import { NButton, NDrawer, NIcon, NMenu } from 'naive-ui'
+import { NButton, NDrawer, NIcon, NMenu, NDropdown, NAvatar } from 'naive-ui'
 import type { Component } from 'vue'
 
-import { defineComponent, h, onMounted, onUnmounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { defineComponent, h, onMounted, onUnmounted, ref, watch } from 'vue'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+import { useMessage } from 'naive-ui'
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -132,18 +161,50 @@ export default defineComponent({
     NButton,
     NIcon,
     MenuIcon,
+    NDropdown,
+    NAvatar,
   },
   setup() {
     const activeKey = ref<string | null>(null)
     const drawerVisible = ref(false)
     const isMobile = ref(false)
+    const userStore = useUserStore()
+    const router = useRouter()
+    const route = useRoute()
+    const showDropdown = ref(false)
+    const message = useMessage()
 
     const updateIsMobile = () => {
       isMobile.value = window.innerWidth < 768
     }
 
+    // 根据当前路由更新选中的菜单项
+    const updateActiveKey = () => {
+      const path = route.path
+      switch (path) {
+        case '/':
+          activeKey.value = 'go-back-home'
+          break
+        case '/models':
+          activeKey.value = 'models-page'
+          break
+        case '/faq':
+          activeKey.value = 'faq-page'
+          break
+        case '/registration':
+          activeKey.value = 'registration-page'
+          break
+        case '/gifts':
+          activeKey.value = 'gift-page'
+          break
+        default:
+          activeKey.value = null
+      }
+    }
+
     onMounted(() => {
       updateIsMobile()
+      updateActiveKey()
       window.addEventListener('resize', updateIsMobile)
     })
 
@@ -151,11 +212,56 @@ export default defineComponent({
       window.removeEventListener('resize', updateIsMobile)
     })
 
+    // 监听路由变化
+    watch(
+      () => route.path,
+      () => {
+        updateActiveKey()
+      }
+    )
+
+    const handleDropdownSelect = async (key: string) => {
+      if (key === 'profile') {
+        router.push('/profile')
+      } else if (key === 'logout') {
+        await handleLogout()
+      }
+    }
+
+    const handleLogout = async () => {
+      try {
+        const result = await userStore.logout()
+        if (result.success) {
+          message.success('已退出登录')
+          router.push('/login')
+        } else {
+          message.error('退出登录失败，请稍后重试')
+        }
+      } catch {
+        message.error('退出登录失败，请稍后重试')
+      }
+    }
+
+    const dropdownOptions = [
+      {
+        label: '个人信息',
+        key: 'profile',
+      },
+      {
+        label: '退出登录',
+        key: 'logout',
+      },
+    ]
+
     return {
       activeKey,
       drawerVisible,
       isMobile,
       menuOptions,
+      userStore,
+      showDropdown,
+      handleDropdownSelect,
+      dropdownOptions,
     }
   },
 })
