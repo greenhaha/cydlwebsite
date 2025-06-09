@@ -34,6 +34,7 @@ import {
   AlertCircle as AlertCircleIcon,
   Book as BookIcon,
   Gift as GiftIcon,
+  Heart as HeartIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
   WomanSharp as ModelIcon,
@@ -122,6 +123,20 @@ const menuOptions: MenuOption[] = [
       ),
     key: 'gift-page',
     icon: renderIcon(GiftIcon),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/contribute',
+          },
+        },
+        { default: () => '贡献者' },
+      ),
+    key: 'contribute-page',
+    icon: renderIcon(HeartIcon),
   },
 ]
 

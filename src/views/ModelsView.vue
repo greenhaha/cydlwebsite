@@ -1,5 +1,6 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full h-full pt-[60px] pb-16">
+  <div class="models-page flex flex-col items-center justify-center w-full h-full pt-[60px] !pb-16">
+    <!-- 背景视频 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="pointer-events-none absolute inset-0">
         <video
@@ -14,64 +15,145 @@
       </div>
     </div>
     <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
-    <div class="grid-containerSearch mt-4 py-[24px]">
-      <n-grid cols="5 xs:1 s:1 m:2 l:5 " x-gap="24" y-gap="24" responsive="screen">
-        <n-grid-item>
-          <n-input v-model:value="searchQuery" placeholder="搜索模型名称、积分、价格" />
-        </n-grid-item>
-        <n-grid-item>
-          <n-select v-model:value="selectedTag" :options="tags" placeholder="选择标签" />
-        </n-grid-item>
-        <n-grid-item>
-          <n-radio-group v-model:value="selectedFaction" name="factionGroup">
-            <n-radio value="1">T</n-radio>
-            <n-radio value="2">CT</n-radio>
-            <n-radio value="">全部</n-radio>
-          </n-radio-group>
-        </n-grid-item>
-        <n-grid-item>
-          <n-button @click="filterModels" type="info">搜索</n-button>
-        </n-grid-item>
-        <n-grid-item>
-          <n-button @click="togglePriceSort" type="primary">
-            {{ sortDirection === 'desc' ? '按价格排序 (低→高)' : '按价格排序 (高→低)' }}
-          </n-button>
-        </n-grid-item>
-      </n-grid>
+
+    <!-- 页面标题 -->
+    <div class="page-header w-full max-w-[1280px] px-4 mb-8 z-20">
+      <h1 class="page-title text-[32px] md:text-[40px] font-bold text-center text-white mb-4 text-shadow-lg">
+        模型展示
+      </h1>
+      <p class="page-subtitle text-[16px] md:text-[18px] text-center text-white/90 text-shadow">
+        探索丰富的角色模型，发现你的专属皮肤
+      </p>
     </div>
 
-    <div class="grid-container mt-4">
-      <n-spin :show="loading" tip="加载模型数据中...">
-        <n-grid cols="4 xs:2 s:2 m:3 l:4 " x-gap="16" y-gap="16" responsive="screen">
+    <!-- 搜索和筛选区域 -->
+    <div class="search-section w-full max-w-[1280px] px-4 !mb-8 z-20">
+      <div class="search-card p-6 rounded-2xl backdrop-blur-lg bg-white/95 border border-gray-200/60 shadow-2xl">
+        <n-grid cols="5 xs:1 s:1 m:2 l:5" x-gap="16" y-gap="16" responsive="screen">
+          <n-grid-item>
+            <div class="search-input-wrapper">
+              <n-input
+                v-model:value="searchQuery"
+                placeholder="搜索模型名称、积分、价格"
+                size="large"
+                class="search-input"
+              />
+            </div>
+          </n-grid-item>
+          <n-grid-item>
+            <div class="select-wrapper">
+              <n-select
+                v-model:value="selectedTag"
+                :options="tags"
+                placeholder="选择标签"
+                size="large"
+                class="tag-select"
+              />
+            </div>
+          </n-grid-item>
+          <n-grid-item>
+            <div class="radio-wrapper p-2 rounded-lg bg-gray-50/80 border border-gray-200/40">
+              <n-radio-group v-model:value="selectedFaction" name="factionGroup" class="faction-radio">
+                <n-radio value="1" class="radio-item">T</n-radio>
+                <n-radio value="2" class="radio-item">CT</n-radio>
+                <n-radio value="" class="radio-item">全部</n-radio>
+              </n-radio-group>
+            </div>
+          </n-grid-item>
+          <n-grid-item>
+            <n-button
+              @click="filterModels"
+              type="info"
+              size="large"
+              class="search-btn w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 border-none shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              搜索
+            </n-button>
+          </n-grid-item>
+          <n-grid-item>
+            <n-button
+              @click="togglePriceSort"
+              type="primary"
+              size="large"
+              class="sort-btn w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 border-none shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              {{ sortDirection === 'desc' ? '按价格排序 (低→高)' : '按价格排序 (高→低)' }}
+            </n-button>
+          </n-grid-item>
+        </n-grid>
+      </div>
+    </div>
+
+    <!-- 模型卡片区域 -->
+    <div class="models-section w-full max-w-[1280px] px-4 z-20">
+      <n-spin :show="loading" tip="加载模型数据中..." class="min-h-[400px]">
+        <n-grid cols="4 xs:1 s:2 m:3 l:4" x-gap="20" y-gap="20" responsive="screen">
           <n-grid-item v-for="model in filteredModels" :key="model.modelId">
-            <n-card>
-            <template #header>
-              <n-ellipsis>
-                {{ model.modelName }}
-              </n-ellipsis>
-            </template>
-            <n-image
-              :src="model.previewUrl"
-              :alt="model.modelName"
-              width="100%"
-              height="200px"
-              fit="cover"
-              @click="showImage(model.previewUrl)"
-            />
-            <p>积分: {{ model.price }}</p>
-            <p>阵营: {{ model.faction === '1' ? 'T' : 'CT' }}</p>
-            <p>
-              皮肤种类:
-              <n-tag :color="{ color: '#fff59d', textColor: '#f57f17', borderColor: '#f57f17' }" round :bordered="false" class="!mr-[4px]">
-                HLYM
-              </n-tag>
-              <n-tag   class="!mr-[4px]" :type="tagsType(model.groupType)" round :bordered="false">
-                {{tagTransform(model.groupType)}}
-              </n-tag>
-            </p>
-          </n-card>
-        </n-grid-item>
-      </n-grid>
+            <n-card class="model-card h-full backdrop-blur-lg bg-white/95 border border-gray-200/60 hover:bg-white/98 transition-all duration-300 hover:scale-105 hover:shadow-2xl" hoverable>
+              <template #header>
+                <div class="model-header min-h-[48px] flex items-center justify-between">
+                  <n-ellipsis class="model-title text-gray-800 font-semibold text-lg">
+                    {{ model.modelName }}
+                  </n-ellipsis>
+                  <div class="faction-badge">
+                    <n-tag
+                      :type="model.faction === '1' ? 'error' : 'info'"
+                      size="small"
+                      round
+                      class="shadow-sm"
+                    >
+                      {{ model.faction === '1' ? 'T' : 'CT' }}
+                    </n-tag>
+                  </div>
+                </div>
+              </template>
+
+              <div class="model-content flex flex-col h-full">
+                <div class="model-image-wrapper !mb-4 rounded-lg overflow-hidden shadow-md">
+                  <n-image
+                    :src="model.previewUrl"
+                    :alt="model.modelName"
+                    width="100%"
+                    height="200px"
+                    object-fit="fill"
+                    @click="showImage(model.previewUrl)"
+                    class="hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  />
+                </div>
+
+                <div class="model-info flex-1 space-y-3">
+                  <div class="price-info flex items-center justify-between">
+                    <span class="price-label text-gray-600 text-sm">积分价格</span>
+                    <span class="price-value text-blue-600 font-bold text-lg">{{ model.price }}</span>
+                  </div>
+
+                  <div class="tags-info">
+                    <div class="tags-wrapper flex flex-wrap gap-2">
+                      <n-tag
+                        :color="{ color: '#fff59d', textColor: '#f57f17', borderColor: '#f57f17' }"
+                        round
+                        :bordered="false"
+                        size="small"
+                        class="shadow-sm"
+                      >
+                        HLYM
+                      </n-tag>
+                      <n-tag
+                        :type="tagsType(model.groupType)"
+                        round
+                        :bordered="false"
+                        size="small"
+                        class="shadow-sm"
+                      >
+                        {{ tagTransform(model.groupType) }}
+                      </n-tag>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </n-card>
+          </n-grid-item>
+        </n-grid>
       </n-spin>
     </div>
   </div>
@@ -245,21 +327,231 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.grid-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  overflow-x: hidden; /* 防止横向滚动条 */
-  padding: 0 8px;
+.models-page {
+  min-height: 100vh;
+  position: relative;
+  z-index: 0;
 }
-.grid-containerSearch {
-  max-width: 1280px;
-  width: 100%;
-  margin: 0 auto;
-  overflow-x: hidden; /* 防止横向滚动条 */
-  padding: 12px 8px;
-}
+
 .home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.6), #f5f5f5);
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+}
+
+/* 页面标题样式 */
+.page-title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 搜索区域样式 */
+.search-card {
+  transition: all 0.3s ease;
+}
+
+.search-card:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.02);
+}
+
+.radio-wrapper {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faction-radio {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.radio-item {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 模型卡片样式 */
+.model-card {
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.model-card:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.model-header {
+  padding: 4px 0;
+}
+
+.model-title {
+  flex: 1;
+  color: #374151;
+}
+
+.faction-badge {
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.model-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.model-image-wrapper {
+  transition: all 0.3s ease;
+}
+
+.model-image-wrapper:hover {
+  transform: translateY(-2px);
+}
+
+.model-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.price-info {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+.price-label {
+  font-weight: 500;
+}
+
+.price-value {
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tags-wrapper {
+  padding: 8px 0;
+}
+
+/* 按钮样式 */
+.search-btn,
+.sort-btn {
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .page-header {
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .search-section {
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .models-section {
+    padding: 0 1rem;
+  }
+
+  .search-card {
+    padding: 1rem;
+  }
+
+  .model-card {
+    min-height: 380px;
+  }
+
+  .model-header {
+    min-height: 40px;
+  }
+
+  .price-info {
+    padding: 10px;
+  }
+
+  .radio-wrapper {
+    height: 36px;
+  }
+
+  .faction-radio {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 24px !important;
+  }
+
+  .page-subtitle {
+    font-size: 14px !important;
+  }
+
+  .model-card {
+    min-height: 350px;
+  }
+
+  .search-card {
+    padding: 0.75rem;
+  }
+}
+
+/* 深色模式优化 */
+@media (prefers-color-scheme: dark) {
+  .search-card,
+  .model-card {
+    background: rgba(248, 250, 252, 0.98) !important;
+    border: 1px solid rgba(226, 232, 240, 0.7) !important;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-header,
+.search-section,
+.models-section {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.search-section {
+  animation-delay: 0.2s;
+}
+
+.models-section {
+  animation-delay: 0.4s;
 }
 </style>
 <style>
