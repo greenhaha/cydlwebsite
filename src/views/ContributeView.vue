@@ -4,7 +4,7 @@
     <div class="fixed inset-0 w-full h-full">
       <div class="pointer-events-none absolute inset-0">
         <video
-          src="../assets/bg/YokaiSecret.mp4"
+          src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/YokaiSecret.mp4"
           muted
           autoplay="true"
           class="w-full h-full bg-cover bg-center min-w-full min-h-full object-cover globalVideo"
@@ -25,7 +25,7 @@
           致谢贡献者
         </h1>
         <p class="hero-subtitle text-lg md:text-xl text-white/110 max-w-2xl mx-auto text-shadow">
-          感谢所有为CYDL服务器发展做出贡献的朋友们，正是因为有了你们的支持，我们才能为大家提供更好的游戏体验
+          感谢所有为HLYM服务器发展做出贡献的朋友们，正是因为有了你们的支持，我们才能为大家提供更好的游戏体验
         </p>
       </div>
       </div>
@@ -120,7 +120,7 @@
                   🙏 特别感谢
                 </h3>
                 <p class="text-white/110 text-lg leading-relaxed text-shadow">
-                  每一份支持都弥足珍贵，每一个贡献都值得铭记。CYDL服务器能够持续为大家提供优质的游戏环境，离不开所有贡献者的无私付出。
+                  每一份支持都弥足珍贵，每一个贡献都值得铭记。HLYM服务器能够持续为大家提供优质的游戏环境，离不开所有贡献者的无私付出。
                   未来我们将继续努力，为大家带来更好的游戏体验！
                 </p>
                 <div class="!mt-8">
