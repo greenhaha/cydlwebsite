@@ -37,6 +37,7 @@ import {
   Heart as HeartIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
+  StorefrontOutline as ShopIcon,
   WomanSharp as ModelIcon,
 } from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
@@ -81,6 +82,20 @@ const menuOptions: MenuOption[] = [
       ),
     key: 'models-page',
     icon: renderIcon(ModelIcon),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/shop',
+          },
+        },
+        { default: () => '商城' },
+      ),
+    key: 'shop-page',
+    icon: renderIcon(ShopIcon),
   },
   {
     label: () =>

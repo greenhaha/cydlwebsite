@@ -6,6 +6,7 @@ import {
   NLayoutContent,
   NLayoutFooter,
   NLayoutHeader,
+  NMessageProvider,
   NSpace,
 } from 'naive-ui'
 import { RouterView } from 'vue-router'
@@ -33,20 +34,26 @@ const themeOverrides: GlobalThemeOverrides = {
 
 <template>
   <n-config-provider preflight-style-disabled :theme-overrides="themeOverrides">
-    <n-space vertical size="large">
-      <n-layout class="relative">
-        <n-layout-header class="n-layout-header absolute top-0 left-0 right-0 z-1">
-          <div class="w-full flex align-middle"><HeaderMenu /></div>
+    <n-message-provider>
+      <n-space vertical size="large">
+        <n-layout class="relative">
+          <n-layout-header class="n-layout-header absolute top-0 left-0 right-0 z-1">
+            <div class="w-full flex align-middle">
+              <HeaderMenu />
+            </div>
 
-          <!-- <div><RouterLink to="/">Home</RouterLink></div>
-          <div><RouterLink to="/about">About</RouterLink></div> -->
-        </n-layout-header>
-        <n-layout-content class="min-h-[calc(100vh)]">
-          <RouterView />
-        </n-layout-content>
-        <n-layout-footer class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
-      </n-layout>
-    </n-space>
+            <!-- <div><RouterLink to="/">Home</RouterLink></div>
+            <div><RouterLink to="/about">About</RouterLink></div> -->
+          </n-layout-header>
+          <n-layout-content class="min-h-[calc(100vh)]">
+            <RouterView />
+          </n-layout-content>
+          <n-layout-footer class="absolute left-0 right-0 bottom-0">
+            <AppFooter />
+          </n-layout-footer>
+        </n-layout>
+      </n-space>
+    </n-message-provider>
   </n-config-provider>
 </template>
 
@@ -87,6 +94,7 @@ n-layout-content {
   background-color: #fff;
   min-height: calc(100vh - 64px);
 }
+
 n-layout {
   min-height: 100vh;
 }
@@ -94,6 +102,7 @@ n-layout {
 
 <style>
 body {
-  overflow-x: hidden; /* 确保整个页面没有横向滚动条 */
+  overflow-x: hidden;
+  /* 确保整个页面没有横向滚动条 */
 }
 </style>
