@@ -3,7 +3,7 @@
     <div class="fixed inset-0 w-full h-full">
       <div class="pointer-events-none absolute inset-0">
         <video
-          src="../assets/bg/giftbg.mp4"
+          src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/giftbg.mp4"
           muted
           autoplay="true"
           class="w-full h-full bg-cover bg-center min-w-full min-h-full object-cover globalVideo"
@@ -25,7 +25,7 @@
     </n-marquee>
   </n-alert>
           <div class="live-room-grid">
-            
+
             <n-card
               v-for="room in liveRooms"
               :key="room.id"

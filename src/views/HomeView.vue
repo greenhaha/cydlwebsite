@@ -6,7 +6,7 @@
     <div class="fixed inset-0 w-full h-full">
       <div class="pointer-events-none absolute inset-0">
         <video
-          src="../assets/bg/hecheng1.mp4"
+          src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/hecheng1.mp4"
           muted
           autoplay="true"
           class="w-full h-full bg-cover bg-center min-w-full min-h-full object-cover globalVideo"
@@ -105,7 +105,7 @@
         <n-grid cols="4 xs:3 s:3 m:3 l:3 " x-gap="24" y-gap="24" responsive="screen">
           <n-grid-item>
             <div class="stat-card text-center p-6 rounded-xl backdrop-blur-lg bg-gray-50/95 border border-gray-200/60 hover:bg-gray-100/95 transition-all duration-300 h-full flex flex-col justify-center">
-              <div class="stat-number text-[28px] md:text-[32px] font-bold text-blue-600 mb-2">40+</div>
+              <div class="stat-number text-[28px] md:text-[32px] font-bold text-blue-600 mb-2">80+</div>
               <div class="stat-label text-[18px] md:text-[20px] font-semibold text-gray-700">游戏地图</div>
             </div>
           </n-grid-item>

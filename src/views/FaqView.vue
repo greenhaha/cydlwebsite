@@ -4,7 +4,7 @@
     <div class="fixed inset-0 w-full h-full">
       <div class="pointer-events-none absolute inset-0">
         <video
-          src="../assets/bg/baierduo.mp4"
+          src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/baierduo.mp4"
           muted
           autoplay="true"
           class="w-full h-full bg-cover bg-center min-w-full min-h-full object-cover globalVideo"
@@ -281,7 +281,7 @@
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base mb-4">
                     <span class="font-semibold text-pink-600 mr-2">A:</span>
-                    如果您对我们的服务器感兴趣，可以加入我们的QQ群了解更多信息，也可以为开发团队提供赞助资金，帮助我们更好地建设服务器！
+                    如果您对我们的服务器感兴趣，可以加入我们的QQ群了解更多信息，也可以点击下方按钮进入爱发电为开发团队提供赞助，帮助我们更好地建设服务器！赞助奖励请参考爱发电赞助说明！
                   </p>
                   <div class="flex flex-col sm:flex-row gap-3">
                     <a
@@ -293,9 +293,11 @@
                         💬 加入QQ群 342289459
                       </n-button>
                     </a>
+                    <a href="https://afdian.com/a/hlymcn" target="_blank" rel="noopener noreferrer">
                     <n-button size="medium" class="bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 border-none shadow-lg hover:shadow-xl">
                       ❤️ 赞助支持
                     </n-button>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -318,13 +320,13 @@
                 <div class="question-section mb-4">
                   <h3 class="text-xl font-bold text-violet-700 mb-2 flex items-center">
                     <span class="mr-2">Q:</span>
-                    <span>如何获得VIP权限？</span>
+                    <span>如何获得服务器身分组？</span>
                   </h3>
                 </div>
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base">
                     <span class="font-semibold text-violet-600 mr-2">A:</span>
-                    VIP权限可以通过赞助服务器获得，具体详情请联系群管理员。VIP用户可以享受优先连接、专属武器皮肤等特权。
+                    可以通过赞助，申请管理员，Helper，Mapper等方式获取对应的身分组。每个身分组有对应的每周积分奖励以及皮肤直接使用权等权益。
                   </p>
                 </div>
               </div>
@@ -353,7 +355,7 @@
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base">
                     <span class="font-semibold text-cyan-600 mr-2">A:</span>
-                    常用指令包括：<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!bind</code> 绑定账号、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!steamid</code> 查看ID、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!rank</code> 查看排名、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!stats</code> 查看统计等。
+                    常用指令包括：<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!bind</code> 绑定账号、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!steamid</code> 查看ID、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!help</code> 查看服务器帮助、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!store</code> 查看商店等。
                   </p>
                 </div>
               </div>
