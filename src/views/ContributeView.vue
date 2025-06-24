@@ -45,7 +45,20 @@
           </div>
 
           <div class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- 加载状态 -->
+            <div v-if="loading" class="col-span-full text-center py-8">
+              <div class="text-white text-lg">正在加载贡献者数据...</div>
+            </div>
+            
+            <!-- 错误状态 -->
+            <div v-else-if="error" class="col-span-full text-center py-8">
+              <div class="text-red-300 text-lg mb-4">{{ error }}</div>
+              <n-button @click="fetchContributors" type="primary">重试</n-button>
+            </div>
+            
+            <!-- 贡献者列表 -->
             <div
+              v-else
               v-for="donor in contributeList.donors"
               :key="donor.name"
               class="contributor-card group"
@@ -73,8 +86,8 @@
         </section>
 
         <!-- 技术支持者区域 -->
-        <section class="tech-supporters-section">
-          <div class="section-header text-center mb-8">
+        <section class="tech-supporters-section !mt-12">
+          <div class="section-header text-center !mb-8">
             <h2 class="section-title text-3xl md:text-4xl font-bold text-white mb-4 text-shadow">
               🛠️ 技术开发团队
             </h2>
@@ -84,7 +97,20 @@
           </div>
 
           <div class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- 加载状态 -->
+            <div v-if="loading" class="col-span-full text-center py-8">
+              <div class="text-white text-lg">正在加载技术支持者数据...</div>
+            </div>
+            
+            <!-- 错误状态 -->
+            <div v-else-if="error" class="col-span-full text-center py-8">
+              <div class="text-red-300 text-lg mb-4">{{ error }}</div>
+              <n-button @click="fetchContributors" type="primary">重试</n-button>
+            </div>
+            
+            <!-- 技术支持者列表 -->
             <div
+              v-else
               v-for="supporter in contributeList.techSupporters"
               :key="supporter.name"
               class="contributor-card group"
@@ -142,46 +168,63 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { NCard, NButton } from 'naive-ui'
-import { contributeList } from '../const/contribute'
+import { contributeApi, type ContributeResponse } from '../services/api'
 
-export default defineComponent({
-  name: 'ContributeView',
-  components: {
-    NCard,
-    NButton,
-  },
-  setup() {
-    // 获取名字首字母用于头像显示
-    const getInitials = (name: string): string => {
-      const cleanName = name.trim()
-      if (cleanName.length === 0) return '?'
-
-      // 如果是中文名字，取前两个字符或第一个字符
-      if (/[\u4e00-\u9fa5]/.test(cleanName)) {
-        return cleanName.length >= 2 ? cleanName.substring(0, 2) : cleanName.substring(0, 1)
-      }
-
-      // 如果是英文名字，取首字母
-      const words = cleanName.split(' ')
-      if (words.length >= 2) {
-        return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase()
-      }
-      return cleanName.charAt(0).toUpperCase()
-    }
-
-    const goToQQGroup = () => {
-      window.open('https://qm.qq.com/cgi-bin/qm/qr?k=Sh4gcapxVV57FqXxe7ZU07-v9u8YvKVN&jump_from=webapi&authKey=HiFkDO97IWzVgJEO6SWn59U3r7vJPEfvGNq8+Y4RVgOHFRN8+CB9WhpjYJmRvyky', '_blank')
-    }
-    return {
-      contributeList,
-      getInitials,
-      goToQQGroup,
-    }
-  },
+// 响应式数据
+const contributeList = ref<ContributeResponse>({
+  donors: [],
+  techSupporters: []
 })
+const loading = ref(true)
+const error = ref<string | null>(null)
+
+// 获取贡献者数据
+const fetchContributors = async () => {
+  try {
+    loading.value = true
+    error.value = null
+    const data = await contributeApi.getContributors()
+    contributeList.value = data
+  } catch (err) {
+    console.error('获取贡献者数据失败:', err)
+    error.value = '获取贡献者数据失败，请稍后重试'
+    // 如果API失败，可以fallback到静态数据
+    const { contributeList: staticData } = await import('../const/contribute')
+    contributeList.value = staticData
+  } finally {
+    loading.value = false
+  }
+}
+
+// 组件挂载时获取数据
+onMounted(() => {
+  fetchContributors()
+})
+
+// 获取名字首字母用于头像显示
+const getInitials = (name: string): string => {
+  const cleanName = name.trim()
+  if (cleanName.length === 0) return '?'
+
+  // 如果是中文名字，取前两个字符或第一个字符
+  if (/[\u4e00-\u9fa5]/.test(cleanName)) {
+    return cleanName.length >= 2 ? cleanName.substring(0, 2) : cleanName.substring(0, 1)
+  }
+
+  // 如果是英文名字，取首字母
+  const words = cleanName.split(' ')
+  if (words.length >= 2) {
+    return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase()
+  }
+  return cleanName.charAt(0).toUpperCase()
+}
+
+const goToQQGroup = () => {
+  window.open('https://qm.qq.com/cgi-bin/qm/qr?k=Sh4gcapxVV57FqXxe7ZU07-v9u8YvKVN&jump_from=webapi&authKey=HiFkDO97IWzVgJEO6SWn59U3r7vJPEfvGNq8+Y4RVgOHFRN8+CB9WhpjYJmRvyky', '_blank')
+}
 </script>
 
 <style scoped>
