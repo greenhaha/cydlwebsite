@@ -1,5 +1,5 @@
 // API配置
-const API_BASE_URL = 'http://localhost:8080/api/v1'
+const API_BASE_URL = '/api/v1'
 
 // 通用fetch请求函数
 const apiRequest = async <T>(url: string, options?: RequestInit): Promise<T> => {
