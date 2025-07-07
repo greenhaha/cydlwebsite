@@ -9,9 +9,18 @@ import {
   NSpace,
   NMessageProvider,
 } from 'naive-ui'
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
+import { computed } from 'vue'
 import AppFooter from './components/Layout/AppFooter.vue'
 import HeaderMenu from './components/Layout/HeaderMenu.vue'
+
+const route = useRoute()
+
+// 计算是否显示header的逻辑
+const shouldShowHeader = computed(() => {
+  const hiddenHeaderRoutes = ['/anniversary']
+  return !hiddenHeaderRoutes.includes(route.path)
+})
 
 const themeOverrides: GlobalThemeOverrides = {
   Menu: {
@@ -37,7 +46,7 @@ const themeOverrides: GlobalThemeOverrides = {
     <n-message-provider>
       <n-space vertical size="large">
         <n-layout class="relative">
-          <n-layout-header class="n-layout-header absolute top-0 left-0 right-0 z-1">
+          <n-layout-header v-if="shouldShowHeader" class="n-layout-header absolute top-0 left-0 right-0 z-1">
             <div class="w-full flex align-middle"><HeaderMenu /></div>
 
             <!-- <div><RouterLink to="/">Home</RouterLink></div>
@@ -46,7 +55,7 @@ const themeOverrides: GlobalThemeOverrides = {
           <n-layout-content class="min-h-[calc(100vh)]">
             <RouterView />
           </n-layout-content>
-          <n-layout-footer class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
+          <n-layout-footer v-if="shouldShowHeader" class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
         </n-layout>
       </n-space>
     </n-message-provider>

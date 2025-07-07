@@ -11,6 +11,9 @@ importers:
       '@vicons/ionicons5':
         specifier: ^0.13.0
         version: 0.13.0
+      '@vicons/tabler':
+        specifier: ^0.13.0
+        version: 0.13.0
       axios:
         specifier: ^1.8.4
         version: 1.10.0
@@ -798,6 +801,9 @@ packages:
 
   '@vicons/ionicons5@0.13.0':
     resolution: {integrity: sha512-zvZKBPjEXKN7AXNo2Na2uy+nvuv6SP4KAMQxpKL2vfHMj0fSvuw7JZcOPCjQC3e7ayssKnaoFVAhbYcW6v41qQ==}
+
+  '@vicons/tabler@0.13.0':
+    resolution: {integrity: sha512-AykuhiqjszkIoAL/7knIFm6RDOBS1ZmQdJfQ+RNLEah0fVsxykUFCfMBSNZh8lOzC85EtdD1k5g/sv5GYk0Ohg==}
 
   '@vitejs/plugin-vue@5.2.4':
     resolution: {integrity: sha512-7Yx/SXSOcQq5HiiV3orevHUFn+pmMB4cgbEkDYgnkUWb0WfeQ/wa2yFv6D5ICiCQOVpjA7vYDXrC7AGO8yjDHA==}
@@ -2711,6 +2717,8 @@ snapshots:
       eslint-visitor-keys: 4.2.1
 
   '@vicons/ionicons5@0.13.0': {}
+
+  '@vicons/tabler@0.13.0': {}
 
   '@vitejs/plugin-vue@5.2.4(vite@6.3.5(@types/node@22.15.32)(jiti@2.4.2)(lightningcss@1.30.1))(vue@3.5.17(typescript@5.8.3))':
     dependencies:

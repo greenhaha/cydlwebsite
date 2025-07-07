@@ -50,6 +50,22 @@ const router = createRouter({
       component: () => import('../views/ContributeView.vue'),
     },
     {
+      path: '/anniversary-preheating',
+      name: 'anniversary-preheating',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AnniversaryPreheatingView.vue'),
+    },
+    {
+      path: '/anniversary',
+      name: 'anniversary',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AnniversaryView.vue'),
+    },
+    {
       path: '/server-status',
       name: 'server-status',
       // route level code-splitting

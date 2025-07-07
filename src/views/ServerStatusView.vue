@@ -45,10 +45,10 @@
       </div>
 
       <div v-else class="server-info">
-        <n-grid 
-          :cols="1" 
-          :x-gap="16" 
-          :y-gap="12" 
+        <n-grid
+          :cols="1"
+          :x-gap="16"
+          :y-gap="12"
           responsive="screen"
           :item-responsive="true"
           :collapsed-rows="2"
@@ -66,8 +66,8 @@
                     size="24"
                     :color="serverData.online ? '#52c41a' : '#ff4d4f'"
                   >
-                    <component 
-                      :is="serverData.online ? CheckCircleIcon : CloseCircleIcon" 
+                    <component
+                      :is="serverData.online ? CheckCircleIcon : CloseCircleIcon"
                     />
                   </n-icon>
                   <n-text style="font-size: 18px; font-weight: 600">
@@ -115,7 +115,7 @@
                   <n-text depth="3">反外挂</n-text>
                   <n-space align="center">
                     <n-text style="font-weight: 600">{{ serverData.antiCheat }}</n-text>
-                    <n-tag 
+                    <n-tag
                       :type="serverData.vacEnabled ? 'success' : 'warning'"
                       size="small"
                     >
@@ -125,7 +125,7 @@
                 </div>
                 <div v-if="serverData.passwordProtected !== null" class="info-item">
                   <n-text depth="3">密码保护</n-text>
-                  <n-tag 
+                  <n-tag
                     :type="serverData.passwordProtected ? 'warning' : 'success'"
                     size="small"
                   >
@@ -136,7 +136,7 @@
                   <n-text depth="3">延迟</n-text>
                   <n-space align="center">
                     <n-text style="font-weight: 600">{{ serverData.ping }}ms</n-text>
-                    <n-tag 
+                    <n-tag
                       :type="serverData.ping < 50 ? 'success' : serverData.ping < 100 ? 'warning' : 'error'"
                       size="small"
                     >
@@ -182,7 +182,7 @@
                   <n-text depth="3">CPU使用率</n-text>
                   <n-space align="center">
                     <n-text style="font-weight: 600">{{ serverData.utilization.toFixed(1) }}%</n-text>
-                    <n-tag 
+                    <n-tag
                       :type="serverData.utilization < 50 ? 'success' : serverData.utilization < 80 ? 'warning' : 'error'"
                       size="small"
                     >
@@ -206,7 +206,7 @@
                   <div class="info-item">
                     <n-text depth="3">服务器地址</n-text>
                     <n-space align="center">
-                      <n-text 
+                      <n-text
                         style="font-weight: 600; font-family: 'Monaco', 'Courier New', monospace"
                       >
                         {{ serverData.address || serverAddress }}
@@ -309,7 +309,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import {
   NCard,
   NSpace,
@@ -389,6 +389,9 @@ const lastUpdated = ref('')
 
 const serverAddress = '43.138.75.104:27015'
 
+// 定时器ID，用于清理
+let intervalId: number | undefined
+
 const playerPercentage = computed(() => {
   if (!serverData.value.maxPlayers) return 0
   return Math.round((serverData.value.players / serverData.value.maxPlayers) * 100)
@@ -414,27 +417,27 @@ const formatPlayTime = (seconds: number) => {
 const fetchServerStatus = async () => {
   loading.value = true
   error.value = ''
-  
+
   try {
     const response = await fetch('/api/v1/cs2/server/details')
-    
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }
-    
+
     const data = await response.json()
-    
+
     // 检查API返回的数据是否有效
     if (!data || typeof data !== 'object') {
       throw new Error('API返回的数据格式无效')
     }
-    
+
     // 根据新的API数据结构更新服务器数据
     const basicInfo = data.basic_info || {}
     const performance = data.performance || {}
     const connection = data.connection || {}
     const rawData = data.raw_data || {}
-    
+
     serverData.value = {
       online: Boolean(basicInfo.online),
       name: basicInfo.name || null,
@@ -454,7 +457,7 @@ const fetchServerStatus = async () => {
       playerList: Array.isArray(data.players) ? data.players : [],
       lastUpdate: data.timestamp ? new Date(data.timestamp).toISOString() : null
     }
-    
+
     if (serverData.value.online) {
       message.success('服务器状态已更新')
     } else {
@@ -463,7 +466,7 @@ const fetchServerStatus = async () => {
   } catch (err) {
     console.warn('API请求失败:', err)
     error.value = err instanceof Error ? err.message : '获取服务器状态失败'
-    
+
     // 设置离线状态
     serverData.value = {
       online: false,
@@ -484,7 +487,7 @@ const fetchServerStatus = async () => {
       playerList: [],
       lastUpdate: null
     }
-    
+
     message.error('无法连接到服务器')
   } finally {
     loading.value = false
@@ -516,11 +519,18 @@ const openInBrowser = () => {
 
 onMounted(() => {
   fetchServerStatus()
-  
+
   // 每30秒自动刷新一次
-  setInterval(() => {
+  intervalId = window.setInterval(() => {
     fetchServerStatus()
   }, 30000)
+})
+
+onUnmounted(() => {
+  // 清理定时器，防止内存泄漏
+  if (intervalId) {
+    clearInterval(intervalId)
+  }
 })
 </script>
 
@@ -619,24 +629,24 @@ onMounted(() => {
   .server-status-container {
     padding: 20px 10px;
   }
-  
+
   .server-status-card {
     padding: 20px;
   }
-  
+
   .page-title {
     font-size: 24px;
   }
-  
+
   .action-buttons {
     margin-top: 16px;
   }
-  
+
   .action-buttons .n-space {
     flex-direction: column;
     width: 100%;
   }
-  
+
   .action-buttons .n-button {
     width: 100%;
   }

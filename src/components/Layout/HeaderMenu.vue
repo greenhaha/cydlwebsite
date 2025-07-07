@@ -33,11 +33,13 @@
 import {
   AlertCircle as AlertCircleIcon,
   Book as BookIcon,
+  // Calendar as CalendarIcon,
   Gift as GiftIcon,
   Heart as HeartIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
   Server as ServerIcon,
+  // Star as StarIcon,
   WomanSharp as ModelIcon,
 } from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
@@ -125,6 +127,34 @@ const menuOptions: MenuOption[] = [
     key: 'server-status-page',
     icon: renderIcon(ServerIcon),
   },
+  // {
+  //   label: () =>
+  //     h(
+  //       RouterLink,
+  //       {
+  //         to: {
+  //           path: '/anniversary-preheating',
+  //         },
+  //       },
+  //       { default: () => '周年庆预热' },
+  //     ),
+  //   key: 'anniversary-preheating-page',
+  //   icon: renderIcon(StarIcon),
+  // },
+  // {
+  //   label: () =>
+  //     h(
+  //       RouterLink,
+  //       {
+  //         to: {
+  //           path: '/anniversary',
+  //         },
+  //       },
+  //       { default: () => '周年庆典' },
+  //     ),
+  //   key: 'anniversary-page',
+  //   icon: renderIcon(CalendarIcon),
+  // },
   {
     label: () =>
       h(
@@ -177,6 +207,8 @@ export default defineComponent({
         '/faq': 'faq-page',
         '/registration': 'registration-page',
         '/server-status': 'server-status-page',
+        '/anniversary-preheating': 'anniversary-preheating-page',
+        '/anniversary': 'anniversary-page',
         '/gifts': 'gift-page',
         '/contribute': 'contribute-page',
       }
