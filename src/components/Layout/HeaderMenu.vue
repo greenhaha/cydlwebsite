@@ -37,14 +37,15 @@ import {
   Heart as HeartIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
+  Server as ServerIcon,
   WomanSharp as ModelIcon,
 } from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
 import { NButton, NDrawer, NIcon, NMenu } from 'naive-ui'
 import type { Component } from 'vue'
 
-import { defineComponent, h, onMounted, onUnmounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { defineComponent, h, onMounted, onUnmounted, ref, watch } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -116,6 +117,20 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
+            path: '/server-status',
+          },
+        },
+        { default: () => '服务器状态' },
+      ),
+    key: 'server-status-page',
+    icon: renderIcon(ServerIcon),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
             path: '/gifts',
           },
         },
@@ -149,9 +164,38 @@ export default defineComponent({
     MenuIcon,
   },
   setup() {
+    const route = useRoute()
     const activeKey = ref<string | null>(null)
     const drawerVisible = ref(false)
     const isMobile = ref(false)
+
+    // 根据路径获取对应的菜单key
+    const getActiveKeyFromPath = (path: string): string | null => {
+      const pathKeyMap: Record<string, string> = {
+        '/': 'go-back-home',
+        '/models': 'models-page',
+        '/faq': 'faq-page',
+        '/registration': 'registration-page',
+        '/server-status': 'server-status-page',
+        '/gifts': 'gift-page',
+        '/contribute': 'contribute-page',
+      }
+      return pathKeyMap[path] || null
+    }
+
+    // 初始化activeKey
+    const initActiveKey = () => {
+      activeKey.value = getActiveKeyFromPath(route.path)
+    }
+
+    // 监听路由变化
+    watch(
+      () => route.path,
+      (newPath) => {
+        activeKey.value = getActiveKeyFromPath(newPath)
+      },
+      { immediate: true }
+    )
 
     const updateIsMobile = () => {
       isMobile.value = window.innerWidth < 768
@@ -160,6 +204,8 @@ export default defineComponent({
     onMounted(() => {
       updateIsMobile()
       window.addEventListener('resize', updateIsMobile)
+      // 确保组件挂载后正确设置activeKey
+      initActiveKey()
     })
 
     onUnmounted(() => {
