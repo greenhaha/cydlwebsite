@@ -1,199 +1,417 @@
 <template>
-  <div class="anniversary-preheating-page z-[0]">
-    <!-- 动态背景 -->
-    <div class="dynamic-background fixed inset-0 w-full h-full ">
-      <div class="background-layer bg-layer-1"></div>
-      <div class="background-layer bg-layer-2"></div>
-      <div class="background-layer bg-layer-3"></div>
-      <div class="background-stars"></div>
+  <div class="preheating-page">
+    <!-- 专属背景 -->
+    <div class="fixed inset-0 w-full h-full">
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+           style="background-image: url('/src/assets/image/cs2CTVST.png')">
+      </div>
+      <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
     </div>
-    
-    <!-- 背景遮罩 -->
-    <div class="background-overlay fixed inset-0 z-1"></div>
 
     <!-- 主内容区域 -->
-    <div class="anniversary-content relative z-10 min-h-screen flex flex-col items-center justify-start py-8 px-4">
-      <!-- 英雄区域 -->
-      <div class="hero-section w-full max-w-6xl mx-auto text-center pt-20 pb-12">
-        <!-- 科技感标题 -->
-        <div class="hero-title-wrapper mb-12">
-          <div class="glitch-container mb-6">
-            <n-h1 class="glitch-text text-center !text-[48px] md:!text-[64px] font-bold text-white mb-6 text-shadow-lg" style="color: #ffffff !important; text-align: center !important; text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 255, 255, 0.4) !important;">
-              CS2 黄粱一梦社区服
-            </n-h1>
-            <n-h2 class="anniversary-subtitle text-center !text-[32px] md:!text-[42px] font-bold mb-6 text-shadow-lg tech-gradient-text" style="text-align: center !important; display: block !important; width: 100% !important; margin: 0 auto !important;">
-              一周年庆典预热
-            </n-h2>
-          </div>
-          <div class="hero-subtitle-wrapper">
-            <n-h5 class="hero-subtitle text-center text-lg md:text-xl text-white/95 max-w-4xl mx-auto text-shadow leading-relaxed" style="color: rgba(255, 255, 255, 0.98) !important; text-align: center !important; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9) !important; display: block !important; width: 100% !important; margin: 0 auto !important;">
-              感谢每一位玩家的支持，一年来我们共同见证了社区的成长！
-            </n-h5>
-          </div>
-        </div>
-        
-        <!-- 科技感装饰线 -->
-        <div class="tech-divider relative flex items-center justify-center mb-16 w-full max-w-lg mx-auto">
-          <div class="tech-line h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent w-full"></div>
-          <div class="tech-dot absolute w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+    <div class="preheating-content inset-0 h-full top-[0px] z-10 flex flex-col items-center justify-start pt-[80px] pb-8">
+      <!-- 顶部导航 -->
+      <div class="fixed top-0 left-0 right-0 z-30 bg-black/60 backdrop-blur-md border-b border-white/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <RouterLink 
+            to="/"
+            class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/20 bg-black/30"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            返回主页
+          </RouterLink>
         </div>
       </div>
 
-      <!-- 倒计时区域 -->
-      <div class="countdown-section w-full max-w-4xl mx-auto mb-16">
-        <div class="countdown-title mb-12 text-center">
-          <n-h3 class="text-2xl md:text-3xl font-bold text-white mb-6" style="color: #ffffff !important; text-align: center !important; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 255, 255, 0.3) !important;">
-            距离周年庆开启还有
-          </n-h3>
-          <div class="countdown-subtitle text-blue-300 text-base md:text-lg mb-8" style="color: #93c5fd !important; text-align: center !important; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9) !important;">
-            {{ celebrationDate }}
+      <!-- 大气标题设计 -->
+      <div class="page-header w-full max-w-[1280px] px-4 mb-8 z-20 text-center">
+        <!-- 背景装饰 -->
+        <div class="relative mb-8">
+          
+          <!-- 主标题容器 -->
+          <div class="relative z-10">
+            <!-- 顶部装饰线 -->
+            <div class="flex items-center justify-center !mb-6">
+              <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent w-24"></div>
+              <div class="mx-3 w-2 h-2 bg-white/60 rounded-full"></div>
+              <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent w-24"></div>
+            </div>
+            
+            <!-- 主标题 -->
+            <div class="!mb-4 relative text-center">
+              <h1 class="text-[36px] md:text-[48px] lg:text-[56px] font-black text-white mb-3 tracking-tight leading-none drop-shadow-2xl text-shadow-lg">
+                黄粱一梦周年庆预热
+              </h1>
+            </div>
+            
+            <!-- 副标题 -->
+            <h2 class="w-full text-[16px] md:text-[20px] lg:text-[24px] font-medium text-white/95 !mb-6 tracking-wide text-center drop-shadow-lg text-shadow">
+              热血沸腾 · 蓄势待发 · 精彩预告
+            </h2>
+            
+            <!-- 底部装饰线 -->
+            <div class="flex items-center justify-center !mb-6">
+              <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent w-32"></div>
+              <div class="mx-3 w-1.5 h-1.5 bg-white/60 rounded-full"></div>
+              <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent w-32"></div>
+            </div>
           </div>
         </div>
         
-        <!-- 倒计时显示 -->
-        <div class="countdown-display grid grid-cols-4 gap-4 md:gap-6 max-w-lg mx-auto">
-          <div class="countdown-item countdown-days">
-            <div class="countdown-number bg-gradient-to-b from-blue-500 to-blue-700 text-white rounded-xl p-4 md:p-6 text-center shadow-lg">
-              <div class="countdown-value text-2xl md:text-3xl font-bold mb-1">{{ countdown.days }}</div>
-              <div class="text-xs md:text-sm text-blue-100">天</div>
-            </div>
+        <!-- 描述文字 -->
+        <div class="backdrop-blur-lg bg-black/50 rounded-lg p-4 border border-white/30 shadow-2xl">
+          <p class="text-[14px] md:text-[16px] text-white leading-relaxed !w-full mx-auto text-center drop-shadow-lg text-shadow">
+            周年庆即将来临，精彩活动蓄势待发！
+          </p>
+        </div>
+      </div>
+ <!-- 倒计时区域 -->
+      <div class="countdown-section w-full max-w-[1280px] px-4 !mb-12 z-20">
+        <div class="text-center mb-8">
+          <h3 class="text-[24px] md:text-[32px] font-bold text-white !mb-4 text-shadow-lg">
+            周年庆倒计时
+          </h3>
+          <p class="text-[16px] md:text-[18px] text-white/90 text-shadow w-full mx-auto">
+            距离盛大开启还有
+          </p>
+        </div>
+
+        <div class="countdown-display flex justify-center items-center space-x-4 !mb-8">
+          <div class="countdown-item backdrop-blur-lg bg-white/95 rounded-xl p-6 text-center shadow-2xl">
+            <div class="text-3xl font-bold text-purple-600">{{ countdown.days }}</div>
+            <div class="text-sm text-gray-600">天</div>
           </div>
-          <div class="countdown-item countdown-hours">
-            <div class="countdown-number bg-gradient-to-b from-purple-500 to-purple-700 text-white rounded-xl p-4 md:p-6 text-center shadow-lg">
-              <div class="countdown-value text-2xl md:text-3xl font-bold mb-1">{{ countdown.hours }}</div>
-              <div class="text-xs md:text-sm text-purple-100">时</div>
-            </div>
+          <div class="text-2xl text-white font-bold">:</div>
+          <div class="countdown-item backdrop-blur-lg bg-white/95 rounded-xl p-6 text-center shadow-2xl">
+            <div class="text-3xl font-bold text-purple-600">{{ countdown.hours }}</div>
+            <div class="text-sm text-gray-600">时</div>
           </div>
-          <div class="countdown-item countdown-minutes">
-            <div class="countdown-number bg-gradient-to-b from-green-500 to-green-700 text-white rounded-xl p-4 md:p-6 text-center shadow-lg">
-              <div class="countdown-value text-2xl md:text-3xl font-bold mb-1">{{ countdown.minutes }}</div>
-              <div class="text-xs md:text-sm text-green-100">分</div>
-            </div>
+          <div class="text-2xl text-white font-bold">:</div>
+          <div class="countdown-item backdrop-blur-lg bg-white/95 rounded-xl p-6 text-center shadow-2xl">
+            <div class="text-3xl font-bold text-purple-600">{{ countdown.minutes }}</div>
+            <div class="text-sm text-gray-600">分</div>
           </div>
-          <div class="countdown-item countdown-seconds">
-            <div class="countdown-number bg-gradient-to-b from-orange-500 to-orange-700 text-white rounded-xl p-4 md:p-6 text-center shadow-lg">
-              <div class="countdown-value text-2xl md:text-3xl font-bold mb-1">{{ countdown.seconds }}</div>
-              <div class="text-xs md:text-sm text-orange-100">秒</div>
-            </div>
+          <div class="text-2xl text-white font-bold">:</div>
+          <div class="countdown-item backdrop-blur-lg bg-white/95 rounded-xl p-6 text-center shadow-2xl">
+            <div class="text-3xl font-bold text-purple-600">{{ countdown.seconds }}</div>
+            <div class="text-sm text-gray-600">秒</div>
           </div>
         </div>
       </div>
 
-      <!-- 活动预告区域 -->
-      <div class="preview-section w-full max-w-6xl mx-auto mb-16">
-        <div class="section-header text-center mb-12">
-          <n-h3 class="text-2xl md:text-3xl font-bold text-white mb-6" style="color: #ffffff !important; text-align: center !important; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 255, 255, 0.3) !important;">
-            活动预告
-          </n-h3>
-          <div class="section-subtitle text-white/70 text-sm md:text-base max-w-2xl mx-auto mb-4" style="color: rgba(255, 255, 255, 0.9) !important; text-align: center !important; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9) !important; display: block !important; width: 100% !important; margin: 0 auto !important;">
-            精彩活动即将开始，敬请期待！
-          </div>
+      <!-- 预热活动区域 -->
+      <div class="activities-section w-full max-w-[800px] px-4 !mb-8 z-20 text-center">
+        <div class="text-center mb-6">
+          <h3 class="text-[20px] md:text-[24px] font-bold text-white !mb-2 text-shadow-lg drop-shadow-lg">
+            预热活动
+          </h3>
+          <p class="text-[14px] md:text-[16px] text-white/95 w-full mx-auto text-shadow drop-shadow">
+            参与预热活动，抢先体验精彩内容
+          </p>
         </div>
-        
-        <!-- 预告卡片 -->
-        <n-grid cols="1 s:2 m:2 l:4" x-gap="20" y-gap="20" responsive="screen">
-          <n-grid-item v-for="(preview, index) in previews" :key="index">
-            <n-card class="preview-card h-full backdrop-blur-lg bg-black/30 border border-blue-500/30 hover:bg-black/40 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-blue-400/60" hoverable>
-              <template #header>
-                <div class="preview-header flex items-center gap-3 min-h-[50px] p-2">
-                  <div class="preview-icon-wrapper p-2 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 shadow-lg">
-                    <component :is="preview.icon" class="w-[20px] h-[20px] text-white" />
-                  </div>
-                  <span class="preview-title text-white font-semibold text-sm">{{ preview.title }}</span>
-                </div>
-              </template>
-              <div class="preview-content text-white/80 text-xs md:text-sm leading-relaxed p-2">
-                {{ preview.description }}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="activity-card p-4 rounded-lg backdrop-blur-lg bg-black/40 border border-white/30 shadow-xl">
+            <div class="text-center !mb-3">
+              <div class="text-2xl !mb-2">🎁</div>
+              <h4 class="text-lg font-bold text-white !mb-1 text-shadow">签到领礼包</h4>
+              <p class="text-white/90 text-sm text-shadow">参与周年庆活动，获得周年庆专属礼包</p>
+            </div>
+            <div class="bg-black/30 rounded-lg p-3 border border-white/20">
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-white/90 text-shadow">准备进度</span>
+                <span class="text-xs font-semibold text-yellow-300 text-shadow"></span>
               </div>
-              <template #footer>
-                <div class="preview-footer flex items-center justify-between p-2">
-                  <span class="preview-date text-blue-300 text-xs">{{ preview.date }}</span>
-                  <div class="preview-status">
-                    <n-tag :type="preview.status === 'coming' ? 'warning' : 'success'" size="small">
-                      {{ preview.status === 'coming' ? '即将开始' : '准备中' }}
-                    </n-tag>
-                  </div>
+              <div class="w-full bg-gray-600 rounded-full h-1.5 !mt-2">
+                <div class="bg-gradient-to-r from-yellow-400 to-orange-400 h-1.5 rounded-full transition-all duration-500" 
+                     :style="{ width: (7 / 7 * 100) + '%' }"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-card p-4 rounded-lg backdrop-blur-lg bg-black/40 border border-white/30 shadow-xl">
+            <div class="text-center !mb-3">
+              <div class="text-2xl !mb-2">⚡</div>
+              <h4 class="text-lg font-bold text-white !mb-1 text-shadow">预热任务</h4>
+              <p class="text-white/90 text-sm text-shadow">完成预热任务，解锁周年庆独家内容</p>
+            </div>
+            <div class="bg-black/30 rounded-lg p-3 border border-white/20">
+              <div class="flex justify-between items-center">
+                <span class="text-xs text-white/90 text-shadow">解锁进度</span>
+                <span class="text-xs font-semibold text-blue-300 text-shadow"></span>
+              </div>
+              <div class="w-full bg-gray-600 rounded-full h-1.5 !mt-2">
+                <div class="bg-gradient-to-r from-blue-400 to-indigo-400 h-1.5 rounded-full transition-all duration-500" 
+                     :style="{ width: 100 + '%' }"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 周年庆奖励物品展示 -->
+      <div class="rewards-section w-full max-w-[1280px] px-4 !mb-12 z-20">
+        <div class="text-center mb-8">
+          <h3 class="text-[24px] md:text-[32px] font-bold text-white !mb-4 text-shadow-lg drop-shadow-lg">
+            周年庆丰厚奖励
+          </h3>
+          <p class="text-[16px] md:text-[18px] text-white/90 text-shadow w-full mx-auto">
+            精心准备的周年庆专属奖励，等你来拿！
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- CS2武器皮肤 -->
+          <div class="reward-card group relative overflow-hidden rounded-2xl backdrop-blur-lg bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-300/30 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-red-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative p-6 text-center">
+              <div class="mb-4">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center shadow-lg">
+                  <span class="text-2xl">🔫</span>
                 </div>
-              </template>
-            </n-card>
-          </n-grid-item>
-        </n-grid>
+                <h4 class="text-xl font-bold text-white mb-2 text-shadow-lg">CS2武器皮肤</h4>
+                <p class="text-white/90 text-sm text-shadow">精选稀有武器皮肤，彰显独特品味</p>
+              </div>
+              <div class="bg-black/20 rounded-lg p-3 border border-orange-300/20">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs text-orange-300 font-medium">稀有度</span>
+                  <span class="text-xs font-bold text-orange-400 bg-orange-400/20 px-2 py-1 rounded">传说级</span>
+                </div>
+                <div class="text-xs text-white/80">包含多款热门武器皮肤</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 周年庆专属模型皮肤 -->
+          <div class="reward-card group relative overflow-hidden rounded-2xl backdrop-blur-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-300/30 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-400/10 to-pink-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative p-6 text-center">
+              <div class="mb-4">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg">
+                  <span class="text-2xl">👤</span>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-2 text-shadow-lg">专属模型皮肤</h4>
+                <p class="text-white/90 text-sm text-shadow">周年庆限定角色皮肤，独一无二</p>
+              </div>
+              <div class="bg-black/20 rounded-lg p-3 border border-purple-300/20">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs text-purple-300 font-medium">稀有度</span>
+                  <span class="text-xs font-bold text-purple-400 bg-purple-400/20 px-2 py-1 rounded">限定版</span>
+                </div>
+                <div class="text-xs text-white/80">周年庆专属设计，过期不候</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 积分抽奖 -->
+          <div class="reward-card group relative overflow-hidden rounded-2xl backdrop-blur-lg bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-300/30 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-br from-yellow-400/10 to-orange-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative p-6 text-center">
+              <div class="mb-4">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center shadow-lg">
+                  <span class="text-2xl">🎰</span>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-2 text-shadow-lg">积分抽奖</h4>
+                <p class="text-white/90 text-sm text-shadow">海量积分奖励，畅享抽奖乐趣</p>
+              </div>
+              <div class="bg-black/20 rounded-lg p-3 border border-yellow-300/20">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs text-yellow-300 font-medium">奖励范围</span>
+                  <span class="text-xs font-bold text-yellow-400 bg-yellow-400/20 px-2 py-1 rounded">100-10000</span>
+                </div>
+                <div class="text-xs text-white/80">每日免费抽奖机会</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 精美壁纸 -->
+          <div class="reward-card group relative overflow-hidden rounded-2xl backdrop-blur-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-300/30 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative p-6 text-center">
+              <div class="mb-4">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full flex items-center justify-center shadow-lg">
+                  <span class="text-2xl">🖼️</span>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-2 text-shadow-lg">精美壁纸</h4>
+                <p class="text-white/90 text-sm text-shadow">高清周年庆主题壁纸合集</p>
+              </div>
+              <div class="bg-black/20 rounded-lg p-3 border border-cyan-300/20">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs text-cyan-300 font-medium">分辨率</span>
+                  <span class="text-xs font-bold text-cyan-400 bg-cyan-400/20 px-2 py-1 rounded">4K超清</span>
+                </div>
+                <div class="text-xs text-white/80">包含多款精美设计</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 专属换肤模型 -->
+          <div class="reward-card group relative overflow-hidden rounded-2xl backdrop-blur-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-300/30 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-400/10 to-emerald-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative p-6 text-center">
+              <div class="mb-4">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-400 to-emerald-400 rounded-full flex items-center justify-center shadow-lg">
+                  <span class="text-2xl">🎨</span>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-2 text-shadow-lg">专属换肤模型</h4>
+                <p class="text-white/90 text-sm text-shadow">周年庆特制换肤系统</p>
+              </div>
+              <div class="bg-black/20 rounded-lg p-3 border border-green-300/20">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs text-green-300 font-medium">类型</span>
+                  <span class="text-xs font-bold text-green-400 bg-green-400/20 px-2 py-1 rounded">互动式</span>
+                </div>
+                <div class="text-xs text-white/80">支持自定义换肤</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 神秘大奖 -->
+          <div class="reward-card group relative overflow-hidden rounded-2xl backdrop-blur-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-300/30 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/10 to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative p-6 text-center">
+              <div class="mb-4">
+                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                  <span class="text-2xl">🎁</span>
+                </div>
+                <h4 class="text-xl font-bold text-white mb-2 text-shadow-lg">神秘大奖</h4>
+                <p class="text-white/90 text-sm text-shadow">周年庆终极奖励，敬请期待</p>
+              </div>
+              <div class="bg-black/20 rounded-lg p-3 border border-indigo-300/20">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs text-indigo-300 font-medium">稀有度</span>
+                  <span class="text-xs font-bold text-indigo-400 bg-indigo-400/20 px-2 py-1 rounded">???</span>
+                </div>
+                <div class="text-xs text-white/80">周年庆当日揭晓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 奖励说明 -->
+        <div class="!mt-8 text-center">
+          <div class="backdrop-blur-lg bg-black/30 rounded-xl p-4 border border-white/20 shadow-xl">
+            <p class="text-white/90 text-sm text-shadow mb-2">
+              🎉 所有奖励均为周年庆专属，参与活动即有机会获得 🎉
+            </p>
+            <p class="text-white/70 text-xs text-shadow">
+              更多惊喜奖励将在周年庆正式开启时公布，敬请期待！
+            </p>
+          </div>
+        </div>
       </div>
 
-      <!-- 行动按钮 -->
-      <div class="action-section w-full max-w-2xl mx-auto flex flex-col sm:flex-row gap-4 justify-center">
-        <n-button 
-          type="primary" 
-          size="large" 
-          class="action-button flex-1 sm:flex-none"
-          @click="$router.push('/anniversary')"
-        >
-          <template #icon>
-            <n-icon>
-              <CalendarIcon />
-            </n-icon>
-          </template>
-          查看周年庆详情
-        </n-button>
-        
-        <n-button 
-          type="default" 
-          size="large" 
-          class="action-button flex-1 sm:flex-none"
-          @click="$router.push('/registration')"
-        >
-          <template #icon>
-            <n-icon>
-              <UserIcon />
-            </n-icon>
-          </template>
-          立即参与活动
-        </n-button>
+     
+      <!-- 快捷按钮 -->
+      <div class="actions-section w-full max-w-[1280px] px-4 !mb-12 z-20">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <RouterLink 
+            v-if="isAnniversaryStarted"
+            to="/anniversary"
+            class="inline-flex items-center px-8 py-4 backdrop-blur-lg bg-gradient-to-r from-purple-500/90 to-pink-500/90 border border-purple-300/30 text-white text-lg font-semibold rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 text-shadow-sm"
+          >
+            <span class="mr-3 text-xl">🎉</span>
+            立即参与
+          </RouterLink>
+          <button 
+            v-else
+            disabled
+            class="inline-flex items-center px-8 py-4 backdrop-blur-lg bg-gray-600/60 border border-gray-400/30 text-white/60 text-lg font-semibold rounded-xl shadow-xl cursor-not-allowed text-shadow-sm"
+          >
+            <span class="mr-3 text-xl">⏳</span>
+            敬请期待
+          </button>
+          <button 
+            @click="sharePreheating"
+            class="inline-flex items-center px-8 py-4 backdrop-blur-lg bg-gradient-to-r from-orange-500/90 to-red-500/90 border border-orange-300/30 text-white text-lg font-semibold rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 text-shadow-sm"
+          >
+            <span class="mr-3 text-xl">📢</span>
+            分享预热
+          </button>
+        </div>
+      </div>
+
+      <!-- 底部信息栏 -->
+      <div class="footer-info w-full max-w-[1280px] px-4 z-20">
+        <div class="text-center p-6 rounded-xl backdrop-blur-lg bg-black/20 border border-white/20">
+          <p class="text-white/90 text-shadow !mb-2">
+            🔥 预热阶段精彩纷呈，正式庆典更加震撼 🔥
+          </p>
+          <p class="text-white/70 text-sm text-shadow">
+            邀请好友一起预热，共同见证历史时刻！
+          </p>
+        </div>
       </div>
     </div>
 
-    <!-- 科技感粒子效果 -->
-    <div class="particles-container fixed inset-0 pointer-events-none z-0">
+    <!-- 分享弹窗 -->
+    <div 
+      v-if="showShareModal"
+      class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+      @click="closeShareModal"
+    >
       <div 
-        v-for="particle in particles" 
-        :key="particle.id"
-        class="particle absolute w-1 h-1 bg-blue-400 rounded-full animate-pulse"
-        :style="{ 
-          left: particle.x + '%', 
-          top: particle.y + '%',
-          animationDelay: particle.delay + 's',
-          animationDuration: particle.duration + 's'
-        }"
-      ></div>
-    </div>
-
-    <!-- 网格背景效果 -->
-    <div class="grid-background fixed inset-0 pointer-events-none z-0">
-      <div class="grid-lines"></div>
-    </div>
-
-    <!-- 光晕效果 -->
-    <div class="glow-effects fixed inset-0 pointer-events-none z-0">
-      <div class="glow-orb glow-orb-1"></div>
-      <div class="glow-orb glow-orb-2"></div>
-      <div class="glow-orb glow-orb-3"></div>
+        class="bg-white rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl"
+        @click.stop
+      >
+        <div class="text-center mb-6">
+          <h3 class="text-xl font-bold text-gray-800 mb-2">分享预热活动</h3>
+          <p class="text-gray-600">邀请好友一起参与周年庆预热！</p>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">分享链接</label>
+          <div class="flex items-center space-x-2">
+            <input 
+              v-model="shareUrl" 
+              readonly 
+              class="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-sm"
+            >
+            <button 
+              @click="copyToClipboard"
+              class="px-4 !ml-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+            >
+              复制
+            </button>
+          </div>
+        </div>
+        
+        <div class="flex space-x-3 !mt-4">
+          <button 
+            @click="shareToQQ"
+            class="flex-1 flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg"
+          >
+            <span class="mr-2">🐧</span>
+            分享到QQ
+          </button>
+          <button 
+            @click="closeShareModal"
+            class="px-6 py-3 bg-gray-300 !ml-2 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
+          >
+            取消
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { 
-  Calendar as CalendarIcon,
-  Gift as GiftIcon,
-  Trophy as TrophyIcon,
-  People as UsersIcon,
-  Person as UserIcon,
-  Star as StarIcon
-} from '@vicons/ionicons5'
-import { NButton, NCard, NGrid, NGridItem, NH1, NH2, NH3, NH5, NIcon, NTag } from 'naive-ui'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 
-// 倒计时状态
+// 周年庆开始时间 - 8月1日 2025年
+const ANNIVERSARY_START_DATE = new Date('2025-08-01 00:00:00')
+
+// 响应式数据
+const signInDays = ref(0)
+const taskProgress = ref(0)
+const showShareModal = ref(false)
+const shareUrl = ref('')
+
+// 倒计时数据
 const countdown = ref({
   days: 0,
   hours: 0,
@@ -201,1119 +419,150 @@ const countdown = ref({
   seconds: 0
 })
 
-// 周年庆日期（可根据实际情况调整）
-const celebrationDate = '2025年7月15日 20:00'
-const targetDate = new Date('2025-07-15T20:00:00')
+let countdownTimer: number | null = null
 
-// 粒子效果
-const particles = ref<Array<{
-  id: number
-  x: number
-  y: number
-  delay: number
-  duration: number
-}>>([])
+// 计算是否已经开始周年庆
+const isAnniversaryStarted = computed(() => {
+  return new Date() >= ANNIVERSARY_START_DATE
+})
 
-// 活动预告数据
-const previews = ref([
-  {
-    title: '限时武器皮肤',
-    description: '专属周年庆武器皮肤免费领取，独特的纪念意义，错过不再有！',
-    date: '7月15日',
-    status: 'coming',
-    icon: StarIcon
-  },
-  {
-    title: '社区竞技赛',
-    description: '举办周年庆专属竞技比赛，丰厚奖品等你来拿，展现你的实力！',
-    date: '7月16日',
-    status: 'preparing',
-    icon: TrophyIcon
-  },
-  {
-    title: '玩家聚会',
-    description: '线上玩家聚会活动，与社区成员互动交流，分享游戏心得！',
-    date: '7月17日',
-    status: 'preparing',
-    icon: UsersIcon
-  },
-  {
-    title: '周年纪念品',
-    description: '限量周年纪念品发放，见证社区一年来的成长历程！',
-    date: '7月18日',
-    status: 'preparing',
-    icon: GiftIcon
+// 分享预热活动
+const sharePreheating = () => {
+  shareUrl.value = window.location.href
+  showShareModal.value = true
+}
+
+// 关闭分享弹窗
+const closeShareModal = () => {
+  showShareModal.value = false
+}
+
+// 复制链接到剪贴板
+const copyToClipboard = async () => {
+  try {
+    await navigator.clipboard.writeText(shareUrl.value)
+    alert('链接已复制到剪贴板！')
+  } catch (err) {
+    console.error('复制失败:', err)
+    // 兜底方案
+    const textArea = document.createElement('textarea')
+    textArea.value = shareUrl.value
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    alert('链接已复制到剪贴板！')
   }
-])
+}
+
+// 分享到QQ
+const shareToQQ = () => {
+  const title = '周年庆预热活动'
+  const description = '热血沸腾·蓄势待发·精彩预告，快来参与周年庆预热活动！'
+  const qqShareUrl = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(shareUrl.value)}&title=${encodeURIComponent(title)}&desc=${encodeURIComponent(description)}`
+  window.open(qqShareUrl, '_blank')
+}
 
 // 更新倒计时
 const updateCountdown = () => {
-  const now = new Date().getTime()
-  const distance = targetDate.getTime() - now
+  const now = new Date()
+  const timeDiff = ANNIVERSARY_START_DATE.getTime() - now.getTime()
 
-  if (distance > 0) {
-    const newCountdown = {
-      days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-      seconds: Math.floor((distance % (1000 * 60)) / 1000)
-    }
-    
-    // 检查是否有数字变化，添加跳动动画
-    if (newCountdown.seconds !== countdown.value.seconds) {
-      triggerNumberAnimation('seconds')
-    }
-    if (newCountdown.minutes !== countdown.value.minutes) {
-      triggerNumberAnimation('minutes')
-    }
-    if (newCountdown.hours !== countdown.value.hours) {
-      triggerNumberAnimation('hours')
-    }
-    if (newCountdown.days !== countdown.value.days) {
-      triggerNumberAnimation('days')
-    }
-    
-    countdown.value = newCountdown
+  if (timeDiff > 0) {
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))
+    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000)
+
+    countdown.value = { days, hours, minutes, seconds }
   } else {
     countdown.value = { days: 0, hours: 0, minutes: 0, seconds: 0 }
   }
 }
 
-// 触发数字跳动动画
-const triggerNumberAnimation = (type: string) => {
-  const element = document.querySelector(`.countdown-${type} .countdown-value`)
-  if (element) {
-    element.classList.add('animate')
-    setTimeout(() => {
-      element.classList.remove('animate')
-    }, 500)
+// 计算进度
+const calculateProgress = () => {
+  const now = new Date()
+  const preheatingStartDate = new Date('2025-07-01 00:00:00') // 预热开始时间
+  const totalDuration = ANNIVERSARY_START_DATE.getTime() - preheatingStartDate.getTime()
+  const elapsedTime = now.getTime() - preheatingStartDate.getTime()
+  
+  if (elapsedTime < 0) {
+    // 预热还未开始
+    signInDays.value = 0
+    taskProgress.value = 0
+  } else if (elapsedTime >= totalDuration) {
+    // 周年庆已经开始
+    signInDays.value = 7
+    taskProgress.value = 100
+  } else {
+    // 预热进行中
+    const progressRatio = elapsedTime / totalDuration
+    signInDays.value = Math.floor(progressRatio * 7)
+    taskProgress.value = Math.floor(progressRatio * 100)
   }
 }
 
-// 初始化粒子效果
-const initParticles = () => {
-  particles.value = Array.from({ length: 50 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    delay: Math.random() * 5,
-    duration: 3 + Math.random() * 4
-  }))
-}
-
-let countdownInterval: number
-
+// 组件挂载时初始化数据
 onMounted(() => {
+  calculateProgress()
   updateCountdown()
-  countdownInterval = setInterval(updateCountdown, 1000) as unknown as number
-  initParticles()
+  
+  // 启动倒计时
+  countdownTimer = window.setInterval(() => {
+    updateCountdown()
+    calculateProgress()
+  }, 1000)
 })
 
+// 组件卸载时清理定时器
 onUnmounted(() => {
-  if (countdownInterval) {
-    clearInterval(countdownInterval)
+  if (countdownTimer) {
+    clearInterval(countdownTimer)
   }
 })
 </script>
 
 <style scoped>
-.anniversary-preheating-page {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
 }
 
-/* 动态背景 */
-.dynamic-background {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e293b 75%, #0f172a 100%);
-  background-size: 400% 400%;
-  animation: gradient-animation 15s ease infinite;
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes gradient-animation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
-.background-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.6;
-}
-
-.bg-layer-1 {
-  background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.3) 0%, transparent 50%);
-  animation: float-1 8s ease-in-out infinite;
-}
-
-.bg-layer-2 {
-  background: radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.3) 0%, transparent 50%);
-  animation: float-2 12s ease-in-out infinite;
-}
-
-.bg-layer-3 {
-  background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.2) 0%, transparent 60%);
-  animation: float-3 10s ease-in-out infinite;
-}
-
-@keyframes float-1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(20px, -20px) scale(1.1); }
-}
-
-@keyframes float-2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-20px, 20px) scale(1.1); }
-}
-
-@keyframes float-3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(10px, -10px) scale(1.05); }
-}
-
-.background-stars {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.8), transparent),
-    radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.9), transparent),
-    radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.7), transparent),
-    radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.8), transparent);
-  background-repeat: repeat;
-  background-size: 200px 100px;
-  animation: twinkle 20s linear infinite;
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
-}
-
-.background-overlay {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(1px);
-}
-
-.anniversary-content {
-  position: relative;
-  z-index: 10;
-}
-
-/* 英雄区域样式 */
-.hero-section {
-  padding: 2rem 1rem;
-  text-align: center;
-}
-
-.hero-title-wrapper {
-  margin-bottom: 3rem;
-  text-align: center;
-}
-
-.glitch-container {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.hero-subtitle-wrapper {
-  margin-top: 1.5rem;
-  text-align: center;
-}
-
-/* 标题文字增强 */
-.glitch-text {
-  color: #ffffff !important;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 255, 255, 0.4) !important;
-  display: block;
-  width: 100%;
-  text-align: center !important;
-}
-
-.anniversary-subtitle {
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-  position: relative;
-}
-
-.tech-gradient-text {
-  background: linear-gradient(
-    45deg,
-    #ff6b6b 0%,
-    #4ecdc4 12.5%,
-    #45b7d1 25%,
-    #96ceb4 37.5%,
-    #feca57 50%,
-    #ff9ff3 62.5%,
-    #54a0ff 75%,
-    #5f27cd 87.5%,
-    #ff6b6b 100%
-  );
-  background-size: 800% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: tech-gradient-animation 4s ease-in-out infinite;
-  position: relative;
-  text-shadow: none !important;
-}
-
-@keyframes tech-gradient-animation {
-  0% {
-    background-position: 0% 50%;
-  }
-  25% {
-    background-position: 100% 50%;
-  }
-  50% {
-    background-position: 200% 50%;
-  }
-  75% {
-    background-position: 300% 50%;
-  }
-  100% {
-    background-position: 400% 50%;
-  }
-}
-
-.tech-gradient-text::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 107, 107, 0.3) 0%,
-    rgba(78, 205, 196, 0.3) 12.5%,
-    rgba(69, 183, 209, 0.3) 25%,
-    rgba(150, 206, 180, 0.3) 37.5%,
-    rgba(254, 202, 87, 0.3) 50%,
-    rgba(255, 159, 243, 0.3) 62.5%,
-    rgba(84, 160, 255, 0.3) 75%,
-    rgba(95, 39, 205, 0.3) 87.5%,
-    rgba(255, 107, 107, 0.3) 100%
-  );
-  background-size: 800% 100%;
-  animation: tech-gradient-animation 4s ease-in-out infinite;
-  filter: blur(15px);
-  opacity: 0.6;
-  z-index: -1;
-  border-radius: 8px;
-}
-
-.tech-gradient-text::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 45%,
-    rgba(255, 255, 255, 0.2) 50%,
-    rgba(255, 255, 255, 0.1) 55%,
-    transparent 100%
-  );
-  animation: tech-shimmer 3s ease-in-out infinite;
-  z-index: 1;
-  pointer-events: none;
-}
-
-@keyframes tech-shimmer {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  50% {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-}
-
-.hero-subtitle {
-  color: rgba(255, 255, 255, 0.98) !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9) !important;
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-}
-
-/* 区域标题增强 */
-.countdown-title {
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-}
-
-.countdown-title h3 {
-  color: #ffffff !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 255, 255, 0.3) !important;
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-}
-
-.countdown-subtitle {
-  color: #93c5fd !important;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9) !important;
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-}
-
-.section-header {
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-}
-
-.section-header h3 {
-  color: #ffffff !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), 0 0 15px rgba(255, 255, 255, 0.3) !important;
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-}
-
-.section-subtitle {
-  color: rgba(255, 255, 255, 0.9) !important;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9) !important;
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-}
-
-/* 区域间距 */
-.countdown-section {
-  padding: 2rem 1rem;
-  margin-bottom: 3rem;
-}
-
-.preview-section {
-  padding: 2rem 1rem;
-  margin-bottom: 3rem;
-}
-
-.action-section {
-  padding: 2rem 1rem;
-  margin-bottom: 2rem;
-}
-
-.section-header {
-  margin-bottom: 3rem;
-}
-
-.section-header h3 {
-  margin-bottom: 1.5rem !important;
-}
-
-.section-subtitle {
-  margin-top: 1rem;
-  margin-bottom: 1rem !important;
-}
-
-/* 倒计时区域优化 */
-.countdown-title {
-  margin-bottom: 3rem;
-}
-
-.countdown-title h3 {
-  margin-bottom: 1.5rem !important;
-}
-
-.countdown-subtitle {
-  margin-bottom: 2rem !important;
-}
-
-.countdown-display {
-  margin: 0 auto;
-  max-width: 28rem;
-}
-
-@media (min-width: 768px) {
-  .countdown-display {
-    max-width: 32rem;
-  }
-}
-
-/* 预告卡片优化 */
-.preview-card {
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-}
-
-.preview-header {
-  padding: 1rem;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-}
-
-.preview-content {
-  flex: 1;
-  padding: 1rem;
-}
-
-.preview-footer {
-  padding: 1rem;
-  border-top: 1px solid rgba(59, 130, 246, 0.1);
-}
-
-/* 按钮区域优化 */
-.action-button {
-  min-width: 180px;
-  height: 48px;
-  font-size: 16px;
-  font-weight: 600;
-}
-.glitch-container {
-  position: relative;
-  text-align: center;
-}
-
-.glitch-text {
-  position: relative;
-  animation: glitch 2s infinite;
-  color: #ffffff !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.3) !important;
-  text-align: center !important;
-  display: block;
-  width: 100%;
-}
-
-.glitch-text::before,
-.glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  text-align: center;
-}
-
-.glitch-text::before {
-  animation: glitch-1 0.5s infinite;
-  color: rgba(255, 0, 0, 0.3);
-  z-index: -1;
-  left: 2px;
-}
-
-.glitch-text::after {
-  animation: glitch-2 0.5s infinite;
-  color: rgba(0, 255, 0, 0.3);
-  z-index: -2;
-  left: -2px;
-}
-
-@keyframes glitch {
-  0%, 100% { transform: translateX(0); }
-  10% { transform: translateX(-2px); }
-  20% { transform: translateX(2px); }
-  30% { transform: translateX(-2px); }
-  40% { transform: translateX(2px); }
-  50% { transform: translateX(-2px); }
-  60% { transform: translateX(2px); }
-  70% { transform: translateX(-2px); }
-  80% { transform: translateX(2px); }
-  90% { transform: translateX(-2px); }
-}
-
-@keyframes glitch-1 {
-  0% { transform: translateX(0); }
-  10% { transform: translateX(-2px); }
-  20% { transform: translateX(2px); }
-  30% { transform: translateX(-2px); }
-  40% { transform: translateX(2px); }
-  50% { transform: translateX(-2px); }
-  60% { transform: translateX(2px); }
-  70% { transform: translateX(-2px); }
-  80% { transform: translateX(2px); }
-  90% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
-}
-
-@keyframes glitch-2 {
-  0% { transform: translateX(0); }
-  10% { transform: translateX(2px); }
-  20% { transform: translateX(-2px); }
-  30% { transform: translateX(2px); }
-  40% { transform: translateX(-2px); }
-  50% { transform: translateX(2px); }
-  60% { transform: translateX(-2px); }
-  70% { transform: translateX(2px); }
-  80% { transform: translateX(-2px); }
-  90% { transform: translateX(2px); }
-  100% { transform: translateX(0); }
-}
-
-/* 科技感装饰线 */
-.tech-divider {
-  position: relative;
-  margin: 2rem auto;
-}
-
-.tech-line {
-  position: relative;
-  overflow: hidden;
-  height: 2px;
-}
-
-.tech-line::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.8), transparent);
-  animation: scan 2s infinite;
-}
-
-@keyframes scan {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-.tech-dot {
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.4);
-  animation: dot-pulse 2s ease-in-out infinite;
-}
-
-@keyframes dot-pulse {
-  0%, 100% { 
-    transform: scale(1);
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.4);
-  }
-  50% { 
-    transform: scale(1.2);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 1), 0 0 40px rgba(59, 130, 246, 0.6);
-  }
-}
-
-/* 倒计时样式 */
-.countdown-display {
-  animation: float 3s ease-in-out infinite;
-  position: relative;
-  gap: 1rem;
-}
-
-@media (min-width: 768px) {
-  .countdown-display {
-    gap: 1.5rem;
-  }
-}
-
-.countdown-display::before {
-  content: '';
-  position: absolute;
-  top: -15px;
-  left: -15px;
-  right: -15px;
-  bottom: -15px;
-  background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
-  border-radius: 20px;
-  z-index: -1;
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% { 
-    transform: scale(1);
-    opacity: 0.5;
-  }
-  50% { 
-    transform: scale(1.02);
-    opacity: 0.8;
-  }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-5px); }
+.text-shadow-sm {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .countdown-item {
-  position: relative;
+  min-width: 80px;
 }
 
-.countdown-number {
-  position: relative;
-  overflow: hidden;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.countdown-number:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-}
-
-.countdown-number::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shine 3s infinite;
-}
-
-.countdown-number::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
-  pointer-events: none;
-}
-
-.countdown-value {
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes shine {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* 倒计时数字跳动动画 */
-.countdown-value {
-  transition: all 0.3s ease;
-}
-
-.countdown-value.animate {
-  animation: number-bounce 0.5s ease-in-out;
-}
-
-@keyframes number-bounce {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-/* 预告卡片样式 */
-.preview-card {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.preview-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.6);
-}
-
-.preview-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-  transition: left 0.5s ease;
-}
-
-.preview-card:hover::before {
-  left: 100%;
-}
-
-.preview-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), transparent);
-  pointer-events: none;
-}
-
-.preview-icon-wrapper {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.preview-icon-wrapper:hover {
-  transform: scale(1.1);
-}
-
-.preview-icon-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: icon-shine 2s infinite;
-}
-
-.preview-icon-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent);
-  pointer-events: none;
-}
-
-@keyframes icon-shine {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* 行动按钮样式 */
-.action-button {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8));
-  border: none;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-}
-
-.action-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.3s ease;
-}
-
-.action-button:hover::before {
-  left: 100%;
-}
-
-.action-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(147, 51, 234, 0.9));
-}
-
-.action-button:active {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-}
-
-/* 粒子效果 */
-.particles-container {
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.particle {
-  opacity: 0.6;
-  animation: particle-float 6s infinite ease-in-out;
-  border-radius: 50%;
-  box-shadow: 0 0 6px rgba(59, 130, 246, 0.8);
-}
-
-@keyframes particle-float {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) rotate(0deg);
-    opacity: 0.6;
-    filter: blur(0px);
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
   }
-  25% {
-    transform: translateY(-10px) translateX(5px) rotate(90deg);
-    opacity: 0.8;
-    filter: blur(1px);
+  40%, 43% {
+    transform: translate3d(0, -15px, 0);
   }
-  50% { 
-    transform: translateY(-20px) translateX(10px) rotate(180deg);
-    opacity: 1;
-    filter: blur(0px);
+  70% {
+    transform: translate3d(0, -7px, 0);
   }
-  75% {
-    transform: translateY(-15px) translateX(-5px) rotate(270deg);
-    opacity: 0.8;
-    filter: blur(1px);
+  90% {
+    transform: translate3d(0, -2px, 0);
   }
 }
 
-/* 添加更多粒子变化 */
-.particle:nth-child(2n) {
-  animation-delay: 0.5s;
-  animation-duration: 8s;
+.animate-bounce {
+  animation: bounce 2s infinite;
 }
-
-.particle:nth-child(3n) {
-  animation-delay: 1s;
-  animation-duration: 10s;
-}
-
-.particle:nth-child(4n) {
-  animation-delay: 1.5s;
-  animation-duration: 12s;
-}
-
-.particle:nth-child(5n) {
-  box-shadow: 0 0 8px rgba(147, 51, 234, 0.8);
-}
-
-.particle:nth-child(6n) {
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.8);
-}
-
-/* 网格背景效果 */
-.grid-background {
-  opacity: 0.1;
-}
-
-.grid-lines {
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: grid-move 20s linear infinite;
-}
-
-@keyframes grid-move {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
-}
-
-/* 光晕效果 */
-.glow-effects {
-  overflow: hidden;
-  z-index: 1;
-}
-
-.glow-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.4;
-  animation: float-glow 12s ease-in-out infinite;
-}
-
-.glow-orb-1 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent);
-  top: 5%;
-  left: 5%;
-  animation-delay: 0s;
-}
-
-.glow-orb-2 {
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(147, 51, 234, 0.3), transparent);
-  top: 70%;
-  right: 5%;
-  animation-delay: 3s;
-}
-
-.glow-orb-3 {
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.3), transparent);
-  bottom: 10%;
-  left: 60%;
-  animation-delay: 6s;
-}
-
-@keyframes float-glow {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) scale(1);
-    opacity: 0.4;
-  }
-  25% {
-    transform: translateY(-30px) translateX(15px) scale(1.1);
-    opacity: 0.6;
-  }
-  50% { 
-    transform: translateY(-60px) translateX(30px) scale(1.2);
-    opacity: 0.8;
-  }
-  75% {
-    transform: translateY(-30px) translateX(15px) scale(1.1);
-    opacity: 0.6;
-  }
-}
-
-/* 响应式设计 */
-@media (max-width: 640px) {
-  .hero-section {
-    padding-top: 1rem;
-    padding-bottom: 1.5rem;
-  }
-  
-  .hero-title-wrapper {
-    margin-bottom: 2rem;
-  }
-  
-  .glitch-container {
-    margin-bottom: 1.5rem;
-  }
-  
-  .tech-divider {
-    margin-bottom: 2rem;
-  }
-  
-  .countdown-section {
-    padding: 1.5rem 1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .countdown-title {
-    margin-bottom: 2rem;
-  }
-  
-  .countdown-title h3 {
-    margin-bottom: 1rem !important;
-  }
-  
-  .countdown-subtitle {
-    margin-bottom: 1.5rem !important;
-  }
-  
-  .countdown-display {
-    gap: 0.75rem;
-    max-width: 20rem;
-  }
-  
-  .countdown-number {
-    padding: 0.75rem;
-  }
-  
-  .countdown-value {
-    font-size: 1.25rem !important;
-  }
-  
-  .preview-section {
-    padding: 1.5rem 1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .section-header {
-    margin-bottom: 2rem;
-  }
-  
-  .section-header h3 {
-    margin-bottom: 1rem !important;
-  }
-  
-  .section-subtitle {
-    margin-bottom: 0.75rem !important;
-  }
-  
-  .preview-card {
-    min-height: 180px;
-  }
-  
-  .preview-header {
-    padding: 0.75rem;
-  }
-  
-  .preview-content {
-    padding: 0.75rem;
-    font-size: 0.75rem;
-  }
-  
-  .preview-footer {
-    padding: 0.75rem;
-  }
-  
-  .action-section {
-    padding: 1.5rem 1rem;
-    gap: 0.75rem;
-  }
-  
-  .action-button {
-    min-width: 160px;
-    height: 44px;
-    font-size: 14px;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 768px) {
-  .hero-section {
-    padding-top: 1.5rem;
-    padding-bottom: 2rem;
-  }
-  
-  .countdown-display {
-    max-width: 24rem;
-  }
-  
-  .preview-card {
-    min-height: 190px;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .hero-section {
-    padding-top: 2rem;
-    padding-bottom: 2.5rem;
-  }
-  
-  .countdown-display {
-    max-width: 28rem;
-  }
-}
-
-@media (min-width: 1025px) {
-  .hero-section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-  
-  .countdown-section {
-    margin-bottom: 4rem;
-  }
-  
-  .preview-section {
-    margin-bottom: 4rem;
-  }
+.home-grass {
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
 }
 </style>

@@ -73,6 +73,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ServerStatusView.vue'),
     },
+    {
+      path: '/lottery',
+      name: 'lottery',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/LotteryView.vue'),
+    },
+    {
+      path: '/challenge',
+      name: 'challenge',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ChallengeView.vue'),
+    },
   ],
 })
 

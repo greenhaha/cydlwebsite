@@ -18,7 +18,7 @@ const route = useRoute()
 
 // 计算是否显示header的逻辑
 const shouldShowHeader = computed(() => {
-  const hiddenHeaderRoutes = ['/anniversary']
+  const hiddenHeaderRoutes = ['/anniversary',`/challenge`, '/lottery', '/anniversary-preheating']
   return !hiddenHeaderRoutes.includes(route.path)
 })
 

@@ -124,6 +124,78 @@
         </n-grid>
       </div>
 
+      <!-- 活动推广区域 -->
+      <div class="activities-section mt-4 w-full pt-20 max-w-[1200px] z-20 px-4">
+        <div class="activities-header text-center mb-8">
+          <h2 class="text-[28px] md:text-[32px] font-bold text-white mb-4 text-shadow-lg">
+            🎉 精彩活动
+          </h2>
+          <p class="text-[16px] md:text-[18px] text-white/90 text-shadow">
+            参与社区活动，赢取丰厚奖励！
+          </p>
+        </div>
+        <n-grid cols="2 xs:1 s:1 m:2 l:2" x-gap="24" y-gap="24" responsive="screen">
+          <n-grid-item>
+            <RouterLink to="/lottery" class="block">
+              <n-card class="activity-card h-full backdrop-blur-lg bg-gradient-to-br from-purple-600/90 to-pink-600/90 border border-purple-300/60 hover:from-purple-500/95 hover:to-pink-500/95 transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer" hoverable>
+                <template #header>
+                  <div class="activity-header flex items-center gap-3">
+                    <div class="activity-icon-wrapper p-3 rounded-full bg-white/20 shadow-lg">
+                      <span class="text-2xl">🎰</span>
+                    </div>
+                    <div>
+                      <span class="activity-title text-white font-bold text-lg">幸运转盘</span>
+                      <div class="activity-status text-xs text-white/80 bg-green-500/30 px-2 py-1 rounded-full mt-1">
+                        🔥 火热进行中
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <div class="activity-content text-white/90 leading-relaxed">
+                  每日免费抽奖机会，赢取积分奖励！超低概率获得万分大奖，快来试试手气吧！
+                </div>
+                <template #action>
+                  <div class="activity-action text-right">
+                    <span class="text-white/80 text-sm hover:text-white transition-colors">
+                      立即参与 →
+                    </span>
+                  </div>
+                </template>
+              </n-card>
+            </RouterLink>
+          </n-grid-item>
+          <n-grid-item>
+            <RouterLink to="/challenge" class="block">
+              <n-card class="activity-card h-full backdrop-blur-lg bg-gradient-to-br from-orange-600/90 to-red-600/90 border border-orange-300/60 hover:from-orange-500/95 hover:to-red-500/95 transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer" hoverable>
+                <template #header>
+                  <div class="activity-header flex items-center gap-3">
+                    <div class="activity-icon-wrapper p-3 rounded-full bg-white/20 shadow-lg">
+                      <span class="text-2xl">🏆</span>
+                    </div>
+                    <div>
+                      <span class="activity-title text-white font-bold text-lg">全服挑战</span>
+                      <div class="activity-status text-xs text-white/80 bg-yellow-500/30 px-2 py-1 rounded-full mt-1">
+                        ⚡ 实时更新
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <div class="activity-content text-white/90 leading-relaxed">
+                  全服玩家共同挑战，累计在线时长、击杀数等数据，达成目标获得丰厚奖励！
+                </div>
+                <template #action>
+                  <div class="activity-action text-right">
+                    <span class="text-white/80 text-sm hover:text-white transition-colors">
+                      查看详情 →
+                    </span>
+                  </div>
+                </template>
+              </n-card>
+            </RouterLink>
+          </n-grid-item>
+        </n-grid>
+      </div>
+
       <!-- 行动召唤区域 -->
       <div class="cta-section mt-4 w-full pt-24 max-w-[1200px] z-20 text-center px-4 ">
         <div class="cta-card p-8 rounded-2xl backdrop-blur-lg bg-gradient-to-br from-white/95 to-gray-50/95 border border-gray-200/60 mx-auto max-w-2xl shadow-2xl">
@@ -321,6 +393,7 @@ import {
 } from '@vicons/ionicons5'
 import { NButton, NCard, NGrid, NGridItem, NH1, NH5 } from 'naive-ui'
 import { defineComponent } from 'vue'
+import { RouterLink } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -335,6 +408,7 @@ export default defineComponent({
     NGridItem,
     NH1,
     NH5,
+    RouterLink,
   },
 
   setup() {

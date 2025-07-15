@@ -34,12 +34,14 @@ import {
   AlertCircle as AlertCircleIcon,
   Book as BookIcon,
   // Calendar as CalendarIcon,
+  // Dice as DiceIcon,
   Gift as GiftIcon,
   Heart as HeartIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
   Server as ServerIcon,
   // Star as StarIcon,
+  // Trophy as TrophyIcon,
   WomanSharp as ModelIcon,
 } from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
@@ -127,6 +129,34 @@ const menuOptions: MenuOption[] = [
     key: 'server-status-page',
     icon: renderIcon(ServerIcon),
   },
+  // {
+  //   label: () =>
+  //     h(
+  //       RouterLink,
+  //       {
+  //         to: {
+  //           path: '/lottery',
+  //         },
+  //       },
+  //       { default: () => '幸运转盘' },
+  //     ),
+  //   key: 'lottery-page',
+  //   icon: renderIcon(DiceIcon),
+  // },
+  // {
+  //   label: () =>
+  //     h(
+  //       RouterLink,
+  //       {
+  //         to: {
+  //           path: '/challenge',
+  //         },
+  //       },
+  //       { default: () => '全服挑战' },
+  //     ),
+  //   key: 'challenge-page',
+  //   icon: renderIcon(TrophyIcon),
+  // },
   // {
   //   label: () =>
   //     h(
