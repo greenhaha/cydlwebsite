@@ -13,15 +13,34 @@
       <!-- 顶部导航 -->
       <div class="fixed top-0 left-0 right-0 z-99 bg-black/60 backdrop-blur-md border-b border-white/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <RouterLink 
-            to="/"
-            class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-350 rounded-lg hover:bg-white/20 bg-black/30"
-          >
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-            返回主页
-          </RouterLink>
+          <div class="flex items-center justify-between">
+            <RouterLink 
+              to="/"
+              class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-350 rounded-lg hover:bg-white/20 bg-black/30"
+            >
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              </svg>
+              返回主页
+            </RouterLink>
+            
+            <!-- 用户信息显示区域 -->
+            <div v-if="authStore.isAuthenticated" class="flex items-center space-x-3">
+              <RouterLink 
+                to="/profile"
+                class="flex items-center space-x-2 px-4 py-2 bg-white/10 rounded-lg border border-white/20 hover:bg-white/20 transition-colors duration-200"
+              >
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+                <div class="text-white">
+                  <span class="text-sm font-medium">{{ authStore.user?.username || '用户' }}</span>
+                </div>
+              </RouterLink>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -49,9 +68,21 @@
             </div>
             
             <!-- 副标题 -->
-            <h2 class="text-[16px] md:text-[20px] lg:text-[24px] font-medium text-white/95 mb-6 tracking-wide text-center drop-shadow-lg text-shadow">
+            <h2 class="text-[16px] md:text-[20px] lg:text-[24px] font-medium text-white/95 mb-4 tracking-wide text-center drop-shadow-lg text-shadow">
               每日签到 · 赢取大奖 · 好运连连
             </h2>
+            
+            <!-- 用户欢迎信息 -->
+            <div v-if="authStore.isAuthenticated" class="!mb-6 flex justify-center">
+              <div class="backdrop-blur-lg bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg px-6 py-3 border border-white/30 shadow-lg">
+                <p class="text-white/95 text-sm md:text-base font-medium text-center">
+                  🎉 欢迎回来，<span class="text-yellow-300 font-bold">{{ authStore.user?.username || '用户' }}</span>！
+                </p>
+                <p class="text-white/80 text-xs md:text-sm text-center mt-1">
+                  开始你的幸运抽奖之旅吧！
+                </p>
+              </div>
+            </div>
             
             <!-- 底部装饰线 -->
             <div class="flex items-center justify-center !mb-[32px]">
@@ -387,7 +418,7 @@
         <div class="text-center !mb-6">
           <button 
             @click="startLottery"
-            :disabled="remainingChances <= 0"
+            :disabled="remainingChances <= 0 || !authStore.isAuthenticated"
             class="relative group"
           >
             <!-- 抽奖按钮背景图 -->
@@ -399,6 +430,11 @@
           <div class="mt-3 text-white text-center drop-shadow-lg">
             <span class="text-base font-medium text-shadow">剩余次数：</span>
             <span class="text-xl font-bold text-yellow-300 text-shadow-lg">{{ remainingChances }}</span>
+          </div>
+          
+          <!-- 登录提示 -->
+          <div v-if="!authStore.isAuthenticated" class="mt-3 text-red-300 text-sm text-center">
+            请先登录才能参与抽奖
           </div>
         </div>
             </div>
@@ -549,7 +585,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { lotteryApi, type LotteryResponse, type LotteryStatusResponse, type LotteryRecord, type ApiResponse } from '@/services/api'
+
+// 路由和认证store
+const router = useRouter()
+const authStore = useAuthStore()
 
 // 响应式数据
 const remainingChances = ref(3)
@@ -560,6 +602,8 @@ const showWinEffect = ref(false)
 const todayDraws = ref(0)
 const todayWins = ref(0)
 const totalRewards = ref(0)
+const hasSignedIn = ref(false)
+const dailyLimit = ref(3)
 
 // 统一奖品配置 - 整合概率和棋盘显示
 const prizePool = [
@@ -599,31 +643,27 @@ const prizes = ref([
 // 大富翁棋盘路径顺序 (0->1->2->3->4->5->6->7->8->9->10->11->0...)
 const boardPath = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
-// 根据概率抽取奖品
-const drawPrize = () => {
-  const random = Math.random() * 100
-  let cumulativeProbability = 0
+// 根据后端返回的奖品信息找到对应的棋盘位置
+const findPrizePosition = (prizeName: string, prizeType: string, prizeValue: string) => {
+  console.log('Finding position for:', { prizeName, prizeType, prizeValue })
   
-  for (const prize of prizePool) {
-    cumulativeProbability += prize.probability
-    if (random <= cumulativeProbability) {
-      return prize
-    }
-  }
-  
-  // 兜底返回最后一个奖品
-  return prizePool[prizePool.length - 1]
-}
-
-// 根据中奖奖品找到对应的棋盘位置
-const findPrizePosition = (actualPrize: { type: string; value: number | string; name: string; icon: string; probability: number; rarity: string }) => {
-  // 对于20积分、50积分、100积分，可以有多个格子，随机选择一个
+  // 尝试匹配奖品类型和值
   const matchingPositions = []
   
   for (let i = 0; i < prizes.value.length; i++) {
     const boardPrize = prizes.value[i]
-    if (actualPrize.type === boardPrize.type && actualPrize.value === boardPrize.value) {
-      matchingPositions.push(i)
+    
+    if (prizeType === 'points') {
+      // 对于积分奖品，尝试匹配数值
+      const valueNum = parseInt(prizeValue)
+      if (boardPrize.type === 'points' && boardPrize.value === valueNum) {
+        matchingPositions.push(i)
+      }
+    } else if (prizeType === 'item' || prizeType === 'special') {
+      // 对于物品奖品，匹配名称或类型
+      if (boardPrize.type === 'item' || prizeName.includes('皮肤') || prizeName.includes('道具')) {
+        matchingPositions.push(i)
+      }
     }
   }
   
@@ -639,62 +679,99 @@ const findPrizePosition = (actualPrize: { type: string; value: number | string; 
 
 // 开始抽奖
 const startLottery = async () => {
+  // 检查登录状态
+  if (!authStore.isAuthenticated) {
+    alert('请先登录再参与抽奖')
+    router.push('/login')
+    return
+  }
+  
   if (remainingChances.value <= 0 || isSpinning.value) return
   
+  if (!hasSignedIn.value) {
+    alert('请先完成今日签到后再进行抽奖')
+    return
+  }
+  
   isSpinning.value = true
-  remainingChances.value--
-  todayDraws.value++
   
-  // 先根据概率确定实际中奖奖品
-  const actualPrize = drawPrize()
-  
-  // 根据中奖奖品找到对应的棋盘位置
-  const targetPosition = findPrizePosition(actualPrize)
-  
-  // 模拟大富翁式抽奖动画
-  let pathIndex = 0
-  let rounds = 0
-  const minRounds = 3 // 最少转3圈
-  const maxRounds = 5 // 最多转5圈
-  const targetRounds = Math.floor(Math.random() * (maxRounds - minRounds + 1)) + minRounds
-  
-  const interval = setInterval(() => {
-    currentIndex.value = boardPath[pathIndex]
-    pathIndex++
+  try {
+    // 调用后端API执行抽奖
+    const response: ApiResponse<LotteryResponse> = await lotteryApi.drawLottery({
+      lotteryType: 'normal'
+    })
     
-    // 完成一圈后重置路径索引
-    if (pathIndex >= boardPath.length) {
-      pathIndex = 0
-      rounds++
-    }
-    
-    // 检查是否应该停止 - 停在目标位置
-    if (rounds >= targetRounds && currentIndex.value === targetPosition) {
-      clearInterval(interval)
+    if (response.success && response.data) {
+      const lotteryResult = response.data
       
-      // 确定中奖位置
-      winningIndex.value = targetPosition
-      showWinEffect.value = true
+      // 更新剩余次数
+      remainingChances.value = lotteryResult.remainingChances
+      todayDraws.value++
+      
+      // 根据后端返回的奖品找到对应的棋盘位置
+      const targetPosition = findPrizePosition(
+        lotteryResult.prizeName,
+        lotteryResult.prizeType,
+        lotteryResult.prizeValue
+      )
+      
+      // 模拟大富翁式抽奖动画
+      let pathIndex = 0
+      let rounds = 0
+      const minRounds = 3 // 最少转3圈
+      const maxRounds = 5 // 最多转5圈
+      const targetRounds = Math.floor(Math.random() * (maxRounds - minRounds + 1)) + minRounds
+      
+      const interval = setInterval(() => {
+        currentIndex.value = boardPath[pathIndex]
+        pathIndex++
+        
+        // 完成一圈后重置路径索引
+        if (pathIndex >= boardPath.length) {
+          pathIndex = 0
+          rounds++
+        }
+        
+        // 检查是否应该停止 - 停在目标位置
+        if (rounds >= targetRounds && currentIndex.value === targetPosition) {
+          clearInterval(interval)
+          
+          // 确定中奖位置
+          winningIndex.value = targetPosition
+          showWinEffect.value = true
+          isSpinning.value = false
+          
+          // 更新统计
+          todayWins.value++
+          if (lotteryResult.prizeType === 'points') {
+            const points = parseInt(lotteryResult.prizeValue)
+            if (!isNaN(points)) {
+              totalRewards.value += points
+            }
+          }
+          
+          // 显示中奖信息
+          setTimeout(() => {
+            alert(`🎉 恭喜获得：${lotteryResult.prizeName} ${lotteryResult.prizeType === 'points' ? `+${lotteryResult.prizeValue}积分` : `(${lotteryResult.prizeValue})`}`)
+          }, 500)
+          
+          // 3秒后隐藏特效
+          setTimeout(() => {
+            showWinEffect.value = false
+            winningIndex.value = -1
+          }, 3000)
+        }
+      }, 150) // 稍微慢一点的动画速度，更有大富翁的感觉
+      
+    } else {
       isSpinning.value = false
-      
-      // 更新统计
-      todayWins.value++
-      if (actualPrize.type === 'points' && typeof actualPrize.value === 'number') {
-        totalRewards.value += actualPrize.value
-      }
-      
-      // 显示中奖信息
-      setTimeout(() => {
-        alert(`🎉 恭喜获得：${actualPrize.name} ${actualPrize.type === 'points' ? `+${actualPrize.value}积分` : ''}`)
-      }, 500)
-      
-      // 3秒后隐藏特效
-      setTimeout(() => {
-        showWinEffect.value = false
-        winningIndex.value = -1
-      }, 3000)
+      alert(`抽奖失败: ${response.message}`)
     }
-  }, 150) // 稍微慢一点的动画速度，更有大富翁的感觉
+  } catch (error) {
+    isSpinning.value = false
+    console.error('抽奖API调用失败:', error)
+    alert('抽奖失败，请稍后重试')
+  }
 }
 
 const selectPrize = (index: number) => {
@@ -703,18 +780,54 @@ const selectPrize = (index: number) => {
   console.log('Selected prize index:', index)
 }
 
-// 组件挂载时初始化数据
-onMounted(() => {
-  // 从本地存储或API获取数据
-  loadLotteryData()
-})
-
-const loadLotteryData = () => {
-  // 模拟加载数据
-  todayDraws.value = Math.floor(Math.random() * 10)
-  todayWins.value = Math.floor(Math.random() * todayDraws.value)
-  totalRewards.value = Math.floor(Math.random() * 1000)
+// 加载抽奖数据
+const loadLotteryData = async () => {
+  try {
+    // 获取抽奖状态
+    const statusResponse: ApiResponse<LotteryStatusResponse> = await lotteryApi.getLotteryStatus()
+    if (statusResponse.success && statusResponse.data) {
+      const status = statusResponse.data
+      remainingChances.value = status.remainingChances
+      todayDraws.value = status.todayLotteryCount
+      hasSignedIn.value = status.hasSignedIn
+      dailyLimit.value = status.dailyLimit
+    }
+    
+    // 获取今日抽奖记录
+    const todayRecordsResponse: ApiResponse<LotteryRecord[]> = await lotteryApi.getTodayLotteryRecords()
+    if (todayRecordsResponse.success && todayRecordsResponse.data) {
+      const records = todayRecordsResponse.data
+      todayWins.value = records.length
+      
+      // 计算今日获得的总积分
+      let totalPoints = 0
+      for (const record of records) {
+        if (record.prizeType === 'points') {
+          const points = parseInt(record.prizeValue)
+          if (!isNaN(points)) {
+            totalPoints += points
+          }
+        }
+      }
+      totalRewards.value = totalPoints
+    }
+  } catch (error) {
+    console.error('加载抽奖数据失败:', error)
+  }
 }
+
+// 组件挂载时初始化数据
+onMounted(async () => {
+  // 检查认证状态
+  if (!authStore.isAuthenticated) {
+    // 如果没有登录，跳转到登录页面
+    router.push('/login')
+    return
+  }
+  
+  // 如果已登录，加载抽奖数据
+  await loadLotteryData()
+})
 </script>
 
 <style scoped>

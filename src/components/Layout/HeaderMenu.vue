@@ -1,31 +1,64 @@
 <template>
-  <div class="flex items-center">
-    <n-menu
-      v-if="!isMobile"
-      :options="menuOptions"
-      mode="horizontal"
-      class="topMenu"
-      responsive
-      v-model:value="activeKey"
-    />
-    <n-drawer v-else v-model:show="drawerVisible" placement="left" width="240">
-      <template #header>
-        <div class="drawer-header">菜单</div>
-      </template>
+  <div class="flex items-center justify-between w-full">
+    <!-- 左侧菜单 -->
+    <div class="flex items-center h-full">
       <n-menu
+        v-if="!isMobile"
         :options="menuOptions"
-        mode="vertical"
+        mode="horizontal"
+        class="topMenu"
+        responsive
         v-model:value="activeKey"
-        class="drawer-menu"
       />
-    </n-drawer>
-    <n-button v-if="isMobile" @click="drawerVisible = true" class="menu-button" color="#2080f0">
-      <template #icon>
-        <n-icon>
-          <MenuIcon />
-        </n-icon>
-      </template>
-    </n-button>
+      <n-drawer v-else v-model:show="drawerVisible" placement="left" width="240">
+        <template #header>
+          <div class="drawer-header">菜单</div>
+        </template>
+        <n-menu
+          :options="menuOptions"
+          mode="vertical"
+          v-model:value="activeKey"
+          class="drawer-menu"
+        />
+      </n-drawer>
+      <n-button v-if="isMobile" @click="drawerVisible = true" class="menu-button" color="#2080f0">
+        <template #icon>
+          <n-icon>
+            <MenuIcon />
+          </n-icon>
+        </template>
+      </n-button>
+    </div>
+
+    <!-- 右侧用户区域 -->
+    <div class="flex items-center space-x-4">
+      <!-- 未登录状态 -->
+      <div v-if="!authStore.isAuthenticated" class="flex items-center space-x-2">
+        <n-button @click="goToLogin" size="small" type="primary" class="!mr-4" ghost>
+          登录
+        </n-button>
+        <n-button @click="goToRegister" size="small" type="primary">
+          注册
+        </n-button>
+      </div>
+
+      <!-- 已登录状态 -->
+      <div v-else class="flex items-center space-x-3">
+        <n-dropdown :options="userMenuOptions" @select="handleUserMenuSelect">
+          <div class="flex items-center space-x-2 cursor-pointer hover:bg-white/10 px-3 py-2 rounded-lg transition-colors">
+            <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+            <span class="text-white text-sm hidden md:block !ml-2">{{ authStore.user?.username }}</span>
+            <n-icon size="16" color="white">
+              <ChevronDownIcon />
+            </n-icon>
+          </div>
+        </n-dropdown>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,23 +66,24 @@
 import {
   AlertCircle as AlertCircleIcon,
   Book as BookIcon,
-  // Calendar as CalendarIcon,
-  // Dice as DiceIcon,
+  ChevronDown as ChevronDownIcon,
   Gift as GiftIcon,
   Heart as HeartIcon,
   Home as HomeIcon,
+  LogOut as LogOutIcon,
   Menu as MenuIcon,
+  Person as PersonIcon,
   Server as ServerIcon,
-  // Star as StarIcon,
-  // Trophy as TrophyIcon,
+  // Settings as SettingsIcon,
   WomanSharp as ModelIcon,
 } from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
-import { NButton, NDrawer, NIcon, NMenu } from 'naive-ui'
+import {  NButton, NDrawer, NDropdown, NIcon, NMenu } from 'naive-ui'
 import type { Component } from 'vue'
 
 import { defineComponent, h, onMounted, onUnmounted, ref, watch } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -129,62 +163,6 @@ const menuOptions: MenuOption[] = [
     key: 'server-status-page',
     icon: renderIcon(ServerIcon),
   },
-  // {
-  //   label: () =>
-  //     h(
-  //       RouterLink,
-  //       {
-  //         to: {
-  //           path: '/lottery',
-  //         },
-  //       },
-  //       { default: () => '幸运转盘' },
-  //     ),
-  //   key: 'lottery-page',
-  //   icon: renderIcon(DiceIcon),
-  // },
-  // {
-  //   label: () =>
-  //     h(
-  //       RouterLink,
-  //       {
-  //         to: {
-  //           path: '/challenge',
-  //         },
-  //       },
-  //       { default: () => '全服挑战' },
-  //     ),
-  //   key: 'challenge-page',
-  //   icon: renderIcon(TrophyIcon),
-  // },
-  // {
-  //   label: () =>
-  //     h(
-  //       RouterLink,
-  //       {
-  //         to: {
-  //           path: '/anniversary-preheating',
-  //         },
-  //       },
-  //       { default: () => '周年庆预热' },
-  //     ),
-  //   key: 'anniversary-preheating-page',
-  //   icon: renderIcon(StarIcon),
-  // },
-  // {
-  //   label: () =>
-  //     h(
-  //       RouterLink,
-  //       {
-  //         to: {
-  //           path: '/anniversary',
-  //         },
-  //       },
-  //       { default: () => '周年庆典' },
-  //     ),
-  //   key: 'anniversary-page',
-  //   icon: renderIcon(CalendarIcon),
-  // },
   {
     label: () =>
       h(
@@ -221,13 +199,45 @@ export default defineComponent({
     NDrawer,
     NButton,
     NIcon,
+    // NAvatar,
+    NDropdown,
     MenuIcon,
+    ChevronDownIcon,
   },
   setup() {
     const route = useRoute()
+    const router = useRouter()
+    const authStore = useAuthStore()
     const activeKey = ref<string | null>(null)
     const drawerVisible = ref(false)
     const isMobile = ref(false)
+
+    // 用户头像配置
+    const userAvatar = ref('')
+    const defaultAvatar = '/src/assets/logo.svg'
+
+    // 用户菜单选项
+    const userMenuOptions = ref([
+      {
+        label: '个人资料',
+        key: 'profile',
+        icon: renderIcon(PersonIcon),
+      },
+      // {
+      //   label: '账户设置',
+      //   key: 'settings',
+      //   icon: renderIcon(SettingsIcon),
+      // },
+      {
+        type: 'divider',
+        key: 'divider',
+      },
+      {
+        label: '退出登录',
+        key: 'logout',
+        icon: renderIcon(LogOutIcon),
+      },
+    ])
 
     // 根据路径获取对应的菜单key
     const getActiveKeyFromPath = (path: string): string | null => {
@@ -263,11 +273,42 @@ export default defineComponent({
       isMobile.value = window.innerWidth < 768
     }
 
+    // 跳转到登录页
+    const goToLogin = () => {
+      router.push('/login')
+    }
+
+    // 跳转到注册页
+    const goToRegister = () => {
+      router.push('/register')
+    }
+
+    // 处理用户菜单选择
+    const handleUserMenuSelect = (key: string) => {
+      switch (key) {
+        case 'profile':
+          // 跳转到个人资料页面
+          router.push('/profile')
+          break
+        case 'settings':
+          // 跳转到账户设置页面
+          console.log('跳转到账户设置')
+          break
+        case 'logout':
+          // 执行退出登录
+          authStore.logout()
+          router.push('/')
+          break
+      }
+    }
+
     onMounted(() => {
       updateIsMobile()
       window.addEventListener('resize', updateIsMobile)
       // 确保组件挂载后正确设置activeKey
       initActiveKey()
+      // 初始化认证状态
+      authStore.initialize()
     })
 
     onUnmounted(() => {
@@ -279,6 +320,13 @@ export default defineComponent({
       drawerVisible,
       isMobile,
       menuOptions,
+      authStore,
+      userMenuOptions,
+      userAvatar,
+      defaultAvatar,
+      goToLogin,
+      goToRegister,
+      handleUserMenuSelect,
     }
   },
 })

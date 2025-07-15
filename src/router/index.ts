@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -24,6 +25,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/RegistrationView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
     },
     {
       path: '/faq',
@@ -40,6 +42,7 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/GiftView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
     },
     {
       path: '/contribute',
@@ -64,6 +67,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AnniversaryView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
     },
     {
       path: '/server-status',
@@ -80,6 +84,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LotteryView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
     },
     {
       path: '/challenge',
@@ -88,8 +93,67 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ChallengeView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
+    },
+    {
+      path: '/login',
+      name: 'login',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/LoginView.vue'),
+      meta: { requiresGuest: true }, // 游客页面（已登录用户不应访问）
+    },
+    {
+      path: '/register',
+      name: 'register',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/RegisterView.vue'),
+      meta: { requiresGuest: true }, // 游客页面（已登录用户不应访问）
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ProfileView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
     },
   ],
+})
+
+// 全局路由守卫
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
+  
+  // 如果还没有初始化认证状态，先初始化
+  if (!authStore.user && authStore.token) {
+    await authStore.initialize()
+  }
+  
+  // 检查是否需要登录
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!authStore.isAuthenticated) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath } // 保存原来要访问的路径
+      })
+      return
+    }
+  }
+  
+  // 检查是否为游客页面（已登录用户不应访问）
+  if (to.matched.some(record => record.meta.requiresGuest)) {
+    if (authStore.isAuthenticated) {
+      next('/')
+      return
+    }
+  }
+  
+  next()
 })
 
 export default router
