@@ -3,7 +3,7 @@
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-           style="background-image: url('/src/assets/image/cs2bg1.png')">
+           style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cs2bg1.png')">
       </div>
       <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
     </div>

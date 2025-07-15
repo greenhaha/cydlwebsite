@@ -3,7 +3,7 @@
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-           style="background-image: url('/src/assets/image/bg1.webp')">
+           style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
       </div>
     </div>
     <div class="pointer-events-none fixed inset-0 z-0"></div>
@@ -86,18 +86,18 @@
               v-for="index in [0, 1, 2,3]" 
               :key="index"
               class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform  mr-2"
-              style="background-image: url('/src/assets/image/cjbox.png'); background-size: 100% 100%;"
+              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cjbox.png'); background-size: 100% 100%;"
               :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
             >
               <!-- 奖品图标/积分 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full">
-                  <img src="/src/assets/image/cont1-icon1.png" class="w-full h-full mx-auto " alt="积分">
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png" class="w-full h-full mx-auto " alt="积分">
                   <span class="text-xs font-bold text-[#999] drop-shadow-lg absolute top-2/3 left-0 block w-full text-center">{{ prizes[index].value }}积分</span>
                 </div>
                 <div v-else-if="prizes[index].type === 'item'" class="text-center w-full h-full flex justify-center ">
-                  <img src="/src/assets/image/eika_mode.webp" style="height: 60%; margin-top: 10px; " alt="积分">
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp" style="height: 60%; margin-top: 10px; " alt="积分">
                   <span class="text-xs font-bold text-[#999] drop-shadow-lg absolute top-2/3 left-0 block w-full text-center">{{ prizes[index].value }}</span>
                 </div>
                 <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
@@ -107,7 +107,7 @@
               <div 
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
-                style="background-image: url('/src/assets/image/light.png')"
+                style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
@@ -162,14 +162,14 @@
               v-for="index in [10, 11,]" 
               :key="index"
               class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform hover:scale-105  mb-2"
-              style="background-image: url('/src/assets/image/cjbox.png'); background-size: 100% 100%;"
+              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cjbox.png'); background-size: 100% 100%;"
               :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
             >
               <!-- 奖品图标/积分 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full">
-                  <img src="/src/assets/image/cont1-icon1.png" class="w-full h-full mx-auto mb-1" alt="积分">
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png" class="w-full h-full mx-auto mb-1" alt="积分">
                   <span class="text-xs font-bold text-[#999] drop-shadow-lg absolute top-2/3 left-0 block w-full text-cente">{{ prizes[index].value }}积分</span>
                 </div>
                 <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
@@ -179,7 +179,7 @@
               <div 
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
-                style="background-image: url('/src/assets/image/light.png')"
+                style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
@@ -233,14 +233,14 @@
               v-for="index in [4, 5,]" 
               :key="index"
               class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat   mb-2"
-              style="background-image: url('/src/assets/image/cjbox.png') ; background-size: 100% 100%;"
+              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cjbox.png') ; background-size: 100% 100%;"
               :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
             >
               <!-- 奖品图标/积分 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full">
-                  <img src="/src/assets/image/cont1-icon1.png" class="w-full h-full mx-auto mb-1" alt="积分">
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png" class="w-full h-full mx-auto mb-1" alt="积分">
                   <span class="text-xs font-bold text-[#999] drop-shadow-lg absolute top-2/3 left-0 block w-full text-cente">{{ prizes[index].value }}积分</span>
                 </div>
                 <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
@@ -250,7 +250,7 @@
               <div 
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
-                style="background-image: url('/src/assets/image/light.png')"
+                style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
@@ -304,14 +304,14 @@
               v-for="index in [ 6, 7, 8, 9]" 
               :key="index"
               class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform hover:scale-105"
-              style="background-image: url('/src/assets/image/cjbox.png'); background-size: 100% 100%;"
+              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cjbox.png'); background-size: 100% 100%;"
               :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
             >
               <!-- 奖品图标/积分 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full">
-                  <img src="/src/assets/image/cont1-icon1.png" class="w-full h-full mx-auto mb-1" alt="积分">
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png" class="w-full h-full mx-auto mb-1" alt="积分">
                   <span class="text-xs font-bold text-[#999] drop-shadow-lg absolute top-2/3 left-0 block w-full text-center">{{ prizes[index].value }}积分</span>
                 </div>
                 <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
@@ -321,7 +321,7 @@
               <div 
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
-                style="background-image: url('/src/assets/image/light.png')"
+                style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
@@ -392,7 +392,7 @@
           >
             <!-- 抽奖按钮背景图 -->
             <div class="w-32 h-25 bg-cover bg-center bg-no-repeat mx-auto transition-transform duration-300 group-hover:scale-105 group-disabled:scale-95 group-disabled:opacity-60"
-                 style="background-image: url('/src/assets/image/btn-cj.png')">
+                 style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/btn-cj.png')">
             </div>
           </button>
           
@@ -564,36 +564,36 @@ const totalRewards = ref(0)
 // 统一奖品配置 - 整合概率和棋盘显示
 const prizePool = [
   // 传说级奖品
-  { type: 'item', value: '模型皮肤', icon: '/src/assets/image/eika_mode.webp', name: '稀有皮肤', probability: 0.1, rarity: 'legendary' },
-  { type: 'points', value: 10000, icon: '/src/assets/image/cont1-icon1.png', name: '巨额积分', probability: 0.1, rarity: 'legendary' },
+  { type: 'item', value: '模型皮肤', icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp', name: '稀有皮肤', probability: 0.1, rarity: 'legendary' },
+  { type: 'points', value: 10000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '巨额积分', probability: 0.1, rarity: 'legendary' },
   // 史诗级奖品
-  { type: 'points', value: 5000, icon: '/src/assets/image/cont1-icon1.png', name: '大额积分', probability: 0.5, rarity: 'epic' },
+  { type: 'points', value: 5000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '大额积分', probability: 0.5, rarity: 'epic' },
   // 稀有级奖品
-  { type: 'points', value: 1000, icon: '/src/assets/image/cont1-icon1.png', name: '丰厚积分', probability: 2, rarity: 'rare' },
-  { type: 'points', value: 500, icon: '/src/assets/image/cont1-icon1.png', name: '优质积分', probability: 5, rarity: 'rare' },
+  { type: 'points', value: 1000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '丰厚积分', probability: 2, rarity: 'rare' },
+  { type: 'points', value: 500, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '优质积分', probability: 5, rarity: 'rare' },
   // 普通级奖品
-  { type: 'points', value: 300, icon: '/src/assets/image/cont1-icon1.png', name: '良好积分', probability: 10, rarity: 'uncommon' },
+  { type: 'points', value: 300, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '良好积分', probability: 10, rarity: 'uncommon' },
   // 基础级奖品 - 可以有多个格子
-  { type: 'points', value: 150, icon: '/src/assets/image/cont1-icon1.png', name: '普通积分', probability: 20, rarity: 'common' },
-  { type: 'points', value: 100, icon: '/src/assets/image/cont1-icon1.png', name: '基础积分', probability: 17, rarity: 'common' },
-  { type: 'points', value: 50, icon: '/src/assets/image/cont1-icon1.png', name: '微量积分', probability: 15, rarity: 'common' },
-  { type: 'points', value: 20, icon: '/src/assets/image/cont1-icon1.png', name: '少量积分', probability: 30.2, rarity: 'common' }
+  { type: 'points', value: 150, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '普通积分', probability: 20, rarity: 'common' },
+  { type: 'points', value: 100, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '基础积分', probability: 17, rarity: 'common' },
+  { type: 'points', value: 50, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '微量积分', probability: 15, rarity: 'common' },
+  { type: 'points', value: 20, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '少量积分', probability: 30.2, rarity: 'common' }
 ]
 
 // 棋盘奖品配置 - 按棋盘位置排列（12个格子）
 const prizes = ref([
-  { type: 'points', value: 10000, icon: '/src/assets/image/cont1-icon1.png', name: '巨额积分' },  // 0
-  { type: 'points', value: 5000, icon: '/src/assets/image/cont1-icon1.png', name: '大额积分' },   // 1
-  { type: 'item', value: '模型皮肤', icon: '/src/assets/image/eika_mode.webp', name: '稀有皮肤' }, // 2
-  { type: 'points', value: 20, icon: '/src/assets/image/cont1-icon1.png', name: '少量积分' },     // 3
-  { type: 'points', value: 1000, icon: '/src/assets/image/cont1-icon1.png', name: '丰厚积分' },  // 4
-  { type: 'points', value: 500, icon: '/src/assets/image/cont1-icon1.png', name: '优质积分' },   // 5
-  { type: 'points', value: 300, icon: '/src/assets/image/cont1-icon1.png', name: '良好积分' },   // 6
-  { type: 'points', value: 50, icon: '/src/assets/image/cont1-icon1.png', name: '微量积分' },    // 7
-  { type: 'points', value: 150, icon: '/src/assets/image/cont1-icon1.png', name: '普通积分' },  // 8
-  { type: 'points', value: 100, icon: '/src/assets/image/cont1-icon1.png', name: '基础积分' },  // 9
-  { type: 'points', value: 50, icon: '/src/assets/image/cont1-icon1.png', name: '微量积分' },    // 10
-  { type: 'points', value: 20, icon: '/src/assets/image/cont1-icon1.png', name: '少量积分' }     // 11
+  { type: 'points', value: 10000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '巨额积分' },  // 0
+  { type: 'points', value: 5000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '大额积分' },   // 1
+  { type: 'item', value: '模型皮肤', icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp', name: '稀有皮肤' }, // 2
+  { type: 'points', value: 20, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '少量积分' },     // 3
+  { type: 'points', value: 1000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '丰厚积分' },  // 4
+  { type: 'points', value: 500, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '优质积分' },   // 5
+  { type: 'points', value: 300, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '良好积分' },   // 6
+  { type: 'points', value: 50, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '微量积分' },    // 7
+  { type: 'points', value: 150, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '普通积分' },  // 8
+  { type: 'points', value: 100, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '基础积分' },  // 9
+  { type: 'points', value: 50, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '微量积分' },    // 10
+  { type: 'points', value: 20, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/cont1-icon1.png', name: '少量积分' }     // 11
 ])
 
 // 大富翁棋盘路径顺序 (0->1->2->3->4->5->6->7->8->9->10->11->0...)

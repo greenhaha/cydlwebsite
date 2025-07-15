@@ -125,7 +125,7 @@
       </div>
 
       <!-- 活动推广区域 -->
-      <div class="activities-section mt-4 w-full pt-20 max-w-[1200px] z-20 px-4">
+      <!-- <div class="activities-section mt-4 w-full pt-20 max-w-[1200px] z-20 px-4">
         <div class="activities-header text-center mb-8">
           <h2 class="text-[28px] md:text-[32px] font-bold text-white mb-4 text-shadow-lg">
             🎉 精彩活动
@@ -194,7 +194,7 @@
             </RouterLink>
           </n-grid-item>
         </n-grid>
-      </div>
+      </div> -->
 
       <!-- 行动召唤区域 -->
       <div class="cta-section mt-4 w-full pt-24 max-w-[1200px] z-20 text-center px-4 ">
@@ -393,7 +393,7 @@ import {
 } from '@vicons/ionicons5'
 import { NButton, NCard, NGrid, NGridItem, NH1, NH5 } from 'naive-ui'
 import { defineComponent } from 'vue'
-import { RouterLink } from 'vue-router'
+// import { RouterLink } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -408,7 +408,7 @@ export default defineComponent({
     NGridItem,
     NH1,
     NH5,
-    RouterLink,
+    // RouterLink,
   },
 
   setup() {
