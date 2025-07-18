@@ -75,7 +75,7 @@
           <p
             class="page-subtitle text-[16px] md:text-[18px] text-white/90 leading-relaxed font-medium drop-shadow-md"
           >
-            坚持每日签到，获得丰厚积分奖励
+            坚持每日签到，获得丰厚祈愿值奖励
           </p>
         </div>
         <div class="flex justify-center space-x-2 !mb-6">
@@ -135,7 +135,7 @@
                   签到中心
                 </h2>
                 <p class="text-gray-600 text-sm font-medium drop-shadow-sm">
-                  完成每日签到，积分奖励等你来拿
+                  完成每日签到，祈愿值奖励等你来拿
                 </p>
               </div>
 
@@ -322,7 +322,7 @@
             </svg>
           </div>
           <span class="text-sm font-medium drop-shadow-md"
-            >每日签到可获得积分奖励，连续签到奖励更丰厚</span
+            >每日签到可获得祈愿值奖励，连续签到奖励更丰厚</span
           >
         </div>
       </div>
@@ -417,7 +417,24 @@ export default defineComponent({
       errorMessage.value = ''
 
       try {
-        const response = await axios.post('/api/v1/signin', { userId: qqNumber.value })
+        // 获取存储的token
+        const token = localStorage.getItem('authToken')
+        if (!token) {
+          showMessage('error', '签到失败', '请先登录后再进行签到')
+          isLoading.value = false
+          return
+        }
+
+        // 添加Authorization请求头
+        const response = await axios.post('/api/v1/signin', 
+          { userId: qqNumber.value },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        )
         console.log(response)
         if (response.data.code === '200') {
           hasSignedIn.value = true
@@ -433,7 +450,12 @@ export default defineComponent({
           } else if (errorMsg.includes('invalid user')) {
             displayMsg = '无效的用户ID，请检查QQ号是否正确'
           }
-
+          if (errorMsg.includes("签到成功")) {
+            if (response.data.data.includes("签到成功！ 恭喜您获得")) {
+            return showMessage('success', 'TIP', response.data.data)
+            }
+            displayMsg = response.data.data
+          }
           showMessage('error', '签到失败', displayMsg)
         }
       } catch (error) {

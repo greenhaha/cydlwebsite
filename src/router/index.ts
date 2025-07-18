@@ -87,6 +87,14 @@ const router = createRouter({
       meta: { requiresAuth: true }, // 需要登录
     },
     {
+      path: '/lottery-test',
+      name: 'lottery-test',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/LotteryTestView.vue'),
+    },
+    {
       path: '/challenge',
       name: 'challenge',
       // route level code-splitting
@@ -120,6 +128,24 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ProfileView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
+    },
+    {
+      path: '/wish-exchange',
+      name: 'wish-exchange',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/WishValueExchangeView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
+    },
+    {
+      path: '/wish-credit-exchange',
+      name: 'wish-credit-exchange',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/WishValueCreditExchangeView.vue'),
       meta: { requiresAuth: true }, // 需要登录
     },
   ],

@@ -130,6 +130,7 @@ export interface ValidateTokenResponse {
 // 抽奖相关类型定义
 export interface LotteryRequest {
   lotteryType?: string
+  activityId?: number
 }
 
 export interface LotteryResponse {
@@ -160,6 +161,28 @@ export interface LotteryRecord {
   prizeValue: string
   lotteryTime: string
   createTime: string
+  activityName?: string
+}
+
+export interface LotteryActivity {
+  id: number
+  name: string
+  startTime: string
+  endTime: string
+  isActive: boolean
+  description?: string
+  dailyLimit?: number
+  requireSignin?: boolean
+}
+
+export interface LotteryPrize {
+  id: number
+  name: string
+  type: string
+  value: string
+  icon: string
+  rarity: string
+  probability: number
 }
 
 // 认证API
@@ -412,9 +435,10 @@ export const lotteryApi = {
   },
 
   // 获取抽奖状态
-  async getLotteryStatus(): Promise<ApiResponse<LotteryStatusResponse>> {
+  async getLotteryStatus(activityId?: number): Promise<ApiResponse<LotteryStatusResponse>> {
     try {
-      return await apiRequest<ApiResponse<LotteryStatusResponse>>('/lottery/status')
+      const url = activityId ? `/lottery/status?activityId=${activityId}` : '/lottery/status'
+      return await apiRequest<ApiResponse<LotteryStatusResponse>>(url)
     } catch (error) {
       console.error('获取抽奖状态失败:', error)
       throw error
@@ -437,6 +461,208 @@ export const lotteryApi = {
       return await apiRequest<ApiResponse<LotteryRecord[]>>('/lottery/today')
     } catch (error) {
       console.error('获取今日抽奖记录失败:', error)
+      throw error
+    }
+  },
+
+  // 获取当前活动
+  async getCurrentActivity(): Promise<ApiResponse<LotteryActivity>> {
+    try {
+      return await apiRequest<ApiResponse<LotteryActivity>>('/lottery/current-activity')
+    } catch (error) {
+      console.error('获取当前活动失败:', error)
+      throw error
+    }
+  },
+
+  // 获取活动奖品
+  async getActivityPrizes(activityId: number): Promise<ApiResponse<LotteryPrize[]>> {
+    try {
+      return await apiRequest<ApiResponse<LotteryPrize[]>>(`/lottery/activity/${activityId}/prizes`)
+    } catch (error) {
+      console.error('获取活动奖品失败:', error)
+      throw error
+    }
+  },
+
+  // 获取当前显示奖品（用于前端12格子显示）
+  async getCurrentDisplayPrizes(): Promise<ApiResponse<LotteryPrize[]>> {
+    try {
+      return await apiRequest<ApiResponse<LotteryPrize[]>>('/lottery/display-prizes')
+    } catch (error) {
+      console.error('获取显示奖品失败:', error)
+      throw error
+    }
+  },
+
+  // 获取个人抽奖记录
+  async getPersonalLotteryRecords(params: {
+    activityId: number
+    page: number
+    size: number
+  }): Promise<ApiResponse<{ records: LotteryRecord[], total: number }>> {
+    try {
+      const { activityId, page, size } = params
+      return await apiRequest<ApiResponse<{ records: LotteryRecord[], total: number }>>(
+        `/lottery/personal-records?activityId=${activityId}&page=${page}&size=${size}`
+      )
+    } catch (error) {
+      console.error('获取个人抽奖记录失败:', error)
+      throw error
+    }
+  },
+}
+
+// 兑换系统相关类型定义
+export interface ExchangeGood {
+  id: number
+  name: string
+  description: string
+  price: number
+  stock: number
+  image: string
+  category: string
+  rarity: string
+}
+
+export interface ExchangeGoodRequest {
+  goodId: number
+  price: number
+}
+
+export interface ExchangeRecord {
+  id: number
+  goodName: string
+  goodImage: string
+  price: number
+  status: 'completed' | 'pending' | 'failed'
+  exchangeTime: string
+}
+
+export interface UserBalances {
+  wishPoints: number
+  credits: number
+}
+
+export interface CreditExchangeRequest {
+  amount: number
+  fromType: 'wish' | 'credits'
+  toType: 'wish' | 'credits'
+}
+
+export interface CreditExchangeRecord {
+  id: number
+  username: string
+  exchangeType: 'WISH_TO_CREDIT' | 'CREDIT_TO_WISH'
+  amount: number
+  beforeWishPoints: number
+  afterWishPoints: number
+  beforeCredits: number
+  afterCredits: number
+  createTime: string
+  // 兼容前端显示
+  fromType: 'wish' | 'credits'
+  toType: 'wish' | 'credits'
+  status: 'completed' | 'pending' | 'failed'
+  exchangeTime: string
+}
+
+export interface ExchangeResult {
+  success: boolean
+  message: string
+  goodId?: number
+  price?: number
+  remainingWishPoints?: number
+  exchangeTime?: string
+}
+
+export interface CreditExchangeResult {
+  success: boolean
+  message: string
+  exchangeType: 'wish-to-credits' | 'credits-to-wish'
+  amount: number
+  newWishPoints: number
+  newCredits: number
+  exchangeTime: string
+}
+
+// 兑换系统API
+export const exchangeApi = {
+  // 获取用户余额
+  async getUserBalances(): Promise<ApiResponse<UserBalances>> {
+    try {
+      return await apiRequest<ApiResponse<UserBalances>>('/exchange/balances')
+    } catch (error) {
+      console.error('获取用户余额失败:', error)
+      throw error
+    }
+  },
+
+  // 获取兑换商品列表
+  async getExchangeGoods(): Promise<ApiResponse<ExchangeGood[]>> {
+    try {
+      return await apiRequest<ApiResponse<ExchangeGood[]>>('/exchange/goods')
+    } catch (error) {
+      console.error('获取兑换商品失败:', error)
+      throw error
+    }
+  },
+
+  // 兑换商品
+  async exchangeGood(request: ExchangeGoodRequest): Promise<ApiResponse<ExchangeResult>> {
+    try {
+      return await apiRequest<ApiResponse<ExchangeResult>>('/exchange/goods/exchange', {
+        method: 'POST',
+        body: JSON.stringify(request)
+      })
+    } catch (error) {
+      console.error('兑换商品失败:', error)
+      throw error
+    }
+  },
+
+  // 获取兑换记录
+  async getExchangeHistory(): Promise<ApiResponse<ExchangeRecord[]>> {
+    try {
+      return await apiRequest<ApiResponse<ExchangeRecord[]>>('/exchange/history')
+    } catch (error) {
+      console.error('获取兑换记录失败:', error)
+      throw error
+    }
+  },
+
+  // 祈愿值兑换Credits
+  async exchangeWishToCredits(request: { amount: number }): Promise<ApiResponse<CreditExchangeResult>> {
+    try {
+      return await apiRequest<ApiResponse<CreditExchangeResult>>('/exchange/wish-to-credit', {
+        method: 'POST',
+        body: JSON.stringify(request)
+      })
+    } catch (error) {
+      console.error('祈愿值兑换Credits失败:', error)
+      throw error
+    }
+  },
+
+  // Credits兑换为祈愿值
+  async exchangeCreditsToWish(request: { amount: number }): Promise<ApiResponse<CreditExchangeResult>> {
+    try {
+      return await apiRequest<ApiResponse<CreditExchangeResult>>('/exchange/credit-to-wish', {
+        method: 'POST',
+        body: JSON.stringify(request)
+      })
+    } catch (error) {
+      console.error('Credits兑换祈愿值失败:', error)
+      throw error
+    }
+  },
+
+  // 获取积分兑换记录
+  async getCreditExchangeHistory(): Promise<ApiResponse<CreditExchangeRecord[]>> {
+    try {
+      return await apiRequest<ApiResponse<CreditExchangeRecord[]>>('/exchange/records')
+    } catch (error) {
+      console.error('获取积分兑换记录失败:', error)
       throw error
     }
   },
