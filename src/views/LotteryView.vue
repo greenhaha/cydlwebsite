@@ -1033,17 +1033,18 @@ const loadLotteryData = async () => {
     if (activityResponse.success && activityResponse.data) {
       currentActivity.value = activityResponse.data
       
+      // 获取当前活动的实际奖品（用于抽奖逻辑）
+      const actualPrizesResponse = await lotteryApi.getActivityPrizes(activityResponse.data.id)
+      if (actualPrizesResponse.success && actualPrizesResponse.data) {
+        currentActivityPrizes.value = actualPrizesResponse.data
+      }
       // 获取当前活动的显示奖品（用于前端12格子显示）
       const displayPrizesResponse = await lotteryApi.getCurrentDisplayPrizes()
       if (displayPrizesResponse.success && displayPrizesResponse.data) {
         updateBoardPrizes(displayPrizesResponse.data)
       }
       
-      // 获取当前活动的实际奖品（用于抽奖逻辑）
-      const actualPrizesResponse = await lotteryApi.getActivityPrizes(activityResponse.data.id)
-      if (actualPrizesResponse.success && actualPrizesResponse.data) {
-        currentActivityPrizes.value = actualPrizesResponse.data
-      }
+      
     }
     
     // 获取抽奖状态
