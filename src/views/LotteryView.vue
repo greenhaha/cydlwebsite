@@ -59,31 +59,31 @@
       <!-- 大气标题设计 -->
       <div class="page-header w-full max-w-[1280px] px-4 mb-8 z-35 text-center">
         <!-- 背景装饰 -->
-        <div class="relative mb-8">
+        <div class="relative mb-8 animate-fade-in">
           
           <!-- 主标题容器 -->
           <div class="relative z-10">
             <!-- 顶部装饰线 -->
-            <div class="flex items-center justify-center !mb-6">
-              <div class="h-px bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent w-24"></div>
-              <div class="mx-3 w-2 h-2 bg-yellow-400 rounded-full shadow-lg shadow-yellow-400/50"></div>
-              <div class="h-px bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent w-24"></div>
+            <div class="flex items-center justify-center mb-6">
+              <div class="h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent w-24 animate-pulse"></div>
+              <div class="mx-3 w-2 h-2 bg-yellow-400 rounded-full shadow-lg animate-ping"></div>
+              <div class="h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent w-24 animate-pulse"></div>
             </div>
             <!-- 主标题 -->
-            <div class="!mb-4 relative text-center">
-              <h1 class="text-[36px] md:text-[48px] lg:text-[56px] font-black text-white mb-3 tracking-tight leading-none drop-shadow-2xl text-shadow-lg">
+            <div class="mb-4 relative text-center">
+              <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 tracking-tight leading-none drop-shadow-2xl animate-title-glow">
                 幸运抽奖
               </h1>
             </div>
             
             <!-- 副标题 -->
-            <h2 class="text-[16px] md:text-[20px] lg:text-[24px] font-medium text-white/95 mb-4 tracking-wide text-center drop-shadow-lg text-shadow">
+            <h2 class="text-lg md:text-xl lg:text-2xl font-medium text-white/95 mb-4 tracking-wide text-center drop-shadow-lg">
               每日签到 · 赢取大奖 · 好运连连
             </h2>
             
             <!-- 用户欢迎信息 -->
-            <div v-if="authStore.isAuthenticated" class="!mb-6 flex justify-center">
-              <div class="backdrop-blur-lg bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg px-6 py-3 border border-white/30 shadow-lg">
+            <div v-if="authStore.isAuthenticated" class="mb-6 flex justify-center">
+              <div class="backdrop-blur-lg bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg px-6 py-3 border border-white/30 shadow-lg animate-bounce-slow">
                 <p class="text-white/95 text-sm md:text-base font-medium text-center">
                   🎉 欢迎回来，<span class="text-yellow-300 font-bold">{{ authStore.user?.username || '用户' }}</span>！
                 </p>
@@ -94,23 +94,23 @@
             </div>
             
             <!-- 底部装饰线 -->
-            <div class="flex items-center justify-center !mb-[32px]">
-              <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent w-32"></div>
-              <div class="!mx-3 w-1.5 h-1.5 bg-white/60 rounded-full"></div>
-              <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent w-32"></div>
+            <div class="flex items-center justify-center mb-8">
+              <div class="h-0.5 bg-gradient-to-r from-transparent via-white/40 to-transparent w-32"></div>
+              <div class="mx-3 w-1.5 h-1.5 bg-white/60 rounded-full"></div>
+              <div class="h-0.5 bg-gradient-to-r from-transparent via-white/40 to-transparent w-32"></div>
             </div>
           </div>
         </div>
         
         <!-- 描述文字 -->
-        <div class="backdrop-blur-lg bg-black/50 rounded-lg flex-wrap !p-4 border border-white/30 shadow-2xl flex justify-center !mb-3">
-          <p class="!w-full text-[14px] md:text-[16px] text-white leading-relaxed max-w-lg mx-auto text-center drop-shadow-lg text-shadow">
+        <div class="backdrop-blur-lg bg-black/50 rounded-lg p-4 border border-white/30 shadow-2xl mb-3 animate-slide-up">
+          <p class="w-full text-sm md:text-base text-white leading-relaxed max-w-lg mx-auto text-center drop-shadow-lg">
             参与每日抽奖活动，丰厚奖品等你来拿！
           </p>
-          <p class="!w-full text-white text-sm mb-1 text-center text-shadow drop-shadow">
+          <p class="w-full text-white text-sm mb-1 text-center drop-shadow">
             🎲 每日免费抽奖机会，错过今天等明天 🎲
           </p>
-          <p class="!w-full text-white/90 text-xs text-center text-shadow">
+          <p class="w-full text-white/90 text-xs text-center">
             抽奖活动每日0点重置，记得及时参与哦！
           </p>
         </div>
@@ -119,51 +119,42 @@
       
 
         <!-- 抽奖格子 - 大富翁棋盘布局 -->
-        <div class="monopoly-board relative mx-auto !mb-6" style="min-width: 300px; min-height: 300px;">
+        <div class="monopoly-board relative mx-auto mb-6 animate-board-entrance" style="min-width: 300px; min-height: 300px;">
           <!-- 顶部一排 (0-2) -->
-          <div class=" flex">
+          <div class="flex">
             <div 
               v-for="index in [0, 1, 2,3]" 
               :key="index"
-              class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform hover:scale-105  mr-2"
+              class="relative m-1 lottery-box w-20 h-20 bg-cover bg-center bg-no-repeat cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-lg mr-2 animate-box-float"
               style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
-              :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
+              :class="{ 'animate-pulse border-4 border-yellow-400 shadow-yellow-400/50': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
+              :style="{ animationDelay: `${index * 0.1}s` }"
             >
               <!-- 奖品图标/祈愿值 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full flex flex-col items-center justify-center">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-3/4 h-3/4 mx-auto mb-1 animate-float" alt="祈愿值">
+                  <span class="text-xs font-bold text-white drop-shadow-lg absolute bottom-1 left-0 w-full text-center py-1 bg-black/30 rounded">{{ prizes[index].value }}祈愿值</span>
                 </div>
                 <div v-else-if="prizes[index].type === 'item'" class="text-center w-full h-full flex justify-center ">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp" style="height: 60%; margin-top: 10px; " alt="道具">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}</span>
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp" class="h-3/5 mt-2 animate-float" alt="道具">
+                  <span class="text-xs font-bold text-white drop-shadow-lg absolute bottom-1 left-0 w-full text-center py-1 bg-black/30 rounded">{{ prizes[index].value }}</span>
                 </div>
-                <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
+                <div v-else class="text-xl drop-shadow-lg animate-bounce">{{ prizes[index].icon }}</div>
               </div>
               
               <!-- 中奖发光效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
+                class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping opacity-75"
                 style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 rounded-lg animate-win-shake"
-                style="
-                  background: radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(255, 165, 0, 0.7) 50%, rgba(255, 69, 0, 0.5) 100%);
-                  box-shadow: 
-                    0 0 30px rgba(255, 215, 0, 1), 
-                    0 0 60px rgba(255, 165, 0, 0.8), 
-                    0 0 90px rgba(255, 69, 0, 0.6),
-                    inset 0 0 20px rgba(255, 255, 255, 0.3);
-                  animation: winPulse 0.8s ease-in-out infinite alternate, winShake 0.3s ease-in-out infinite;
-                  border: 3px solid rgba(255, 215, 0, 0.8);
-                "
+                class="absolute inset-0 rounded-lg animate-win-effect bg-gradient-radial from-yellow-400/90 via-orange-400/70 to-red-400/50 border-4 border-yellow-400/80 shadow-2xl"
               ></div>
               
               <!-- 中奖文字效果 -->
@@ -171,7 +162,7 @@
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 flex items-center justify-center z-10"
               >
-                <div class="text-white text-xs font-bold bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1 rounded-full animate-bounce shadow-2xl border-2 border-white/50">
+                <div class="text-white text-xs font-bold bg-gradient-to-r from-red-500 to-orange-500 px-2 py-1 rounded-full animate-bounce shadow-2xl border border-white/50">
                   🎉 中奖！
                 </div>
               </div>
@@ -179,12 +170,12 @@
               <!-- 中奖粒子效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 pointer-events-none overflow-hidden"
+                class="absolute inset-0 pointer-events-none overflow-hidden z-20"
               >
                 <div 
                   v-for="i in 8" 
                   :key="i"
-                  class="absolute w-1 h-1 bg-yellow-400 rounded-full animate-ping"
+                  class="absolute w-1 h-1 bg-yellow-400 rounded-full animate-ping opacity-80"
                   :style="{
                     left: Math.random() * 100 + '%',
                     top: Math.random() * 100 + '%',
@@ -197,45 +188,36 @@
           </div>
 
           <!-- 右侧一排 (3-4) -->
-          <div class=" flex flex-col-reverse">
+          <div class="flex flex-col-reverse">
             <div 
               v-for="index in [10, 11,]" 
               :key="index"
-              class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform hover:scale-105  mb-2"
+              class="relative m-1 lottery-box w-20 h-20 bg-cover bg-center bg-no-repeat cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-lg mb-2 animate-box-float"
               style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
-              :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
+              :class="{ 'animate-pulse border-4 border-yellow-400 shadow-yellow-400/50': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
+              :style="{ animationDelay: `${index * 0.1}s` }"
             >
               <!-- 奖品图标/祈愿值 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full flex flex-col items-center justify-center">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-3/4 h-3/4 mx-auto mb-1 animate-float" alt="祈愿值">
+                  <span class="text-xs font-bold text-white drop-shadow-lg absolute bottom-1 left-0 w-full text-center py-1 bg-black/30 rounded">{{ prizes[index].value }}祈愿值</span>
                 </div>
-                <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
+                <div v-else class="text-xl drop-shadow-lg animate-bounce">{{ prizes[index].icon }}</div>
               </div>
               
               <!-- 中奖发光效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
+                class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping opacity-75"
                 style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 rounded-lg animate-win-shake"
-                style="
-                  background: radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(255, 165, 0, 0.7) 50%, rgba(255, 69, 0, 0.5) 100%);
-                  box-shadow: 
-                    0 0 30px rgba(255, 215, 0, 1), 
-                    0 0 60px rgba(255, 165, 0, 0.8), 
-                    0 0 90px rgba(255, 69, 0, 0.6),
-                    inset 0 0 20px rgba(255, 255, 255, 0.3);
-                  animation: winPulse 0.8s ease-in-out infinite alternate, winShake 0.3s ease-in-out infinite;
-                  border: 3px solid rgba(255, 215, 0, 0.8);
-                "
+                class="absolute inset-0 rounded-lg animate-win-effect bg-gradient-radial from-yellow-400/90 via-orange-400/70 to-red-400/50 border-4 border-yellow-400/80 shadow-2xl"
               ></div>
               
               <!-- 中奖文字效果 -->
@@ -243,7 +225,7 @@
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 flex items-center justify-center z-10"
               >
-                <div class="text-white text-xs font-bold bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1 rounded-full animate-bounce shadow-2xl border-2 border-white/50">
+                <div class="text-white text-xs font-bold bg-gradient-to-r from-red-500 to-orange-500 px-2 py-1 rounded-full animate-bounce shadow-2xl border border-white/50">
                   🎉 中奖！
                 </div>
               </div>
@@ -251,12 +233,12 @@
               <!-- 中奖粒子效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 pointer-events-none overflow-hidden"
+                class="absolute inset-0 pointer-events-none overflow-hidden z-20"
               >
                 <div 
                   v-for="i in 8" 
                   :key="i"
-                  class="absolute w-1 h-1 bg-yellow-400 rounded-full animate-ping"
+                  class="absolute w-1 h-1 bg-yellow-400 rounded-full animate-ping opacity-80"
                   :style="{
                     left: Math.random() * 100 + '%',
                     top: Math.random() * 100 + '%',
@@ -267,46 +249,37 @@
               </div>
             </div>
           </div>
- <!-- 右侧一排 (3-4) -->
+          <!-- 右侧一排 (3-4) -->
           <div class="absolute right-0 top-36 flex flex-col">
             <div 
               v-for="index in [4, 5,]" 
               :key="index"
-              class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat   mb-2 transition-transform hover:scale-105"
-              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png') ; background-size: 100% 100%;"
-              :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
+              class="relative m-1 lottery-box w-20 h-20 bg-cover bg-center bg-no-repeat mb-2 transition-all duration-300 hover:scale-110 hover:shadow-lg animate-box-float"
+              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
+              :class="{ 'animate-pulse border-4 border-yellow-400 shadow-yellow-400/50': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
+              :style="{ animationDelay: `${index * 0.1}s` }"
             >
               <!-- 奖品图标/祈愿值 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full flex flex-col items-center justify-center">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-3/4 h-3/4 mx-auto mb-1 animate-float" alt="祈愿值">
+                  <span class="text-xs font-bold text-white drop-shadow-lg absolute bottom-1 left-0 w-full text-center py-1 bg-black/30 rounded">{{ prizes[index].value }}祈愿值</span>
                 </div>
-                <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
+                <div v-else class="text-xl drop-shadow-lg animate-bounce">{{ prizes[index].icon }}</div>
               </div>
               
               <!-- 中奖发光效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
+                class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping opacity-75"
                 style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 rounded-lg animate-win-shake"
-                style="
-                  background: radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(255, 165, 0, 0.7) 50%, rgba(255, 69, 0, 0.5) 100%);
-                  box-shadow: 
-                    0 0 30px rgba(255, 215, 0, 1), 
-                    0 0 60px rgba(255, 165, 0, 0.8), 
-                    0 0 90px rgba(255, 69, 0, 0.6),
-                    inset 0 0 20px rgba(255, 255, 255, 0.3);
-                  animation: winPulse 0.8s ease-in-out infinite alternate, winShake 0.3s ease-in-out infinite;
-                  border: 3px solid rgba(255, 215, 0, 0.8);
-                "
+                class="absolute inset-0 rounded-lg animate-win-effect bg-gradient-radial from-yellow-400/90 via-orange-400/70 to-red-400/50 border-4 border-yellow-400/80 shadow-2xl"
               ></div>
               
               <!-- 中奖文字效果 -->
@@ -314,7 +287,7 @@
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 flex items-center justify-center z-10"
               >
-                <div class="text-white text-xs font-bold bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1 rounded-full animate-bounce shadow-2xl border-2 border-white/50">
+                <div class="text-white text-xs font-bold bg-gradient-to-r from-red-500 to-orange-500 px-2 py-1 rounded-full animate-bounce shadow-2xl border border-white/50">
                   🎉 中奖！
                 </div>
               </div>
@@ -322,12 +295,12 @@
               <!-- 中奖粒子效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 pointer-events-none overflow-hidden"
+                class="absolute inset-0 pointer-events-none overflow-hidden z-20"
               >
                 <div 
                   v-for="i in 8" 
                   :key="i"
-                  class="absolute w-1 h-1 bg-yellow-400 rounded-full animate-ping"
+                  class="absolute w-1 h-1 bg-yellow-400 rounded-full animate-ping opacity-80"
                   :style="{
                     left: Math.random() * 100 + '%',
                     top: Math.random() * 100 + '%',
@@ -339,45 +312,36 @@
             </div>
           </div>
           <!-- 底部一排 (5-7) - 从右到左 -->
-          <div class=" flex flex-row-reverse">
+          <div class="flex flex-row-reverse">
             <div 
               v-for="index in [ 6, 7, 8, 9]" 
               :key="index"
-              class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform hover:scale-105"
+              class="relative m-1 lottery-box w-20 h-20 bg-cover bg-center bg-no-repeat cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-lg animate-box-float"
               style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
-              :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
+              :class="{ 'animate-pulse border-4 border-yellow-400 shadow-yellow-400/50': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
+              :style="{ animationDelay: `${index * 0.1}s` }"
             >
               <!-- 奖品图标/祈愿值 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full flex flex-col items-center justify-center">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
+                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-3/4 h-3/4 mx-auto mb-1 animate-float" alt="祈愿值">
+                  <span class="text-xs font-bold text-white drop-shadow-lg absolute bottom-1 left-0 w-full text-center py-1 bg-black/30 rounded">{{ prizes[index].value }}祈愿值</span>
                 </div>
-                <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
+                <div v-else class="text-xl drop-shadow-lg animate-bounce">{{ prizes[index].icon }}</div>
               </div>
               
               <!-- 中奖发光效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
+                class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping opacity-75"
                 style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 rounded-lg animate-win-shake"
-                style="
-                  background: radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(255, 165, 0, 0.7) 50%, rgba(255, 69, 0, 0.5) 100%);
-                  box-shadow: 
-                    0 0 30px rgba(255, 215, 0, 1), 
-                    0 0 60px rgba(255, 165, 0, 0.8), 
-                    0 0 90px rgba(255, 69, 0, 0.6),
-                    inset 0 0 20px rgba(255, 255, 255, 0.3);
-                  animation: winPulse 0.8s ease-in-out infinite alternate, winShake 0.3s ease-in-out infinite;
-                  border: 3px solid rgba(255, 215, 0, 0.8);
-                "
+                class="absolute inset-0 rounded-lg animate-win-effect bg-gradient-radial from-yellow-400/90 via-orange-400/70 to-red-400/50 border-4 border-yellow-400/80 shadow-2xl"
               ></div>
               
               <!-- 中奖文字效果 -->
@@ -385,7 +349,7 @@
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 flex items-center justify-center z-10"
               >
-                <div class="text-white text-xs font-bold bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1 rounded-full animate-bounce shadow-2xl border-2 border-white/50">
+                <div class="text-white text-xs font-bold bg-gradient-to-r from-red-500 to-orange-500 px-2 py-1 rounded-full animate-bounce shadow-2xl border border-white/50">
                   🎉 中奖！
                 </div>
               </div>
@@ -393,12 +357,12 @@
               <!-- 中奖粒子效果 -->
               <div 
                 v-if="winningIndex === index && showWinEffect"
-                class="absolute inset-0 pointer-events-none overflow-hidden"
+                class="absolute inset-0 pointer-events-none overflow-hidden z-20"
               >
                 <div 
                   v-for="i in 8" 
                   :key="i"
-                  class="absolute w-1 h-1 bg-yellow-400 rounded-full animate-ping"
+                  class="absolute w-1 h-1 bg-yellow-400 rounded-full animate-ping opacity-80"
                   :style="{
                     left: Math.random() * 100 + '%',
                     top: Math.random() * 100 + '%',
@@ -413,36 +377,36 @@
          
 
           <!-- 中央区域 - 显示当前抽奖状态 -->
-          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-            <div v-if="isSpinning" class="text-white text-lg font-bold animate-bounce drop-shadow-lg text-shadow">
+          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-30">
+            <div v-if="isSpinning" class="text-white text-lg font-bold animate-bounce drop-shadow-lg">
               🎲 抽奖中...
             </div>
-            <div v-else-if="showWinEffect" class="text-yellow-300 text-lg font-bold animate-pulse drop-shadow-lg text-shadow">
+            <div v-else-if="showWinEffect" class="text-yellow-300 text-lg font-bold animate-pulse drop-shadow-lg">
               🎉 恭喜中奖！
             </div>
             <div v-else class="text-white/80 text-sm drop-shadow text-shadow">
               <!-- 抽奖区域 -->
-      <div class="lottery-section w-full max-w-[600px] !px-4 !mb-8 z-35 text-center">
+              <div class="lottery-section w-full max-w-96 px-4 mb-8 z-35 text-center">
         <!-- 抽奖按钮 -->
-        <div class="text-center !mb-6">
+                <div class="text-center mb-6">
           <button 
             @click="startLottery"
             :disabled="remainingChances <= 0 || !authStore.isAuthenticated"
-            class="relative group"
+                    class="relative group transform transition-all duration-300 hover:scale-105 disabled:hover:scale-100"
           >
             <!-- 抽奖按钮背景图 -->
-            <div class="w-32 h-32 bg-cover bg-center bg-no-repeat mx-auto transition-transform duration-300 group-hover:scale-105 group-disabled:scale-95 group-disabled:opacity-60"
+                    <div class="w-24 h-24 bg-cover bg-center bg-no-repeat mx-auto transition-all duration-300 group-hover:scale-110 group-disabled:scale-95 group-disabled:opacity-60 animate-pulse-slow"
                  style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybtn.png'); background-size: 100% 100%;">
             </div>
           </button>
           
-          <div class="mt-3 text-white text-center drop-shadow-lg">
-            <span class="text-base font-medium text-shadow">剩余次数：</span>
-            <span class="text-xl font-bold text-yellow-300 text-shadow-lg">{{ remainingChances }}</span>
+                  <div class="mt-3 text-white text-center drop-shadow-lg">
+                    <span class="text-base font-medium">剩余次数：</span>
+                    <span class="text-xl font-bold text-yellow-300 animate-pulse">{{ remainingChances }}</span>
           </div>
           
           <!-- 登录提示 -->
-          <div v-if="!authStore.isAuthenticated" class="mt-3 text-red-300 text-sm text-center">
+                  <div v-if="!authStore.isAuthenticated" class="mt-3 text-red-300 text-sm text-center animate-bounce">
             请先登录才能参与抽奖
           </div>
         </div>
@@ -454,37 +418,37 @@
   
 
       <!-- 奖品展示区域 -->
-      <div class="prizes-showcase w-full max-w-[900px] px-4 mb-8 z-35">
-        <div class="backdrop-blur-lg bg-black/50 rounded-xl p-6 border border-white/30 shadow-2xl">
-          <div class="text-center mb-6">
-            <h3 class="text-[20px] md:text-[24px] font-bold text-white mb-2 text-shadow-lg drop-shadow-lg">
+      <div class="prizes-showcase w-full max-w-4xl px-4 mb-8 z-35 animate-slide-up">
+        <div class="backdrop-blur-lg bg-black/50 rounded-xl p-6 border border-white/30 shadow-2xl hover:shadow-3xl transition-all duration-500">
+          <div class="text-center mb-6 animate-fade-in">
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-2 drop-shadow-lg">
               奖品展示
             </h3>
-            <p class="text-[14px] md:text-[16px] text-white/95 text-center text-shadow drop-shadow">
+            <p class="text-sm md:text-base text-white/95 text-center drop-shadow">
               所有奖品及中奖概率一览
             </p>
           </div>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-stagger-in">
             <!-- 使用后台返回的奖品数据 -->
             <div 
               v-for="prize in currentActivityPrizes" 
               :key="prize.id"
-              class="rounded-lg p-4 border-2 hover:scale-105 transition-all duration-300"
+              class="rounded-lg p-4 border-2 hover:scale-105 transition-all duration-300 hover:shadow-lg backdrop-blur-sm animate-prize-card"
               :class="getPrizeDisplayClass(prize.rarity)"
             >
-              <div class="flex items-center mb-3">
-                <div class="w-12 h-12 rounded-lg flex items-center justify-center !mr-3"
+              <div class="flex items-center mb-3 animate-fade-in">
+                <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-3 animate-float"
                      :class="getPrizeIconBgClass(prize.rarity)">
-                  <img :src="prize.icon" class="h-[80%] object-contain" :alt="prize.name">
+                  <img :src="prize.icon" class="h-4/5 object-contain" :alt="prize.name">
                 </div>
                 <div class="flex-1">
-                  <h4 class="text-white font-bold text-sm mb-1 text-shadow">{{ prize.name }}</h4>
+                  <h4 class="text-white font-bold text-sm mb-1">{{ prize.name }}</h4>
                   <div class="flex items-center justify-between">
                     <span class="text-xs font-medium" :class="getPrizeValueClass(prize.rarity)">
                       {{ prize.type === 'points' ? `+${prize.value}祈愿值` : prize.value }}
                     </span>
-                    <span class="text-xs font-bold px-2 py-1 rounded" :class="getPrizeProbabilityClass(prize.rarity)">
+                    <span class="text-xs font-bold px-2 py-1 rounded animate-pulse-slow" :class="getPrizeProbabilityClass(prize.rarity)">
                       {{ prize.probability }}%
                     </span>
                   </div>
@@ -502,12 +466,12 @@
     </div>
 
     <!-- 物品箱对话框 -->
-    <div v-if="showItemBoxDialog" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[80vh] overflow-y-auto border border-white/20 shadow-2xl">
+    <div v-if="showItemBoxDialog" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in">
+      <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-4/5 overflow-y-auto border border-white/20 shadow-2xl animate-modal-enter">
         <!-- 对话框头部 -->
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 !mr-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <div class="w-10 h-10 mr-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center animate-pulse">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
               </svg>
@@ -528,24 +492,24 @@
         </div>
 
         <!-- 加载状态 -->
-        <div v-if="isLoadingRecords" class="flex items-center justify-center py-12 !mt-4">
+        <div v-if="isLoadingRecords" class="flex items-center justify-center py-12 mt-4">
           <div class="flex items-center space-x-3">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500 border-t-2 border-t-transparent"></div>
             <span class="text-white">正在加载物品记录...</span>
           </div>
         </div>
 
         <!-- 物品列表 -->
-        <div v-else-if="personalLotteryRecords.length > 0" class="space-y-4 !mt-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div v-else-if="personalLotteryRecords.length > 0" class="space-y-4 mt-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-stagger-in">
             <div 
               v-for="record in personalLotteryRecords" 
               :key="record.id"
-              class="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-xl p-4 border border-gray-600/30 hover:border-purple-500/50 transition-all duration-300 hover:scale-105"
+              class="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-xl p-4 border border-gray-600/30 hover:border-purple-500/50 transition-all duration-300 hover:scale-105 hover:shadow-lg animate-item-enter"
             >
               <!-- 物品图标 -->
-              <div class="flex items-center !mb-3">
-                <div class="w-16 h-16 !mr-4  bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg flex items-center justify-center mr-4 border border-purple-400/30">
+              <div class="flex items-center mb-3">
+                <div class="w-16 h-16 mr-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg flex items-center justify-center border border-purple-400/30 animate-float">
                   <img 
                     v-if="record.prizeType === 'item'" 
                     src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp" 
@@ -600,12 +564,12 @@
 
         <!-- 空状态 -->
         <div v-else class="text-center py-12">
-          <div class="w-24 h-24 bg-gray-700/50 rounded-full flex items-center justify-center mx-auto !mb-4 mx-auto">
+          <div class="w-24 h-24 bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
             <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
             </svg>
           </div>
-          <h3 class="text-white text-xl font-bold mb-2">物品箱空空如也</h3>
+          <h3 class="text-white text-xl font-bold mb-2 animate-fade-in">物品箱空空如也</h3>
           <p class="text-gray-400">还没有抽取到任何物品，快去参与抽奖吧！</p>
         </div>
 
@@ -613,7 +577,7 @@
         <div class="mt-6 pt-4 border-t border-gray-600/50 flex justify-end">
           <button
             @click="closeItemBoxDialog"
-            class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 font-medium"
+            class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 font-medium transform hover:scale-105"
           >
             关闭
           </button>
@@ -1178,53 +1142,259 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-@keyframes spin-slow {
+/* 自定义动画 */
+@keyframes fade-in {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(20px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes winPulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  100% {
-    transform: scale(1.05);
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes board-entrance {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes box-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(2deg);
+  }
+}
+
+@keyframes title-glow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 165, 0, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 165, 0, 0.5);
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
     opacity: 1;
   }
+  50% {
+    opacity: 0.7;
+  }
 }
 
-@keyframes winShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+@keyframes win-effect {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 1);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
 }
 
-.animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
-.animate-win-shake {
-  animation: winShake 0.5s ease-in-out infinite;
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+@keyframes prize-card {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes item-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 应用动画类 */
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out;
+}
+
+.animate-board-entrance {
+  animation: board-entrance 1s ease-out;
+}
+
+.animate-box-float {
+  animation: box-float 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 2s ease-in-out infinite;
+}
+
+.animate-title-glow {
+  animation: title-glow 3s ease-in-out infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+.animate-win-effect {
+  animation: win-effect 0.8s ease-in-out infinite;
+}
+
+.animate-modal-enter {
+  animation: modal-enter 0.5s ease-out;
+}
+
+.animate-stagger-in {
+  animation: stagger-in 0.6s ease-out;
+}
+
+.animate-stagger-in > * {
+  animation: stagger-in 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.animate-stagger-in > *:nth-child(1) { animation-delay: 0.1s; }
+.animate-stagger-in > *:nth-child(2) { animation-delay: 0.2s; }
+.animate-stagger-in > *:nth-child(3) { animation-delay: 0.3s; }
+.animate-stagger-in > *:nth-child(4) { animation-delay: 0.4s; }
+.animate-stagger-in > *:nth-child(5) { animation-delay: 0.5s; }
+.animate-stagger-in > *:nth-child(6) { animation-delay: 0.6s; }
+
+.animate-prize-card {
+  animation: prize-card 0.5s ease-out;
+}
+
+.animate-item-enter {
+  animation: item-enter 0.4s ease-out;
+}
+
+/* 渐变背景 */
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
 }
 
-.text-shadow {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .monopoly-board {
+    min-width: 280px !important;
+    min-height: 280px !important;
+  }
+  
+  .lottery-box {
+    width: 4rem !important;
+    height: 4rem !important;
+  }
+  
+  .animate-box-float {
+    animation-duration: 4s;
+  }
 }
 
-.text-shadow-lg {
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+@media (max-width: 480px) {
+  .monopoly-board {
+    min-width: 260px !important;
+    min-height: 260px !important;
+  }
+  
+  .lottery-box {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
 }
 
-.lottery-box {
-  transition: all 0.3s ease;
+/* 性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-board-entrance,
+  .animate-box-float,
+  .animate-float,
+  .animate-title-glow,
+  .animate-bounce-slow,
+  .animate-pulse-slow,
+  .animate-win-effect,
+  .animate-modal-enter,
+  .animate-stagger-in,
+  .animate-prize-card,
+  .animate-item-enter {
+    animation: none;
+  }
 }
 </style>
