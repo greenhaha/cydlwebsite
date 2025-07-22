@@ -675,7 +675,7 @@ onUnmounted(() => {
 
 /* 游戏风格奖励卡片 */
 .game-reward-card {
-  @apply p-6 rounded-2xl backdrop-blur-xl border-2 shadow-2xl transition-all duration-500 transform hover:scale-105 relative overflow-hidden text-center;
+  @apply p-6 rounded-2xl backdrop-blur-xl border-3 shadow-2xl transition-all duration-500 transform hover:scale-105 relative overflow-hidden text-center;
 }
 
 .game-reward-card.orange {
@@ -842,7 +842,7 @@ onUnmounted(() => {
 
 /* 游戏风格分享弹窗 */
 .game-modal-content {
-  @apply bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl backdrop-blur-xl border-2 border-gray-200;
+  @apply bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl backdrop-blur-xl border-3 border-gray-200;
   padding: 2rem !important;
 }
 

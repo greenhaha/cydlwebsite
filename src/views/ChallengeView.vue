@@ -331,7 +331,7 @@
       </div>
 
       <!-- 错误提示 -->
-      <div v-if="errorMessage && isBackendAvailable" class="error-message w-full max-w-5xl mx-auto px-6 !mb-16">
+      <div v-if="errorMessage" class="error-message w-full max-w-5xl mx-auto px-6 !mb-16">
         <div class="game-error-container">
           <div class="text-center">
             <div class="text-5xl !mb-4">❌</div>
@@ -348,22 +348,6 @@
         </div>
       </div>
 
-      <!-- 演示模式提示 -->
-      <div v-if="!isBackendAvailable" class="demo-notice w-full max-w-5xl mx-auto px-6 !mb-16">
-        <div class="game-demo-container">
-          <div class="text-center">
-            <div class="text-5xl !mb-4">🎮</div>
-            <div class="text-xl text-white font-bold !mb-3">演示模式</div>
-            <div class="text-white/90 text-base !mb-6 max-w-2xl mx-auto">
-              后端服务暂时不可用，当前显示的是演示数据。请启动后端服务以查看真实数据。
-            </div>
-            <div class="text-cyan-400 text-sm font-medium">
-              💡 提示：启动后端服务后点击"刷新数据"按钮即可加载真实数据
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- 底部信息栏 -->
       <div class="footer-info w-full max-w-6xl mx-auto px-6">
         <div class="game-footer-container">
@@ -375,7 +359,7 @@
             </span>
           </p>
           <p class="text-white/90 text-base">
-            {{ isBackendAvailable ? '数据每5分钟自动更新 · 见证每位玩家的精彩表现！' : '演示模式 · 启动后端服务查看真实数据' }}
+            数据每5分钟自动更新 · 见证每位玩家的精彩表现！
           </p>
         </div>
       </div>
@@ -391,7 +375,6 @@ import { k4StatsApi, type K4ChallengeData, type K4RankingPlayer } from '@/servic
 // 响应式数据
 const isLoading = ref(true)
 const errorMessage = ref('')
-const isBackendAvailable = ref(true)
 const currentRankingType = ref<'kills' | 'assists' | 'revenge' | 'noscope'>('kills')
 
 // 挑战数据
@@ -403,54 +386,6 @@ const challengeData = ref<K4ChallengeData>({
   revengeKillsRanking: [],
   noScopeKillsRanking: []
 })
-
-// 模拟数据（当后端不可用时使用）
-const mockChallengeData: K4ChallengeData = {
-  combatStats: {
-    totalKills: 15420,
-    totalAssists: 8930,
-    totalDeaths: 12650,
-    activePlayersCount: 156,
-    avgKillsPerPlayer: 98.8,
-    avgAssistsPerPlayer: 57.2,
-    lastUpdateTime: new Date().toISOString()
-  },
-  specialKillsStats: {
-    totalRevengeKills: 2340,
-    totalNoScopeKills: 1890,
-    totalWallBangKills: 3450,
-    totalFlashAssists: 4560,
-    lastUpdateTime: new Date().toISOString()
-  },
-  killsRanking: [
-    { playerId: 1, playerName: 'ProGamer2024', steamId: '76561198123456789', value: 1250, rank: 1, lastPlayTime: '2024-01-15T10:30:00Z' },
-    { playerId: 2, playerName: 'SniperKing', steamId: '76561198987654321', value: 1180, rank: 2, lastPlayTime: '2024-01-15T09:45:00Z' },
-    { playerId: 3, playerName: 'HeadshotMaster', steamId: '76561198456789123', value: 1120, rank: 3, lastPlayTime: '2024-01-15T11:20:00Z' },
-    { playerId: 4, playerName: 'FragHunter', steamId: '76561198789123456', value: 1050, rank: 4, lastPlayTime: '2024-01-15T08:15:00Z' },
-    { playerId: 5, playerName: 'EliteShooter', steamId: '76561198321654987', value: 980, rank: 5, lastPlayTime: '2024-01-15T12:00:00Z' }
-  ],
-  assistsRanking: [
-    { playerId: 6, playerName: 'TeamPlayer', steamId: '76561198654321987', value: 890, rank: 1, lastPlayTime: '2024-01-15T10:30:00Z' },
-    { playerId: 7, playerName: 'SupportAce', steamId: '76561198147258369', value: 820, rank: 2, lastPlayTime: '2024-01-15T09:45:00Z' },
-    { playerId: 8, playerName: 'AssistKing', steamId: '76561198963852741', value: 750, rank: 3, lastPlayTime: '2024-01-15T11:20:00Z' },
-    { playerId: 9, playerName: 'Coordinator', steamId: '76561198258741963', value: 680, rank: 4, lastPlayTime: '2024-01-15T08:15:00Z' },
-    { playerId: 10, playerName: 'Backup', steamId: '76561198741852963', value: 620, rank: 5, lastPlayTime: '2024-01-15T12:00:00Z' }
-  ],
-  revengeKillsRanking: [
-    { playerId: 11, playerName: 'Avenger', steamId: '76561198852963741', value: 340, rank: 1, lastPlayTime: '2024-01-15T10:30:00Z' },
-    { playerId: 12, playerName: 'Retaliator', steamId: '76561198369741852', value: 290, rank: 2, lastPlayTime: '2024-01-15T09:45:00Z' },
-    { playerId: 13, playerName: 'Vendetta', steamId: '76561198741963852', value: 250, rank: 3, lastPlayTime: '2024-01-15T11:20:00Z' },
-    { playerId: 14, playerName: 'Payback', steamId: '76561198963741852', value: 210, rank: 4, lastPlayTime: '2024-01-15T08:15:00Z' },
-    { playerId: 15, playerName: 'Justice', steamId: '76561198852741963', value: 180, rank: 5, lastPlayTime: '2024-01-15T12:00:00Z' }
-  ],
-  noScopeKillsRanking: [
-    { playerId: 16, playerName: 'WallBanger', steamId: '76561198741852963', value: 280, rank: 1, lastPlayTime: '2024-01-15T10:30:00Z' },
-    { playerId: 17, playerName: 'PenetrationPro', steamId: '76561198963852741', value: 240, rank: 2, lastPlayTime: '2024-01-15T09:45:00Z' },
-    { playerId: 18, playerName: 'ThroughWalls', steamId: '76561198852741963', value: 200, rank: 3, lastPlayTime: '2024-01-15T11:20:00Z' },
-    { playerId: 19, playerName: 'XRayVision', steamId: '76561198741963852', value: 170, rank: 4, lastPlayTime: '2024-01-15T08:15:00Z' },
-    { playerId: 20, playerName: 'WallHacker', steamId: '76561198369852741', value: 140, rank: 5, lastPlayTime: '2024-01-15T12:00:00Z' }
-  ]
-}
 
 // 排名类型配置
 const rankingTypes = [
@@ -508,17 +443,6 @@ const getRankDisplay = (index: number) => {
   return displays[index] || { emoji: '🏅', color: 'text-white' }
 }
 
-// 检查是否为连接错误
-const isConnectionError = (error: any): boolean => {
-  const errorMessage = error?.message || ''
-  return errorMessage === 'BACKEND_UNAVAILABLE' ||
-         errorMessage.includes('ECONNREFUSED') || 
-         errorMessage.includes('Failed to fetch') ||
-         errorMessage.includes('Network Error') ||
-         errorMessage.includes('HTTP error! status: 500') ||
-         errorMessage.includes('网络连接失败')
-}
-
 // 刷新统计数据
 const refreshStats = async () => {
   await loadChallengeData()
@@ -532,21 +456,10 @@ const loadChallengeData = async () => {
   try {
     const data = await k4StatsApi.getAllChallengeData()
     challengeData.value = data
-    isBackendAvailable.value = true
     console.log('K4挑战数据加载成功:', data)
   } catch (error) {
     console.error('加载K4挑战数据失败:', error)
-    
-    if (isConnectionError(error)) {
-      // 后端不可用，使用模拟数据
-      isBackendAvailable.value = false
-      challengeData.value = mockChallengeData
-      errorMessage.value = '后端服务暂时不可用，正在显示演示数据'
-      console.log('使用模拟数据:', mockChallengeData)
-    } else {
-      // 其他错误
-      errorMessage.value = error instanceof Error ? error.message : '网络连接异常，请检查网络后重试'
-    }
+    errorMessage.value = error instanceof Error ? error.message : '网络连接异常，请检查网络后重试'
   } finally {
     isLoading.value = false
   }
@@ -556,11 +469,9 @@ const loadChallengeData = async () => {
 onMounted(() => {
   loadChallengeData()
 
-  // 设置定期刷新（仅在后端可用时）
+  // 设置定期刷新
   setInterval(() => {
-    if (isBackendAvailable.value) {
-      loadChallengeData()
-    }
+    loadChallengeData()
   }, 5 * 60 * 1000) // 每5分钟刷新一次
 })
 </script>
@@ -740,11 +651,6 @@ onMounted(() => {
 
 .game-error-container {
   @apply backdrop-blur-xl bg-red-900/40 border-2 border-red-500/60 rounded-2xl shadow-2xl;
-  padding: 2rem !important;
-}
-
-.game-demo-container {
-  @apply backdrop-blur-xl bg-blue-900/40 border-2 border-blue-500/60 rounded-2xl shadow-2xl;
   padding: 2rem !important;
 }
 

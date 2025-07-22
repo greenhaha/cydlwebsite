@@ -30,28 +30,12 @@ const apiRequest = async <T>(url: string, options?: RequestInit): Promise<T> => 
     })
 
     if (!response.ok) {
-      const errorMessage = `HTTP error! status: ${response.status}`
-      console.error('API请求失败:', errorMessage, 'URL:', url)
-      throw new Error(errorMessage)
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
 
     return await response.json()
   } catch (error) {
-    console.error('API请求错误:', error, 'URL:', url)
-    
-    // 检查是否为网络连接错误 - 更全面的检测
-    if (error instanceof TypeError && 
-        (error.message.includes('Failed to fetch') || 
-         error.message.includes('fetch') ||
-         error.message.includes('NetworkError'))) {
-      throw new Error('BACKEND_UNAVAILABLE')
-    }
-    
-    // 检查是否为HTTP 500错误（通常表示后端不可用）
-    if (error instanceof Error && error.message.includes('HTTP error! status: 500')) {
-      throw new Error('BACKEND_UNAVAILABLE')
-    }
-    
+    console.error('API请求错误:', error)
     throw error
   }
 }
