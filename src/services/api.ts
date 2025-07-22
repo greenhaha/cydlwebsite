@@ -39,9 +39,17 @@ const apiRequest = async <T>(url: string, options?: RequestInit): Promise<T> => 
   } catch (error) {
     console.error('API请求错误:', error, 'URL:', url)
     
-    // 检查是否为网络连接错误
-    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
-      throw new Error('网络连接失败，请检查后端服务是否启动')
+    // 检查是否为网络连接错误 - 更全面的检测
+    if (error instanceof TypeError && 
+        (error.message.includes('Failed to fetch') || 
+         error.message.includes('fetch') ||
+         error.message.includes('NetworkError'))) {
+      throw new Error('BACKEND_UNAVAILABLE')
+    }
+    
+    // 检查是否为HTTP 500错误（通常表示后端不可用）
+    if (error instanceof Error && error.message.includes('HTTP error! status: 500')) {
+      throw new Error('BACKEND_UNAVAILABLE')
     }
     
     throw error

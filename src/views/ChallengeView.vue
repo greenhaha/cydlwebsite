@@ -511,10 +511,12 @@ const getRankDisplay = (index: number) => {
 // 检查是否为连接错误
 const isConnectionError = (error: any): boolean => {
   const errorMessage = error?.message || ''
-  return errorMessage.includes('ECONNREFUSED') || 
+  return errorMessage === 'BACKEND_UNAVAILABLE' ||
+         errorMessage.includes('ECONNREFUSED') || 
          errorMessage.includes('Failed to fetch') ||
          errorMessage.includes('Network Error') ||
-         errorMessage.includes('HTTP error! status: 500')
+         errorMessage.includes('HTTP error! status: 500') ||
+         errorMessage.includes('网络连接失败')
 }
 
 // 刷新统计数据
