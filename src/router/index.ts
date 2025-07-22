@@ -59,6 +59,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AnniversaryPreheatingView.vue'),
+      // 无需登录访问 - 公开页面
     },
     {
       path: '/anniversary',
@@ -67,7 +68,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AnniversaryView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
+      // 无需登录访问 - 公开页面
     },
     {
       path: '/server-status',
@@ -101,7 +102,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ChallengeView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
+      // 无需登录访问 - 公开页面
     },
     {
       path: '/login',
@@ -154,12 +155,12 @@ const router = createRouter({
 // 全局路由守卫
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
-  
+
   // 如果还没有初始化认证状态，先初始化
   if (!authStore.user && authStore.token) {
     await authStore.initialize()
   }
-  
+
   // 检查是否需要登录
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!authStore.isAuthenticated) {
@@ -170,7 +171,7 @@ router.beforeEach(async (to, from, next) => {
       return
     }
   }
-  
+
   // 检查是否为游客页面（已登录用户不应访问）
   if (to.matched.some(record => record.meta.requiresGuest)) {
     if (authStore.isAuthenticated) {
@@ -178,7 +179,7 @@ router.beforeEach(async (to, from, next) => {
       return
     }
   }
-  
+
   next()
 })
 
