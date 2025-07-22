@@ -13,12 +13,12 @@ const apiRequest = async <T>(url: string, options?: RequestInit): Promise<T> => 
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json',
     }
-    
+
     // 合并用户传入的headers
     if (options?.headers) {
       Object.assign(headers, options.headers)
     }
-    
+
     // 如果有token，添加到请求头
     if (token) {
       headers.Authorization = `Bearer ${token}`
@@ -194,7 +194,7 @@ export const authApi = {
         method: 'POST',
         body: JSON.stringify(loginData),
       })
-      
+
       if (response.success && response.data) {
         // 保存token到localStorage
         localStorage.setItem('authToken', response.data.token)
@@ -215,7 +215,7 @@ export const authApi = {
         method: 'POST',
         body: JSON.stringify(registerData),
       })
-      
+
       if (response.success && response.data) {
         return response.data
       } else {
@@ -233,7 +233,7 @@ export const authApi = {
       const response = await apiRequest<ApiResponse<ValidateTokenResponse>>('/auth/validate', {
         method: 'GET',
       })
-      
+
       if (response.success && response.data) {
         return response.data
       } else {
@@ -253,7 +253,7 @@ export const authApi = {
       const response = await apiRequest<ApiResponse<AuthResponse>>('/auth/refresh', {
         method: 'POST',
       })
-      
+
       if (response.success && response.data) {
         // 更新token
         localStorage.setItem('authToken', response.data.token)
@@ -287,7 +287,7 @@ export const authApi = {
         method: 'PUT',
         body: JSON.stringify(profileData),
       })
-      
+
       if (response.success && response.data) {
         return response.data
       } else {
@@ -305,7 +305,7 @@ export const authApi = {
       const response = await apiRequest<ApiResponse<UserProfileResponse>>('/user/profile', {
         method: 'GET',
       })
-      
+
       if (response.success && response.data) {
         return response.data
       } else {
@@ -327,7 +327,7 @@ export const bindingApi = {
         method: 'POST',
         body: JSON.stringify({ accountId }),
       })
-      
+
       if (response.success && response.data) {
         return response.data
       } else {
@@ -346,7 +346,7 @@ export const bindingApi = {
         method: 'POST',
         body: JSON.stringify({ accountId }),
       })
-      
+
       if (response.success && response.data) {
         return response.data
       } else {
@@ -364,7 +364,7 @@ export const bindingApi = {
       const response = await apiRequest<ApiResponse<BindAccountResponse>>('/account-binding/unbind-qq', {
         method: 'POST',
       })
-      
+
       if (response.success && response.data) {
         return response.data
       } else {
@@ -382,7 +382,7 @@ export const bindingApi = {
       const response = await apiRequest<ApiResponse<BindAccountResponse>>('/account-binding/unbind-steam', {
         method: 'POST',
       })
-      
+
       if (response.success && response.data) {
         return response.data
       } else {
@@ -666,4 +666,137 @@ export const exchangeApi = {
       throw error
     }
   },
+}
+
+// K4统计数据相关类型定义
+export interface K4CombatStats {
+  totalKills: number
+  totalAssists: number
+  totalDeaths: number
+  activePlayersCount: number
+  avgKillsPerPlayer: number
+  avgAssistsPerPlayer: number
+  lastUpdateTime: string
+}
+
+export interface K4SpecialKillsStats {
+  totalRevengeKills: number
+  totalNoScopeKills: number
+  totalWallBangKills: number
+  totalFlashAssists: number
+  lastUpdateTime: string
+}
+
+export interface K4RankingPlayer {
+  playerId: number
+  playerName: string
+  steamId: string
+  value: number
+  rank: number
+  lastPlayTime: string
+}
+
+export interface K4ChallengeData {
+  combatStats: K4CombatStats | null
+  specialKillsStats: K4SpecialKillsStats | null
+  killsRanking: K4RankingPlayer[]
+  assistsRanking: K4RankingPlayer[]
+  revengeKillsRanking: K4RankingPlayer[]
+  noScopeKillsRanking: K4RankingPlayer[]
+}
+
+// K4统计数据API
+export const k4StatsApi = {
+  // 获取战斗统计数据
+  async getCombatStats(): Promise<ApiResponse<K4CombatStats>> {
+    try {
+      return await apiRequest<ApiResponse<K4CombatStats>>('/k4stats/statistics/combat')
+    } catch (error) {
+      console.error('获取战斗统计数据失败:', error)
+      throw error
+    }
+  },
+
+  // 获取特殊击杀统计数据
+  async getSpecialKillsStats(): Promise<ApiResponse<K4SpecialKillsStats>> {
+    try {
+      return await apiRequest<ApiResponse<K4SpecialKillsStats>>('/k4stats/statistics/special-kills')
+    } catch (error) {
+      console.error('获取特殊击杀统计数据失败:', error)
+      throw error
+    }
+  },
+
+  // 获取击杀排名
+  async getKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingPlayer[]>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingPlayer[]>>(`/k4stats/rankings/kills?limit=${limit}`)
+    } catch (error) {
+      console.error('获取击杀排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取助攻排名
+  async getAssistsRanking(limit: number = 50): Promise<ApiResponse<K4RankingPlayer[]>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingPlayer[]>>(`/k4stats/rankings/assists?limit=${limit}`)
+    } catch (error) {
+      console.error('获取助攻排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取复仇击杀排名
+  async getRevengeKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingPlayer[]>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingPlayer[]>>(`/k4stats/rankings/revenge-kills?limit=${limit}`)
+    } catch (error) {
+      console.error('获取复仇击杀排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取盲狙击杀排名（穿墙击杀）
+  async getNoScopeKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingPlayer[]>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingPlayer[]>>(`/k4stats/rankings/noscope-kills?limit=${limit}`)
+    } catch (error) {
+      console.error('获取盲狙击杀排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取所有K4挑战数据（并行请求）
+  async getAllChallengeData(): Promise<K4ChallengeData> {
+    try {
+      const [
+        combatResponse,
+        specialKillsResponse,
+        killsResponse,
+        assistsResponse,
+        revengeResponse,
+        noScopeResponse
+      ] = await Promise.all([
+        this.getCombatStats(),
+        this.getSpecialKillsStats(),
+        this.getKillsRanking(50),
+        this.getAssistsRanking(50),
+        this.getRevengeKillsRanking(50),
+        this.getNoScopeKillsRanking(50)
+      ])
+
+      return {
+        combatStats: combatResponse.success ? combatResponse.data || null : null,
+        specialKillsStats: specialKillsResponse.success ? specialKillsResponse.data || null : null,
+        killsRanking: killsResponse.success ? killsResponse.data || [] : [],
+        assistsRanking: assistsResponse.success ? assistsResponse.data || [] : [],
+        revengeKillsRanking: revengeResponse.success ? revengeResponse.data || [] : [],
+        noScopeKillsRanking: noScopeResponse.success ? noScopeResponse.data || [] : []
+      }
+    } catch (error) {
+      console.error('获取K4挑战数据失败:', error)
+      throw error
+    }
+  }
 }
