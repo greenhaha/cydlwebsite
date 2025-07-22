@@ -85,7 +85,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LotteryView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
+      // meta: { requiresAuth: true }, // 需要登录
     },
     {
       path: '/lottery-test',
