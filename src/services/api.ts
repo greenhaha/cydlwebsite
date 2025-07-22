@@ -30,12 +30,20 @@ const apiRequest = async <T>(url: string, options?: RequestInit): Promise<T> => 
     })
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      const errorMessage = `HTTP error! status: ${response.status}`
+      console.error('API请求失败:', errorMessage, 'URL:', url)
+      throw new Error(errorMessage)
     }
 
     return await response.json()
   } catch (error) {
-    console.error('API请求错误:', error)
+    console.error('API请求错误:', error, 'URL:', url)
+    
+    // 检查是否为网络连接错误
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      throw new Error('网络连接失败，请检查后端服务是否启动')
+    }
+    
     throw error
   }
 }
