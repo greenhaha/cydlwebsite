@@ -668,32 +668,76 @@ export const exchangeApi = {
   },
 }
 
-// K4统计数据相关类型定义
+// K4统计数据类型定义
+export interface K4StatisticItem {
+  name: string
+  value: number
+  percentage: number
+}
+
+export interface K4StatisticCategory {
+  categoryName: string
+  totalPlayers: number
+  statistics: { [key: string]: number }  // 修改为对象格式
+}
+
+export interface K4AllStatistics {
+  combat: K4StatisticCategory
+  hitLocations: K4StatisticCategory
+  rounds: K4StatisticCategory
+  specialKills: K4StatisticCategory
+  others: K4StatisticCategory
+}
+
+export interface K4PlayerRankingInfo {
+  rank: number
+  steamId: string
+  playerName: string  // 修改为后端返回的字段名
+  value: number
+  isHighlighted?: boolean
+}
+
+export interface K4RankingResponse {
+  category: string
+  description: string
+  totalPlayers: number
+  rankings: K4PlayerRankingInfo[]
+  timestamp: number
+}
+
+export interface K4CombinedRankingResponse {
+  kills: K4RankingResponse
+  firstBlood: K4RankingResponse
+  assists: K4RankingResponse
+  revengeKills: K4RankingResponse
+  noscopeKills: K4RankingResponse
+}
+
+// 保留原有的简化类型以兼容
 export interface K4CombatStats {
   totalKills: number
-  totalAssists: number
   totalDeaths: number
-  activePlayersCount: number
-  avgKillsPerPlayer: number
-  avgAssistsPerPlayer: number
-  lastUpdateTime: string
+  totalAssists: number
+  totalFirstBlood: number
+  totalShoots: number
+  totalHitsGiven: number
+  totalHitsTaken: number
 }
 
 export interface K4SpecialKillsStats {
+  totalNoscopeKills: number
+  totalPenetratedKills: number
+  totalThrusmokeKills: number
+  totalFlashedKills: number
+  totalDominatedKills: number
   totalRevengeKills: number
-  totalNoScopeKills: number
-  totalWallBangKills: number
-  totalFlashAssists: number
-  lastUpdateTime: string
 }
 
 export interface K4RankingPlayer {
-  playerId: number
-  playerName: string
-  steamId: string
-  value: number
   rank: number
-  lastPlayTime: string
+  steamId: string
+  name: string
+  value: number
 }
 
 export interface K4ChallengeData {
@@ -707,6 +751,16 @@ export interface K4ChallengeData {
 
 // K4统计数据API
 export const k4StatsApi = {
+  // 获取所有统计数据
+  async getAllStatistics(): Promise<ApiResponse<K4AllStatistics>> {
+    try {
+      return await apiRequest<ApiResponse<K4AllStatistics>>('/k4stats/statistics/all')
+    } catch (error) {
+      console.error('获取所有统计数据失败:', error)
+      throw error
+    }
+  },
+
   // 获取战斗统计数据
   async getCombatStats(): Promise<ApiResponse<K4CombatStats>> {
     try {
@@ -717,52 +771,159 @@ export const k4StatsApi = {
     }
   },
 
-  // 获取特殊击杀统计数据
+  // 获取命中部位统计
+  async getHitLocationStats(): Promise<ApiResponse<K4StatisticCategory>> {
+    try {
+      return await apiRequest<ApiResponse<K4StatisticCategory>>('/k4stats/statistics/hit-locations')
+    } catch (error) {
+      console.error('获取命中部位统计失败:', error)
+      throw error
+    }
+  },
+
+  // 获取回合/对局统计
+  async getRoundStats(): Promise<ApiResponse<K4StatisticCategory>> {
+    try {
+      return await apiRequest<ApiResponse<K4StatisticCategory>>('/k4stats/statistics/rounds')
+    } catch (error) {
+      console.error('获取回合统计失败:', error)
+      throw error
+    }
+  },
+
+  // 获取特殊击杀统计
   async getSpecialKillsStats(): Promise<ApiResponse<K4SpecialKillsStats>> {
     try {
       return await apiRequest<ApiResponse<K4SpecialKillsStats>>('/k4stats/statistics/special-kills')
     } catch (error) {
-      console.error('获取特殊击杀统计数据失败:', error)
+      console.error('获取特殊击杀统计失败:', error)
       throw error
     }
   },
 
-  // 获取击杀排名
-  async getKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingPlayer[]>> {
+  // 获取其他统计
+  async getOtherStats(): Promise<ApiResponse<K4StatisticCategory>> {
     try {
-      return await apiRequest<ApiResponse<K4RankingPlayer[]>>(`/k4stats/rankings/kills?limit=${limit}`)
+      return await apiRequest<ApiResponse<K4StatisticCategory>>('/k4stats/statistics/others')
     } catch (error) {
-      console.error('获取击杀排名失败:', error)
+      console.error('获取其他统计失败:', error)
       throw error
     }
   },
 
-  // 获取助攻排名
-  async getAssistsRanking(limit: number = 50): Promise<ApiResponse<K4RankingPlayer[]>> {
+  // 获取击杀次数排名
+  async getKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
     try {
-      return await apiRequest<ApiResponse<K4RankingPlayer[]>>(`/k4stats/rankings/assists?limit=${limit}`)
+      return await apiRequest<ApiResponse<K4RankingResponse>>(`/k4stats/rankings/kills?limit=${limit}`)
     } catch (error) {
-      console.error('获取助攻排名失败:', error)
+      console.error('获取击杀次数排名失败:', error)
       throw error
     }
   },
 
-  // 获取复仇击杀排名
-  async getRevengeKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingPlayer[]>> {
+  // 获取首杀次数排名
+  async getFirstBloodRanking(limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
     try {
-      return await apiRequest<ApiResponse<K4RankingPlayer[]>>(`/k4stats/rankings/revenge-kills?limit=${limit}`)
+      return await apiRequest<ApiResponse<K4RankingResponse>>(`/k4stats/rankings/firstblood?limit=${limit}`)
     } catch (error) {
-      console.error('获取复仇击杀排名失败:', error)
+      console.error('获取首杀次数排名失败:', error)
       throw error
     }
   },
 
-  // 获取盲狙击杀排名（穿墙击杀）
-  async getNoScopeKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingPlayer[]>> {
+  // 获取助攻次数排名
+  async getAssistsRanking(limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
     try {
-      return await apiRequest<ApiResponse<K4RankingPlayer[]>>(`/k4stats/rankings/noscope-kills?limit=${limit}`)
+      return await apiRequest<ApiResponse<K4RankingResponse>>(`/k4stats/rankings/assists?limit=${limit}`)
     } catch (error) {
-      console.error('获取盲狙击杀排名失败:', error)
+      console.error('获取助攻次数排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取复仇击杀次数排名
+  async getRevengeKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingResponse>>(`/k4stats/rankings/revenge-kills?limit=${limit}`)
+    } catch (error) {
+      console.error('获取复仇击杀次数排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取盲射击杀次数排名
+  async getNoScopeKillsRanking(limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingResponse>>(`/k4stats/rankings/noscope-kills?limit=${limit}`)
+    } catch (error) {
+      console.error('获取盲射击杀次数排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取穿墙击杀次数排名（使用后端的特殊击杀统计）
+  async getWallbangKillsRanking(_limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
+    console.log(_limit)
+    try {
+      // 由于后端没有单独的穿墙击杀排名，我们使用特殊击杀统计数据
+      const response = await apiRequest<ApiResponse<K4StatisticCategory>>('/k4stats/statistics/special-kills')
+      if (response.success && response.data) {
+        // 构造一个模拟的排名响应
+        return {
+          success: true,
+          message: '获取穿墙击杀排名成功',
+          data: {
+            category: 'wallbang-kills',
+            description: '穿墙击杀次数排名',
+            totalPlayers: response.data.totalPlayers,
+            rankings: [],
+            timestamp: Date.now()
+          }
+        }
+      }
+      throw new Error('无法获取穿墙击杀数据')
+    } catch (error) {
+      console.error('获取穿墙击杀次数排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取开火次数排名
+  async getShootsRanking(limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingResponse>>(`/k4stats/rankings/shoots?limit=${limit}`)
+    } catch (error) {
+      console.error('获取开火次数排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取道具投掷次数排名
+  async getGrenadesRanking(limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingResponse>>(`/k4stats/rankings/grenades?limit=${limit}`)
+    } catch (error) {
+      console.error('获取道具投掷次数排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取下包次数排名
+  async getBombPlantedRanking(limit: number = 50): Promise<ApiResponse<K4RankingResponse>> {
+    try {
+      return await apiRequest<ApiResponse<K4RankingResponse>>(`/k4stats/rankings/bomb-planted?limit=${limit}`)
+    } catch (error) {
+      console.error('获取下包次数排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取综合排名数据
+  async getCombinedRankings(limit: number = 50): Promise<ApiResponse<K4CombinedRankingResponse>> {
+    try {
+      return await apiRequest<ApiResponse<K4CombinedRankingResponse>>(`/k4stats/rankings/combined?limit=${limit}`)
+    } catch (error) {
+      console.error('获取综合排名数据失败:', error)
       throw error
     }
   },
@@ -780,22 +941,222 @@ export const k4StatsApi = {
       ] = await Promise.all([
         this.getCombatStats(),
         this.getSpecialKillsStats(),
-        this.getKillsRanking(50),
-        this.getAssistsRanking(50),
-        this.getRevengeKillsRanking(50),
-        this.getNoScopeKillsRanking(50)
+        this.getKillsRanking(10), // 只获取前10名
+        this.getAssistsRanking(10),
+        this.getRevengeKillsRanking(10),
+        this.getNoScopeKillsRanking(10)
       ])
+
+      // 转换K4PlayerRankingInfo到K4RankingPlayer格式
+      const convertRankings = (response: ApiResponse<K4RankingResponse>): K4RankingPlayer[] => {
+        if (response.success && response.data) {
+          return response.data.rankings.map(player => ({
+            rank: player.rank,
+            steamId: player.steamId,
+            name: player.playerName, // 修改字段映射
+            value: player.value
+          }))
+        }
+        return []
+      }
 
       return {
         combatStats: combatResponse.success ? combatResponse.data || null : null,
         specialKillsStats: specialKillsResponse.success ? specialKillsResponse.data || null : null,
-        killsRanking: killsResponse.success ? killsResponse.data || [] : [],
-        assistsRanking: assistsResponse.success ? assistsResponse.data || [] : [],
-        revengeKillsRanking: revengeResponse.success ? revengeResponse.data || [] : [],
-        noScopeKillsRanking: noScopeResponse.success ? noScopeResponse.data || [] : []
+        killsRanking: convertRankings(killsResponse),
+        assistsRanking: convertRankings(assistsResponse),
+        revengeKillsRanking: convertRankings(revengeResponse),
+        noScopeKillsRanking: convertRankings(noScopeResponse)
       }
     } catch (error) {
       console.error('获取K4挑战数据失败:', error)
+      throw error
+    }
+  }
+}
+
+// 祈愿值兑换相关类型定义
+export interface WishExchangeItem {
+  id: number
+  name: string
+  category: string
+  wishPoints: number
+  description: string
+  iconUrl: string
+  rarity: string
+  validFrom: string
+  validUntil: string
+  sortOrder: number
+  canExchange: boolean
+}
+
+export interface UserWishExchange {
+  id: number
+  userId?: number
+  itemId: number
+  itemName: string
+  itemCategory: string
+  wishPointsUsed: number
+  exchangeTime: string
+  status: string
+}
+
+export interface ExchangeRequest {
+  itemId: number
+}
+
+export interface UserBalances {
+  wishPoints: number
+  credits: number
+}
+
+// 祈愿值兑换API
+export const wishExchangeApi = {
+  // 获取用户余额信息
+  async getUserBalances(): Promise<ApiResponse<UserBalances>> {
+    try {
+      return await apiRequest<ApiResponse<UserBalances>>('/exchange/balances')
+    } catch (error) {
+      console.error('获取用户余额失败:', error)
+      throw error
+    }
+  },
+
+  // 获取可兑换物品列表
+  async getAvailableItems(userId: number): Promise<ApiResponse<WishExchangeItem[]>> {
+    try {
+      return await apiRequest<ApiResponse<WishExchangeItem[]>>(`/wish-exchange/items?userId=${userId}`)
+    } catch (error) {
+      console.error('获取可兑换物品列表失败:', error)
+      throw error
+    }
+  },
+
+  // 根据分类获取可兑换物品
+  async getAvailableItemsByCategory(category: string, userId: number): Promise<ApiResponse<WishExchangeItem[]>> {
+    try {
+      return await apiRequest<ApiResponse<WishExchangeItem[]>>(`/wish-exchange/items/category/${category}?userId=${userId}`)
+    } catch (error) {
+      console.error('根据分类获取物品失败:', error)
+      throw error
+    }
+  },
+
+  // 获取所有物品分类
+  async getAllCategories(): Promise<ApiResponse<string[]>> {
+    try {
+      return await apiRequest<ApiResponse<string[]>>('/wish-exchange/categories')
+    } catch (error) {
+      console.error('获取分类列表失败:', error)
+      throw error
+    }
+  },
+
+  // 兑换物品
+  async exchangeItem(userId: number, itemId: number): Promise<ApiResponse<UserWishExchange>> {
+    try {
+      return await apiRequest<ApiResponse<UserWishExchange>>(`/wish-exchange/exchange?userId=${userId}`, {
+        method: 'POST',
+        body: JSON.stringify({ itemId })
+      })
+    } catch (error) {
+      console.error('兑换物品失败:', error)
+      throw error
+    }
+  },
+
+  // 获取用户兑换记录
+  async getUserExchangeHistory(userId: number): Promise<ApiResponse<UserWishExchange[]>> {
+    try {
+      return await apiRequest<ApiResponse<UserWishExchange[]>>(`/wish-exchange/history?userId=${userId}`)
+    } catch (error) {
+      console.error('获取兑换记录失败:', error)
+      throw error
+    }
+  },
+
+  // 祈愿值兑换Credits
+  async wishToCredit(amount: number): Promise<ApiResponse<CreditExchangeResult>> {
+    try {
+      return await apiRequest<ApiResponse<CreditExchangeResult>>('/exchange/wish-to-credit', {
+        method: 'POST',
+        body: JSON.stringify({ amount })
+      })
+    } catch (error) {
+      console.error('祈愿值兑换Credits失败:', error)
+      throw error
+    }
+  },
+
+  // Credits兑换祈愿值
+  async creditToWish(amount: number): Promise<ApiResponse<CreditExchangeResult>> {
+    try {
+      return await apiRequest<ApiResponse<CreditExchangeResult>>('/exchange/credit-to-wish', {
+        method: 'POST',
+        body: JSON.stringify({ amount })
+      })
+    } catch (error) {
+      console.error('Credits兑换祈愿值失败:', error)
+      throw error
+    }
+  },
+
+  // 获取兑换记录
+  async getExchangeRecords(): Promise<ApiResponse<CreditExchangeRecord[]>> {
+    try {
+      return await apiRequest<ApiResponse<CreditExchangeRecord[]>>('/exchange/records')
+    } catch (error) {
+      console.error('获取兑换记录失败:', error)
+      throw error
+    }
+  }
+}
+
+// K4Times相关类型定义
+export interface K4TimesPlayerRankingInfo {
+  rank: number
+  steamId: string
+  playerName: string
+  value: number
+}
+
+export interface K4TimesRankingResponse {
+  category: string
+  description: string
+  totalPlayers: number
+  rankings: K4TimesPlayerRankingInfo[]
+  timestamp: number
+}
+
+export interface K4PlayerTimeInfo {
+  steamId: string
+  playerName: string
+  totalTime: number
+  ctTime: number
+  tTime: number
+  specTime: number
+  aliveTime: number
+  deadTime: number
+}
+
+// K4Times统计数据API
+export const k4TimesApi = {
+  // 获取游玩时长排名
+  async getPlayTimeRanking(limit: number = 50): Promise<ApiResponse<K4TimesRankingResponse>> {
+    try {
+      return await apiRequest<ApiResponse<K4TimesRankingResponse>>(`/k4times/rankings/playtime?limit=${limit}`)
+    } catch (error) {
+      console.error('获取游玩时长排名失败:', error)
+      throw error
+    }
+  },
+
+  // 获取玩家游玩时长
+  async getPlayerPlayTime(steamId: string): Promise<ApiResponse<K4PlayerTimeInfo>> {
+    try {
+      return await apiRequest<ApiResponse<K4PlayerTimeInfo>>(`/k4times/player/${steamId}`)
+    } catch (error) {
+      console.error('获取玩家游玩时长失败:', error)
       throw error
     }
   }

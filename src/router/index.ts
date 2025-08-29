@@ -53,23 +53,6 @@ const router = createRouter({
       component: () => import('../views/ContributeView.vue'),
     },
     {
-      path: '/anniversary-preheating',
-      name: 'anniversary-preheating',
-      // route level code-splitting
-      // this generates a separate chunk for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AnniversaryPreheatingView.vue'),
-    },
-    {
-      path: '/anniversary',
-      name: 'anniversary',
-      // route level code-splitting
-      // this generates a separate chunk for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AnniversaryView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
-    },
-    {
       path: '/server-status',
       name: 'server-status',
       // route level code-splitting
@@ -148,18 +131,35 @@ const router = createRouter({
       component: () => import('../views/WishValueCreditExchangeView.vue'),
       meta: { requiresAuth: true }, // 需要登录
     },
+    {
+      path: '/activity',
+      name: 'activity',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ActivityView.vue'),
+      meta: { requiresAuth: true }, // 需要登录
+    },
+    {
+      path: '/activity-test',
+      name: 'activity-test',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/ActivityTestView.vue'),
+    },
   ],
 })
 
 // 全局路由守卫
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
-  
+
   // 如果还没有初始化认证状态，先初始化
   if (!authStore.user && authStore.token) {
     await authStore.initialize()
   }
-  
+
   // 检查是否需要登录
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!authStore.isAuthenticated) {
@@ -170,7 +170,7 @@ router.beforeEach(async (to, from, next) => {
       return
     }
   }
-  
+
   // 检查是否为游客页面（已登录用户不应访问）
   if (to.matched.some(record => record.meta.requiresGuest)) {
     if (authStore.isAuthenticated) {
@@ -178,7 +178,7 @@ router.beforeEach(async (to, from, next) => {
       return
     }
   }
-  
+
   next()
 })
 

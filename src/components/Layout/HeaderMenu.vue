@@ -76,6 +76,7 @@ import {
   Server as ServerIcon,
   // Settings as SettingsIcon,
   WomanSharp as ModelIcon,
+  Trophy as TrophyIcon,
 } from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
 import {  NButton, NDrawer, NDropdown, NIcon, NMenu } from 'naive-ui'
@@ -191,6 +192,20 @@ const menuOptions: MenuOption[] = [
     key: 'contribute-page',
     icon: renderIcon(HeartIcon),
   },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: '/activity',
+          },
+        },
+        { default: () => '活动中心' },
+      ),
+    key: 'activity-page',
+    icon: renderIcon(TrophyIcon),
+  },
 ]
 
 export default defineComponent({
@@ -251,6 +266,7 @@ export default defineComponent({
         '/anniversary': 'anniversary-page',
         '/gifts': 'gift-page',
         '/contribute': 'contribute-page',
+        '/activity': 'activity-page',
       }
       return pathKeyMap[path] || null
     }
