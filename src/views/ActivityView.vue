@@ -42,7 +42,7 @@
           <!-- 副标题 -->
           <div class="subtitle-container !mb-6 flex justify-center items-center flex-col">
             <h2 class="text-lg md:text-xl lg:text-2xl font-semibold text-white/95 !mb-3 tracking-wide">
-              精彩活动 · 丰厚奖励 · 荣耀排行
+              限时活动 · 专属奖励 · 趣味排名
             </h2>
             <div class="w-24 h-0.5 bg-gradient-to-r from-yellow-400 to-orange-400 mx-auto rounded-full"></div>
           </div>
@@ -50,7 +50,7 @@
           <!-- 描述文字 -->
           <div class="description-card max-w-xl mx-auto p-4 rounded-xl bg-black/30 backdrop-blur-xl border border-white/20 shadow-2xl">
             <p class="text-base text-white/90 leading-relaxed">
-              参与精彩活动，赢取丰厚奖励，展示你的实力与荣耀！
+              欢迎来到活动中心！参加限时活动，可兑换专属奖励！祝你好运！
             </p>
           </div>
         </div>
@@ -63,8 +63,8 @@
           <!-- 第一部分：奖品轮播展示 -->
           <div class="prize-showcase !mb-12">
             <div class="section-header">
-              <h3 class="section-title">精彩奖品展示</h3>
-              <p class="section-subtitle">点击奖品可快速跳转到兑换区域</p>
+              <h3 class="section-title">活动奖品</h3>
+              <p class="section-subtitle">点击图片即可跳转至兑换区域</p>
             </div>
 
             <div class="prize-carousel-container">
@@ -88,7 +88,7 @@
                         <h3 class="prize-name">{{ prize.name }}</h3>
                         <p class="prize-description">{{ prize.description }}</p>
                         <div class="prize-details">
-                          <span class="prize-price">{{ prize.price }} 祈愿值</span>
+                          <span class="prize-price">{{ prize.price }} 热度值</span>
                           <span class="prize-rarity">{{ prize.rarity }}</span>
                         </div>
                       </div>
@@ -205,7 +205,8 @@
               </div>
 
               <!-- 兑换功能快捷入口 -->
-              <div class="exchange-actions !mt-6">
+              <div class="exchange-actions-container !mt-6">
+                <!-- 积分兑换按钮 -->
                 <RouterLink
                   to="/wish-credit-exchange"
                   class="exchange-action-btn"
@@ -216,6 +217,20 @@
                     <div class="action-btn-subtitle">祈愿值 ⇄ 积分互换</div>
                   </div>
                   <div class="action-btn-arrow">→</div>
+                  <div class="action-btn-glow"></div>
+                </RouterLink>
+
+                <!-- 热度值皮肤兑换按钮 -->
+                <RouterLink
+                  to="/wish-exchange"
+                  class="exchange-action-btn heat-exchange-btn"
+                >
+                  <div class="action-btn-icon" style="color: #f97316;">🔥</div>
+                  <div class="action-btn-content">
+                    <div class="action-btn-title" style="color: #f97316;">热度值兑换</div>
+                    <div class="action-btn-subtitle">兑换限定游戏皮肤</div>
+                  </div>
+                  <div class="action-btn-arrow" style="color: #f97316;">→</div>
                   <div class="action-btn-glow"></div>
                 </RouterLink>
               </div>
@@ -470,11 +485,11 @@ const playTimeRanking = ref<K4TimesPlayerRankingInfo[]>([])
 // 精选奖品数据（轮播展示）
 const featuredPrizes = ref([
   {
-    name: '传说级换肤模型',
-    description: '稀有传说级角色皮肤，让你在战场上脱颖而出',
-    image: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp',
-    price: 5000,
-    rarity: '传说'
+    name: '[周年庆限定]lime',
+    description: '捐赠人oVo，周年庆限定皮肤，活动期间限时兑换',
+    image: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lime_1.png',
+    price: 1000,
+    rarity: '换肤模型'
   },
   // {
   //   name: '史诗级换肤模型',
@@ -969,19 +984,29 @@ onUnmounted(() => {
   box-shadow: 0 12px 40px rgba(251, 191, 36, 0.2);
 }
 
+.prize-card:hover .prize-image {
+  transform: scale(2.8);  /* 鼠标悬停时进一步放大图片 */
+}
+
 .prize-image-container {
   position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-bottom: 1.5rem;
+  height: 12.5rem; /* 更改高度 */
+  overflow: visible;  /* 允许内容溢出，确保放大的图片可见 */
 }
 
 .prize-image {
   width: 8rem;
   height: 8rem;
-  object-fit: cover;
-  border-radius: 0.5rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  object-fit: contain;  /* 确保图片完整显示 */
+  border-radius: 0;  /* 移除边框圆角 */
+  box-shadow: none;  /* 移除阴影效果 */
+  transform: scale(2.6);  /* 放大图片到原尺寸的1.5倍 */
+  transform-origin: center;  /* 从中心点放大 */
+  transition: transform 0.3s ease;  /* 添加平滑过渡效果 */
 }
 
 .image-glow {
@@ -989,10 +1014,11 @@ onUnmounted(() => {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 120%;
-  height: 120%;
+  width: 160%;  /* 增加宽度以匹配放大后的图片 */
+  height: 160%;  /* 增加高度以匹配放大后的图片 */
   background: radial-gradient(circle, rgba(251, 191, 36, 0.2) 0%, transparent 70%);
   border-radius: 50%;
+  z-index: -1;  /* 确保发光效果位于图片下方 */
 }
 
 .prize-info {
@@ -1149,11 +1175,14 @@ onUnmounted(() => {
 }
 
 /* 兑换功能快捷入口 */
-.exchange-actions {
+.exchange-actions-container {
   max-width: 1000px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
+  flex-direction: row; /* 横向排列 */
+  gap: 2.5rem; /* 按钮间的间距增加 */
+  align-items: center;
 }
 
 .exchange-action-btn {
@@ -1169,7 +1198,7 @@ onUnmounted(() => {
   text-decoration: none;
   transition: all 0.3s ease;
   overflow: hidden;
-  min-width: 280px;
+  width: 320px; /* 减小宽度让两个按钮能并排显示 */
 }
 
 .exchange-action-btn:hover {
@@ -1232,6 +1261,35 @@ onUnmounted(() => {
 
 .exchange-action-btn:hover .action-btn-glow {
   opacity: 1;
+}
+
+/* 热度值兑换按钮样式 */
+.heat-exchange-btn {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(234, 88, 12, 0.2));
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.heat-exchange-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 15px 40px rgba(239, 68, 68, 0.3);
+}
+
+.heat-exchange-btn .action-btn-glow {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.2), transparent);
+}
+
+/* 响应式调整 - 小屏幕设备上按钮垂直排列 */
+@media (max-width: 768px) {
+  .exchange-actions-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .exchange-action-btn {
+    width: 100%;
+    max-width: 350px;
+  }
 }
 
 /* 兑换商品网格 */
