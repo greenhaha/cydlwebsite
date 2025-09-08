@@ -1,5 +1,5 @@
 <template>
-  <n-card class="status-card primary-card" embedded>
+  <n-card class="status-card primary-card" :class="serverData.online ? 'online' : 'offline'" embedded>
     <n-space align="center" justify="space-between">
       <n-space align="center">
         <n-icon
@@ -41,6 +41,28 @@ defineProps<{
 
 <style scoped>
 .status-card {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border:1px solid #e2e8f0;
+  box-shadow:0 2px 4px -2px rgba(0,0,0,.04), 0 4px 10px -4px rgba(0,0,0,.06);
+  transition:background .4s ease;
+}
+.status-card.online {
+  background:linear-gradient(90deg,
+    #ffffff 0%,
+    #ffffff 30%,
+    #f0fdf4 55%,
+    #dcfce7 80%,
+    #bbf7d0 100%
+  );
+  color:#065f46;
+}
+.status-card.offline {
+  background:linear-gradient(90deg,
+    #ffffff 0%,
+    #ffffff 30%,
+    #fef2f2 55%,
+    #fee2e2 80%,
+    #fecaca 100%
+  );
+  color:#7f1d1d;
 }
 </style>
