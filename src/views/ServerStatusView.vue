@@ -6,38 +6,52 @@
     </div>
     <div class="server-status-container">
   <div class="server-status-card fade-in-card">
-      <ServerStatusHeader :loading="loading" @refresh="fetchServers" />
+  <ServerStatusHeader />
       <n-divider />
   <LoadingErrorState :loading="loading" :error="error" :has-data="serverDataList.length > 0" @retry="fetchServers" />
-  <div v-if="!loading && serverDataList.length" class="summary-bar" aria-live="polite">
+  <div v-if="showSummary" class="summary-bar" aria-live="polite" role="group" aria-label="服务器总体概览">
         <div class="summary-item">
           <span class="label">在线服务器</span>
-          <n-tag :type="onlineServers > 0 ? 'success' : 'error'" size="small" round>
-            <span class="metric-val" :key="onlineServers">{{ onlineServers }}</span>/{{ totalServers }}
-          </n-tag>
+          <div class="metric-line" aria-label="在线服务器">
+            <span class="val" :key="onlineServers">{{ onlineServers }}</span>
+            <span class="sep">/</span>
+            <span class="total">{{ totalServers }}</span>
+          </div>
         </div>
         <div class="summary-item">
           <span class="label">玩家总数</span>
-          <n-tag type="info" size="small" round>
-            <span class="metric-val" :key="totalPlayers">{{ totalPlayers }}</span>/{{ totalMaxPlayers }}
-          </n-tag>
-        </div>
-        <div class="summary-item">
-          <span class="label">平均 Ping</span>
-          <n-tag :type="avgPingTagType" size="small" round>
-            <span class="metric-val" :key="avgPingDisplay">{{ avgPingDisplay }}</span>
-          </n-tag>
-        </div>
-        <div class="summary-item utilization" v-if="totalMaxPlayers > 0">
-          <span class="label">整体利用率</span>
-          <div class="util-bar" :class="{ zero: utilizationPercent === 0 }">
-            <div class="util-inner" :style="{ width: utilizationPercent + '%', background: utilizationColor }"></div>
-            <span class="util-text"><span class="metric-val" :key="utilizationPercent.toFixed(0)">{{ utilizationPercent.toFixed(0) }}</span>%</span>
+          <div class="metric-line" aria-label="玩家总数">
+            <span class="val" :key="totalPlayers">{{ totalPlayers }}</span>
+            <span class="sep">/</span>
+            <span class="total">{{ totalMaxPlayers }}</span>
           </div>
         </div>
+        <div class="summary-item">
+          <span class="label">平均 PING</span>
+          <div class="metric-line" aria-label="平均 Ping">
+            <span class="val" :key="avgPingDisplay">{{ avgPingDisplay }}</span>
+          </div>
+        </div>
+        <div class="summary-item utilization" v-if="totalMaxPlayers > 0">
+          <div class="util-head">
+            <span class="label">整体利用率</span>
+            <span class="util-num" :style="{ color: utilizationColor }">{{ utilizationPercent.toFixed(0) }}%</span>
+          </div>
+          <div class="util-bar" :class="{ zero: utilizationPercent === 0 }" role="progressbar" :aria-valuenow="Math.round(utilizationPercent)" aria-valuemin="0" aria-valuemax="100">
+            <div class="util-inner" :style="{ width: utilizationPercent + '%', background: utilizationColor }"></div>
+          </div>
+        </div>
+        <!-- 刷新按钮（靠右） -->
+  <button :class="['summary-refresh-btn', { loading }]" :disabled="loading" @click="handleRefresh" aria-label="立即刷新" title="立即刷新">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10" />
+            <polyline points="1 20 1 14 7 14" />
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+          </svg>
+        </button>
       </div>
 
-  <div v-if="!loading && serverDataList.length" class="preview-grid" aria-label="服务器列表">
+  <div v-if="showSummary" class="preview-grid" aria-label="服务器列表">
         <ServerPreviewCard
           v-for="(sd, idx) in serverDataList"
           :key="idx"
@@ -50,7 +64,20 @@
 
       <div v-else-if="loading" class="skeleton-blocks">
         <div class="summary-skeleton" aria-hidden="true">
-          <div class="line w120" /><div class="line w140" /><div class="line w100" /><div class="line w200" />
+          <div class="metric-skel" v-for="m in 3" :key="m">
+            <div class="skel-num" />
+            <div class="skel-label" />
+          </div>
+          <div class="util-skel">
+            <div class="util-head-skel">
+              <div class="skel-label short" />
+              <div class="skel-num sm" />
+            </div>
+            <div class="util-bar-skel">
+              <div class="fill" />
+            </div>
+          </div>
+          <div class="refresh-skel" />
         </div>
         <div class="preview-skeleton-grid" aria-hidden="true">
           <div class="preview-skel" v-for="n in 2" :key="n">
@@ -103,6 +130,11 @@
         </transition>
       </teleport>
 
+      <!-- 底部更新时间与手动刷新 -->
+      <div v-if="showSummary" class="last-updated footer-update" aria-live="polite">
+        <span>上次更新：<strong>{{ lastUpdated || '—' }}</strong></span>
+      </div>
+
     </div>
     </div>
   </div>
@@ -110,10 +142,9 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onUnmounted } from 'vue'
-import { NGrid, NGridItem, NDivider } from 'naive-ui'
+import { NGrid, NGridItem, NDivider, useMessage } from 'naive-ui'
 import { ServerStatusCard, ServerInfoCard, PlayerInfoCard, ConnectionCard, PlayerList, ServerStatusHeader, LoadingErrorState } from '@/components/ServerStatus'
 import { useMultiServerStatus } from '@/composables/useMultiServerStatus'
-import { NTag } from 'naive-ui'
 import ServerPreviewCard from '@/components/ServerStatus/ServerPreviewCard.vue'
 
 // 配置需要展示的服务器地址（可扩展）
@@ -126,11 +157,12 @@ const serverConfigs: ServerConfig[] = [
 ]
 const serverAddresses = serverConfigs.map(c => c.address)
 
-const { loading, error, serverDataList, fetchServers } = useMultiServerStatus(serverAddresses)
+const { loading, error, serverDataList, lastUpdated, fetchServers } = useMultiServerStatus(serverAddresses)
+const message = useMessage()
 
 // 折叠视图逻辑已移除（预览卡取代）
 
-// 汇总统计
+// 汇总统计与派生显示
 const totalServers = computed(() => serverDataList.value.length)
 const onlineServers = computed(() => serverDataList.value.filter(s => s.online).length)
 const totalPlayers = computed(() => serverDataList.value.reduce((sum, s) => sum + (s.players || 0), 0))
@@ -138,21 +170,34 @@ const totalMaxPlayers = computed(() => serverDataList.value.reduce((sum, s) => s
 const pingValues = computed(() => serverDataList.value.map(s => s.ping).filter((p): p is number => typeof p === 'number' && p > 0))
 const avgPing = computed(() => pingValues.value.length ? Math.round(pingValues.value.reduce((a, b) => a + b, 0) / pingValues.value.length) : null)
 const avgPingDisplay = computed(() => avgPing.value != null ? `${avgPing.value}ms` : '未知')
-const avgPingTagType = computed(() => {
-  if (avgPing.value == null) return 'default'
-  if (avgPing.value <= 40) return 'success'
-  if (avgPing.value <= 80) return 'info'
-  if (avgPing.value <= 120) return 'warning'
-  return 'error'
-})
+// 颜色标签胶囊已移除，avgPingTagType 不再需要
 const utilizationPercent = computed(() => totalMaxPlayers.value ? (totalPlayers.value / totalMaxPlayers.value) * 100 : 0)
+// 利用率颜色（方案A）：低 → 高 = 绿 (#10B981) → 蓝 (#3B82F6) → 橙 (#F59E0B) → 红 (#DC2626)
+// 阈值区间：0-39 绿（空闲/健康） | 40-74 蓝（中等） | 75-89 橙（偏高） | 90+ 红（高危）
 const utilizationColor = computed(() => {
   const v = utilizationPercent.value
-  if (v >= 90) return '#DC2626'
-  if (v >= 75) return '#F59E0B'
-  if (v >= 40) return '#10B981'
-  return '#3B82F6'
+  if (v >= 90) return '#DC2626' // 红 高危
+  if (v >= 75) return '#F59E0B' // 橙 偏高
+  if (v >= 40) return '#3B82F6' // 蓝 中等
+  return '#10B981'              // 绿 低负载
 })
+const showSummary = computed(() => !loading.value && serverDataList.value.length > 0)
+
+// 刷新封装：带成功/失败提示
+const handleRefresh = async () => {
+  if (loading.value) return
+  const prevError = error.value
+  try {
+    await fetchServers()
+    if (!error.value) {
+      message.success('刷新成功')
+    } else if (error.value && error.value !== prevError) {
+      message.error(`刷新失败: ${error.value}`)
+    }
+  } catch {
+    message.error('刷新过程中出现异常')
+  }
+}
 
 // Demo 详情展开逻辑
 const detailIndex = ref<number | null>(null)
@@ -271,34 +316,34 @@ onUnmounted(() => {
 .summary-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
-  padding: 12px 20px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(109,40,217,0.08));
-  border: 1px solid rgba(99,102,241,0.15);
-  border-radius: 14px;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding: 16px 20px 18px;
+  background: linear-gradient(135deg,#ffffff 0%, #f1f5f9 100%);
+  border: 1px solid #d6dee9;
+  border-radius: 18px;
   position: relative;
   pointer-events:auto;
+  color:#1E293B;
 }
-.summary-bar::before { content:""; position:absolute; top:0; left:12px; right:12px; height:1px; background:linear-gradient(90deg, rgba(99,102,241,.35), rgba(139,92,246,.25), rgba(99,102,241,.35)); opacity:.55; pointer-events:none; }
 .summary-item {
   display: flex;
   flex-direction: column;
   min-width: 120px;
   position: relative;
 }
-.summary-item .label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  color: #6366F1;
-  margin-bottom: 4px;
-}
+.summary-item .label { font-size:12px; font-weight:600; letter-spacing:.5px; text-transform:uppercase; color:#1E293B; margin-bottom:6px; }
+.metric-line { display:flex; align-items:baseline; gap:4px; font-variant-numeric:tabular-nums; }
+.metric-line .val { font-size:20px; font-weight:600; color:#1E293B; letter-spacing:.5px; }
+.metric-line .total { font-size:14px; font-weight:500; color:#64748B; }
+.metric-line .sep { font-size:16px; color:#94A3B8; }
 .utilization {
   flex: 1 1 220px;
   min-width: 200px;
 }
+.util-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.util-num { font-size:14px; font-weight:600; }
 .util-bar {
   position: relative;
   height: 22px;
@@ -315,19 +360,25 @@ onUnmounted(() => {
   transition: width .6s cubic-bezier(.4,0,.2,1), background .3s;
   background: #6366F1;
 }
-.util-text {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-.metric-val { display:inline-block; animation:metricIn .25s ease-out; }
-@keyframes metricIn { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:translateY(0);} }
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 600;
-  color: #1E293B;
-  mix-blend-mode: multiply;
+/* 移除旧的中间百分比文字，利用率数值移至头部 */
+.summary-refresh-btn {
+  margin-left:auto;
+  align-self:center; /* 垂直居中 */
+  background:#F1F5F9;
+  border:1px solid #CBD5E1;
+  color:#0F766E;
+  width:40px; height:40px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:12px; cursor:pointer;
+  transition:background .25s, box-shadow .25s, transform .25s;
 }
+.summary-refresh-btn:hover:not(:disabled) { background:#E2E8F0; box-shadow:0 4px 12px rgba(0,0,0,.08); }
+.summary-refresh-btn:active:not(:disabled) { transform:scale(.94); }
+.summary-refresh-btn:disabled { opacity:.55; cursor:not-allowed; }
+.summary-refresh-btn.loading { box-shadow:0 0 0 0 rgba(15,118,110,.45); animation:pulseRing 1.6s ease-out infinite; }
+.summary-refresh-btn.loading svg { animation:spinBtn .9s linear infinite; }
+@keyframes spinBtn { to { transform:rotate(360deg); } }
+@keyframes pulseRing { 0% { box-shadow:0 0 0 0 rgba(15,118,110,.45);} 70% { box-shadow:0 0 0 10px rgba(15,118,110,0);} 100% { box-shadow:0 0 0 0 rgba(15,118,110,0);} }
 
 .avg-ping-item { min-width: 200px; }
 .avg-ping-box { position: relative; width: 180px; height: 50px; border-radius: 12px; background: linear-gradient(135deg,#EEF2FF,#F8FAFC); overflow:hidden; box-shadow: inset 0 0 0 1px rgba(99,102,241,0.15); }
@@ -336,12 +387,21 @@ onUnmounted(() => {
 
 /* Skeleton */
 .skeleton-blocks { margin-bottom:32px; pointer-events:none; }
-.summary-skeleton { display:flex; gap:18px; margin-bottom:26px; }
-.summary-skeleton .line { height:42px; border-radius:14px; background:linear-gradient(90deg,#eceff4 0%, #f5f7fa 40%, #eceff4 80%); background-size:200% 100%; animation:shimmer 1.3s linear infinite; flex:0 0 auto; }
-.summary-skeleton .w120 { width:140px; }
-.summary-skeleton .w140 { width:180px; }
-.summary-skeleton .w100 { width:120px; }
-.summary-skeleton .w200 { width:260px; flex:1; }
+/* 新 summary 骨架：模拟实际布局与卡片风格 */
+.summary-skeleton { display:flex; flex-wrap:wrap; gap:18px; margin-bottom:28px; padding:16px 20px 18px; background:linear-gradient(135deg,#ffffff 0%, #f1f5f9 100%); border:1px solid #d6dee9; border-radius:18px; position:relative; overflow:hidden; }
+.summary-skeleton::after { content:""; position:absolute; inset:0; background:linear-gradient(120deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 45%,rgba(255,255,255,0) 70%); animation:skel-sweep 2.2s ease-in-out infinite; }
+.metric-skel { width:120px; display:flex; flex-direction:column; gap:8px; }
+.skel-num { height:18px; width:78px; border-radius:4px; background:linear-gradient(90deg,#e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%); background-size:200% 100%; animation:shimmer 1.4s linear infinite; }
+.skel-num.sm { width:36px; height:14px; }
+.skel-label { height:10px; width:64px; border-radius:4px; background:linear-gradient(90deg,#e2e8f0 0%, #f1f5f9 50%, #e2e8f0 100%); background-size:200% 100%; animation:shimmer 1.6s linear infinite; opacity:.8; }
+.skel-label.short { width:54px; }
+.util-skel { flex:1 1 260px; min-width:240px; display:flex; flex-direction:column; gap:10px; }
+.util-head-skel { display:flex; align-items:center; justify-content:space-between; }
+.util-bar-skel { position:relative; height:22px; border-radius:999px; background:#EEF2FF; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(203,213,225,.6); }
+.util-bar-skel .fill { position:absolute; inset:0; width:55%; background:linear-gradient(90deg,#d1fae5,#bfdbfe,#fde68a,#fecaca); background-size:300% 100%; animation:barFlow 2.4s ease-in-out infinite; border-radius:999px; }
+@keyframes barFlow { 0% { background-position:0 0; } 50% { background-position:100% 0; } 100% { background-position:0 0; } }
+.refresh-skel { width:40px; height:40px; border:1px solid #CBD5E1; background:linear-gradient(135deg,#F1F5F9,#E2E8F0); border-radius:12px; position:relative; overflow:hidden; }
+.refresh-skel::before { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.8) 50%,rgba(255,255,255,0) 100%); animation:shimmer 1.5s linear infinite; }
 .preview-skeleton-grid { display:flex; gap:20px 22px; flex-wrap:wrap; }
 .preview-skel { width:260px; height:86px; background:linear-gradient(135deg,#ffffff,#f1f5f9); border:1px solid #d6dee9; border-radius:18px; padding:14px 16px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
 .preview-skel::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.6),rgba(255,255,255,0)); animation:skel-sweep 1.4s ease-in-out infinite; }
@@ -363,6 +423,13 @@ onUnmounted(() => {
   }
 
 .no-scroll { overflow:hidden !important; }
+
+/* 底部刷新按钮 */
+.footer-update { display:flex; gap:12px; align-items:center; justify-content:flex-end; font-size:12px; }
+.refresh-btn { background:#EEF2FF; border:1px solid #CBD5E1; padding:4px 12px; border-radius:8px; font-size:12px; cursor:pointer; line-height:1.2; color:#334155; transition:background .2s, box-shadow .2s; }
+.refresh-btn:hover:not(:disabled) { background:#E0E7FF; box-shadow:0 2px 4px rgba(0,0,0,.08); }
+.refresh-btn:active:not(:disabled) { transform:translateY(1px); }
+.refresh-btn:disabled { opacity:.55; cursor:not-allowed; }
 
 :deep(.n-card) {
   transition: all 0.3s ease;

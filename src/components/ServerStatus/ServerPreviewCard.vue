@@ -122,7 +122,7 @@ const handleExpand = () => {
 .ping-warn { color:#D97706; }
 .ping-bad { color:#DC2626; }
 .ping-unknown { color:#64748B; }
-.ping-bar { width:50px; height:4px; border-radius:3px; background:#cbd5e1; margin-left:2px; position:relative; top:0; }
+.ping-bar { width:55px; height:4px; border-radius:3px; background:#cbd5e1; margin-left:2px; position:relative; top:0; }
 .bar-good { background:linear-gradient(90deg,#34c58f,#058a5d); }
 .bar-ok { background:linear-gradient(90deg,#2563EB,#3B82F6); }
 .bar-warn { background:linear-gradient(90deg,#F59E0B,#D97706); }
