@@ -5,14 +5,14 @@
         <n-text depth="3">在线玩家</n-text>
         <n-space align="center">
           <n-text style="font-weight: 600; font-size: 18px">
-            {{ serverData.online ? serverData.players : '-' }}
+            {{ serverData.online ? serverData.players : '未知' }}
           </n-text>
           <n-text depth="3">
             {{ serverData.online && serverData.maxPlayers > 0 ? `/ ${serverData.maxPlayers}` : '' }}
           </n-text>
         </n-space>
       </div>
-      
+
       <div v-if="serverData.online && serverData.maxPlayers > 0" class="progress-container">
         <n-progress
           type="line"
@@ -25,9 +25,9 @@
           服务器容量: {{ playerPercentage }}%
         </n-text>
       </div>
-      
+
       <ServerInfoItem v-if="serverData.online" label="机器人" :value="String(serverData.bots)" />
-      
+
       <div v-if="serverData.utilization > 0" class="info-item">
         <n-text depth="3">CPU使用率</n-text>
         <n-space align="center">
@@ -40,7 +40,7 @@
           </n-tag>
         </n-space>
       </div>
-      
+
       <div v-if="!serverData.online" class="offline-notice">
         <n-alert type="warning" :show-icon="false">
           服务器当前离线，无法获取玩家信息
@@ -106,4 +106,6 @@ const getUtilizationText = (utilization: number) => {
 .offline-notice {
   margin-top: 12px;
 }
+:deep(.n-card__header) { color:#1e293b; font-weight:600; }
+:deep(.n-text[depth="3"]) { color:#64748b; }
 </style>

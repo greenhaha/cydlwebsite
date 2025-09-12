@@ -64,7 +64,7 @@
                 </div>
               </template>
               <div class="feature-content text-emerald-700 leading-relaxed min-h-[60px] flex items-center">
-                主打MG娱乐对抗，内置40多张精选小游戏地图
+                主打MG娱乐对抗，内置40多张小游戏地图
               </div>
             </n-card>
           </n-grid-item>
@@ -111,7 +111,7 @@
           </n-grid-item>
           <n-grid-item>
             <div class="stat-card text-center p-6 rounded-xl backdrop-blur-lg bg-gray-50/95 border border-gray-200/60 hover:bg-gray-100/95 transition-all duration-300 h-full flex flex-col justify-center">
-              <div class="stat-number text-[28px] md:text-[32px] font-bold text-emerald-600 mb-2">90+</div>
+              <div class="stat-number text-[28px] md:text-[32px] font-bold text-emerald-600 mb-2">100+</div>
               <div class="stat-label text-[18px] md:text-[20px] font-semibold text-gray-700">人物模型</div>
             </div>
           </n-grid-item>

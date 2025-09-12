@@ -8,7 +8,7 @@
             <n-text
               style="font-weight: 600; font-family: 'Monaco', 'Courier New', monospace"
             >
-              {{ serverData.address || serverAddress }}
+              {{ (serverData.address || serverAddress) || '未公布' }}
             </n-text>
             <n-button
               @click="copyServerAddress"
@@ -23,26 +23,26 @@
             </n-button>
           </n-space>
         </div>
-        
-        <ServerInfoItem 
-          v-if="serverData.queryDuration" 
-          label="查询耗时" 
-          :value="`${serverData.queryDuration}ms`" 
+
+        <ServerInfoItem
+          v-if="serverData.queryDuration"
+          label="查询耗时"
+          :value="`${serverData.queryDuration}ms`"
         />
-        
-        <ServerInfoItem 
-          v-if="serverData.lastUpdate" 
-          label="数据更新时间" 
-          :value="formatUpdateTime(serverData.lastUpdate)" 
+
+        <ServerInfoItem
+          v-if="serverData.lastUpdate"
+          label="数据更新时间"
+          :value="formatUpdateTime(serverData.lastUpdate)"
         />
       </div>
-      
+
       <div v-if="!serverData.online" class="offline-warning">
         <n-alert type="warning" title="服务器离线">
           当前无法连接到游戏服务器，请稍后再试或联系管理员。
         </n-alert>
       </div>
-      
+
       <div class="action-buttons">
         <n-space>
           <n-button
@@ -98,7 +98,7 @@ const formatUpdateTime = (timestamp: string) => {
 
 const copyServerAddress = async () => {
   try {
-    const addressToCopy = props.serverData.address || props.serverAddress
+  const addressToCopy = (props.serverData.address || props.serverAddress) || '未公布'
     await navigator.clipboard.writeText(addressToCopy)
     message.success('服务器地址已复制到剪贴板')
   } catch (err) {
@@ -108,7 +108,11 @@ const copyServerAddress = async () => {
 }
 
 const connectViaSteam = () => {
-  const addressToConnect = props.serverData.address || props.serverAddress
+  const addressToConnect = (props.serverData.address || props.serverAddress)
+  if (!addressToConnect) {
+    message.warning('该服务器地址尚未公布')
+    return
+  }
   const steamUrl = `steam://connect/${addressToConnect}`
   window.open(steamUrl, '_blank')
   message.info('正在启动 Steam 客户端...')
@@ -139,4 +143,6 @@ const openInBrowser = () => {
 .offline-warning {
   margin: 16px 0;
 }
+:deep(.n-card__header) { color:#1e293b; font-weight:600; }
+:deep(.n-text[depth="3"]) { color:#64748b; }
 </style>

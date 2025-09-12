@@ -208,15 +208,15 @@
                 <div class="question-section mb-4">
                   <h3 class="text-xl font-bold text-indigo-700 mb-2 flex items-center">
                     <span class="mr-2">Q:</span>
-                    <span>如何订阅创意工坊？</span>
+                    <span>如何订阅服务器资源？</span>
                   </h3>
                 </div>
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base mb-4">
                     <span class="font-semibold text-indigo-600 mr-2">A:</span>
-                    国内用户需要开启加速器，然后访问创意工坊链接订阅地图和贴图资源。
+                    请加入交流群，获取最新的资源订阅链接和方法。
                   </p>
-                  <a
+                  <!-- <a
                     href="https://steamcommunity.com/sharedfiles/filedetails/?id=3245952520"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -224,7 +224,7 @@
                     <n-button type="primary" size="medium" class="action-btn bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 border-none shadow-lg hover:shadow-xl">
                       🔧 打开创意工坊
                     </n-button>
-                  </a>
+                  </a> -->
                 </div>
               </div>
             </div>
@@ -295,7 +295,7 @@
                     </a>
                     <a href="https://afdian.com/a/hlymcn" target="_blank" rel="noopener noreferrer">
                     <n-button size="medium" class="bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 border-none shadow-lg hover:shadow-xl">
-                      ❤️ 赞助支持
+                      ❤️ 赞助支持（爱发电）
                     </n-button>
                     </a>
                   </div>

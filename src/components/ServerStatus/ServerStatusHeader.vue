@@ -7,37 +7,15 @@
         </n-icon>
         <h1 class="page-title">CS2 服务器状态</h1>
       </n-space>
-      <n-button
-        @click="onRefresh"
-        :loading="loading"
-        type="primary"
-        circle
-        size="large"
-        class="refresh-button"
-      >
-        <template #icon>
-          <n-icon><RefreshIcon /></n-icon>
-        </template>
-      </n-button>
+  <!-- 刷新按钮已移除：仅保留标题区 -->
     </n-space>
   </div>
 </template>
 
 <script setup lang="ts">
-import { NSpace, NIcon, NButton } from 'naive-ui'
-import { Server as ServerIcon, Refresh as RefreshIcon } from '@vicons/tabler'
-
-defineProps<{
-  loading: boolean
-}>()
-
-const emit = defineEmits<{
-  refresh: []
-}>()
-
-const onRefresh = () => {
-  emit('refresh')
-}
+import { NSpace, NIcon } from 'naive-ui'
+import { Server as ServerIcon } from '@vicons/tabler'
+// 该头部仅展示标题，不再包含刷新交互
 </script>
 
 <style scoped>
@@ -69,9 +47,7 @@ const onRefresh = () => {
   font-size: 28px !important;
 }
 
-.refresh-button {
-  flex-shrink: 0;
-}
+/* 刷新按钮相关样式已移除 */
 
 /* 响应式设计 */
 @media (max-width: 768px) {
