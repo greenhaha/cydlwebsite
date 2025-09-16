@@ -1161,3 +1161,36 @@ export const k4TimesApi = {
     }
   }
 }
+
+// 热度值相关类型定义
+export interface HotpointsResponse {
+  steamId64: string
+  credits: number
+  hotpoints: number
+  updatedAt: string
+}
+
+export const hotpointsApi = {
+  async getMyHotpoints(): Promise<ApiResponse<HotpointsResponse>> {
+    try {
+      return await apiRequest<ApiResponse<HotpointsResponse>>('/hotpoints/me')
+    } catch (error) {
+      console.error('获取热度值失败:', error)
+      throw error
+    }
+  }
+}
+
+// 游玩时长相关API
+export interface PlayerPlayTimeInfo { steamId: string; playerName: string; totalTime: number; ctTime: number; tTime: number; specTime: number; aliveTime: number; deadTime: number }
+
+export const playTimeApi = {
+  async getMyPlayTime(): Promise<ApiResponse<PlayerPlayTimeInfo>> {
+    try {
+      return await apiRequest<ApiResponse<PlayerPlayTimeInfo>>('/k4times/me/playtime')
+    } catch (e) {
+      console.error('获取当前用户游玩时长失败', e)
+      throw e
+    }
+  }
+}
