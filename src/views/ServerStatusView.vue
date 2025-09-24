@@ -153,7 +153,7 @@ interface ServerConfig { name: string; address: string }
 // 更新：第一个服务器为正式服，第二个服务器地址未公布
 const serverConfigs: ServerConfig[] = [
   { name: '娱乐对抗正式服', address: '110.42.41.225:27015' },
-  { name: '活动专用服务器 - 待上线', address: '' } // 空表示未公布
+  { name: '活动专用服务器 - 测试中', address: '110.42.38.181:27015' }
 ]
 const serverAddresses = serverConfigs.map(c => c.address)
 
