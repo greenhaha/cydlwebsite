@@ -77,6 +77,32 @@ export interface ApiResponse<T> {
   code?: number
 }
 
+// 热度值兑换 DTO
+export interface HotpointsExchangeRecord {
+  orderId: number
+  itemId: string
+  itemName: string
+  costHotpoints: number
+  status: 'BOUGHT' | 'WAREHOUSED'
+  createdAt: string
+  warehousedAt?: string
+}
+
+export interface HotpointsExchangeActionRequest { action:'BUY'|'WAREHOUSE'; itemId:string }
+
+export const hotpointsExchangeApi = {
+  async exchange(action:'BUY'|'WAREHOUSE', itemId:string){
+    const resp = await apiRequest<ApiResponse<HotpointsExchangeRecord>>('/hotpoints/exchange', { method:'POST', body: JSON.stringify({ action, itemId }) })
+    if(!resp.success || !resp.data) throw new Error(resp.message)
+    return resp.data
+  },
+  async history(){
+    const resp = await apiRequest<ApiResponse<HotpointsExchangeRecord[]>>('/hotpoints/exchange/history', { method:'GET' })
+    if(!resp.success || !resp.data) throw new Error(resp.message)
+    return resp.data
+  }
+}
+
 export interface RegisterResponse {
   userId: number
   username: string
@@ -1176,6 +1202,27 @@ export const hotpointsApi = {
       return await apiRequest<ApiResponse<HotpointsResponse>>('/hotpoints/me')
     } catch (error) {
       console.error('获取热度值失败:', error)
+      throw error
+    }
+  }
+}
+
+// 服务器时间 API
+export interface ServerTimeResponse {
+  serverTime: string | null
+  chinaTime: string | null
+  timestamp: number
+  timezone: string
+  chinaTimezone: string
+}
+
+export const timeApi = {
+  async getServerTime(): Promise<ServerTimeResponse> {
+    try {
+      // 直接调用统一 apiRequest，自动附带前缀 /api/v1
+  return await apiRequest<ServerTimeResponse>('/time/current', { method:'GET', cache:'no-store' })
+    } catch (error) {
+      console.error('获取服务器时间失败:', error)
       throw error
     }
   }

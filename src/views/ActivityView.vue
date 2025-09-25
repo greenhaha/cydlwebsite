@@ -220,19 +220,18 @@
                   <div class="action-btn-glow"></div>
                 </RouterLink>
 
-                <!-- 热度值皮肤兑换按钮 (占位: 正在开发中) -->
-                <button
-                  type="button"
-                  @click="showHeatpointsComingSoon"
-                  class="exchange-action-btn heat-exchange-btn cursor-not-allowed">
+                <!-- 热度值兑换按钮 -->
+                <RouterLink
+                  to="/hotpoints-exchange"
+                  class="exchange-action-btn heat-exchange-btn">
                   <div class="action-btn-icon" style="color: #f97316;">🔥</div>
                   <div class="action-btn-content">
                     <div class="action-btn-title" style="color: #f97316;">热度值兑换</div>
-                    <div class="action-btn-subtitle">正在开发中…</div>
+                    <div class="action-btn-subtitle">热度值 → 奖励</div>
                   </div>
-                  <div class="action-btn-arrow" style="color: #f97316;">🚧</div>
+                  <div class="action-btn-arrow" style="color: #f97316;">→</div>
                   <div class="action-btn-glow"></div>
-                </button>
+                </RouterLink>
               </div>
             </div>
 
@@ -795,11 +794,6 @@ onUnmounted(() => {
   stopAutoSlide()
 })
 
-// 定义热度值兑换功能即将上线的提示方法
-const showHeatpointsComingSoon = () => {
-  // 使用浏览器原生弹窗；此方法确保通过脚本定义避免模板直接访问 window
-  alert('热度值兑换功能正在开发中，敬请期待！')
-}
 
 // 监听用户认证状态变化，自动加载余额和热度值
 watch(() => authStore.isAuthenticated, (val) => {

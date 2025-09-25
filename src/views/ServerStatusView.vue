@@ -150,7 +150,6 @@ import ServerPreviewCard from '@/components/ServerStatus/ServerPreviewCard.vue'
 // 配置需要展示的服务器地址（可扩展）
 // 服务器配置：名称 + 地址；空地址表示占位待配置
 interface ServerConfig { name: string; address: string }
-// 更新：第一个服务器为正式服，第二个服务器地址未公布
 const serverConfigs: ServerConfig[] = [
   { name: '娱乐对抗正式服', address: '110.42.41.225:27015' },
   { name: '活动专用服务器 - 测试中', address: '110.42.38.181:27015' }
@@ -181,21 +180,29 @@ const utilizationColor = computed(() => {
   if (v >= 40) return '#3B82F6' // 蓝 中等
   return '#10B981'              // 绿 低负载
 })
-const showSummary = computed(() => !loading.value && serverDataList.value.length > 0)
+// 允许部分服务器已返回就先显示概要与卡片；loading 期间已有数据也展示
+const showSummary = computed(() => {
+  if (!serverDataList.value.length) return false
+  // 只要任意一个有更新时间（说明已返回过）即可显示
+  return serverDataList.value.some(s => s.lastUpdate) || (!loading.value && serverDataList.value.length > 0)
+})
 
 // 刷新封装：带成功/失败提示
 const handleRefresh = async () => {
   if (loading.value) return
+  const loadingMsg = message.loading('刷新中...', { duration: 0 })
   const prevError = error.value
   try {
     await fetchServers()
-    if (!error.value) {
-      message.success('刷新成功')
-    } else if (error.value && error.value !== prevError) {
+    // 不再显示成功勾，只在失败时提示错误
+    if (error.value && error.value !== prevError) {
       message.error(`刷新失败: ${error.value}`)
     }
   } catch {
     message.error('刷新过程中出现异常')
+  } finally {
+    // 结束后关闭“刷新中...”提示
+    loadingMsg.destroy()
   }
 }
 

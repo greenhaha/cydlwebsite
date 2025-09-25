@@ -186,50 +186,92 @@ export const useMultiServerStatus = (serverAddresses: string[]) => {
   /**
    * 拉取所有服务器状态；内部会保留原顺序并为缺失地址填空。
    */
-  const fetchServers = async () => {
-    if (!serverAddresses.length) return
-    loading.value = true
-    error.value = ''
-    try {
-  // 过滤有效地址，保持原索引映射
-      const indexed = serverAddresses.map((addr, idx) => ({ addr: addr?.trim(), idx }))
-      const valid = indexed.filter(i => i.addr)
+  // 并发请求控制：避免并发刷新互相覆盖
+  let runId = 0
 
-      if (valid.length === 0) {
-        serverDataList.value = serverAddresses.map(() => createEmptyServerData())
-        lastUpdated.value = new Date().toLocaleString('zh-CN')
-        loading.value = false
+  /** 带超时的 fetch */
+  const fetchWithTimeout = (url: string, ms = 3500): Promise<Response> => {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), ms)
+    return fetch(url, { signal: controller.signal })
+      .finally(() => clearTimeout(timer))
+  }
+
+  /** 并发拉取：每个服务器单独请求，及时更新 UI，不等待其他服务器 */
+  let resolvePromise: () => void = () => {}
+
+  const fetchServers = (): Promise<void> => {
+    if (!serverAddresses.length) return Promise.resolve()
+    error.value = ''
+    const currentRun = ++runId
+    loading.value = true
+    const donePromise = new Promise<void>(resolve => { resolvePromise = resolve })
+
+    // 保证数组长度（首次或地址数量变化）
+    if (serverDataList.value.length !== serverAddresses.length) {
+      serverDataList.value = serverAddresses.map(() => createEmptyServerData())
+    }
+
+  let pending = serverAddresses.length
+  let successCount = 0
+    const overallNow = Date.now()
+
+    const updateAtIndex = (idx: number, data: ServerData) => {
+      // 使用新数组触发响应式
+      serverDataList.value = serverDataList.value.map((v, i) => i === idx ? data : v)
+    }
+
+  serverAddresses.forEach((rawAddr, idx) => {
+      const addr = rawAddr?.trim()
+      if (!addr) {
+        updateAtIndex(idx, { ...createEmptyServerData(), lastUpdate: new Date().toISOString() })
+        if (--pending === 0 && runId === currentRun) {
+          loading.value = false
+          lastUpdated.value = new Date().toLocaleString('zh-CN')
+        }
         return
       }
 
-      const qs = valid.map(v => v.addr).join(',')
-      const res = await fetch(`/api/v1/cs2/servers/batch?servers=${qs}`)
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-      const list: RawServer[] = Array.isArray(data.servers) ? data.servers : []
-
-  // 按原传入顺序映射回结果
-      serverDataList.value = serverAddresses.map((addr) => {
-        if (!addr) return createEmptyServerData()
-        const raw = list.shift() // 依次取出对应数据
-        return raw ? transformServer(raw) : createEmptyServerData()
-      })
-      // 改进伪 ping：仅在判定在线但缺失或无效 ping (null / 0) 时生成
-      const now = Date.now()
-      serverDataList.value = serverDataList.value.map((sd, idx) => {
-        if (sd.online && (sd.ping == null || sd.ping <= 0)) {
-          sd.ping = derivePseudoPing(sd.address, sd.queryDuration, now + idx)
-        }
-        return sd
-      })
-      lastUpdated.value = new Date().toLocaleString('zh-CN')
-    } catch (e) {
-      error.value = e instanceof Error ? e.message : '批量获取服务器失败'
-      // 保持之前数据但标记离线
-      serverDataList.value = serverDataList.value.map(prev => ({ ...prev, online: false }))
-    } finally {
-      loading.value = false
-    }
+      // 采用批量接口但仅传一个地址，避免单个失败拖慢整体
+      const url = `/api/v1/cs2/servers/batch?servers=${encodeURIComponent(addr)}`
+      fetchWithTimeout(url)
+        .then(async res => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`)
+          const data = await res.json().catch(() => ({ servers: [] }))
+          const list: RawServer[] = Array.isArray(data.servers) ? data.servers : []
+          const raw = list[0]
+          const sd = raw ? transformServer(raw) : createEmptyServerData()
+          // 伪 ping 补偿
+          if (sd.online && (sd.ping == null || sd.ping <= 0)) {
+            sd.ping = derivePseudoPing(sd.address, sd.queryDuration, overallNow + idx)
+          }
+          sd.lastUpdate = sd.lastUpdate || new Date().toISOString()
+          updateAtIndex(idx, sd)
+          if (sd.online) successCount++
+        })
+  .catch(() => {
+          // 单个失败：立即标记离线并更新时间，不影响其他
+          const failed = createEmptyServerData()
+          failed.lastUpdate = new Date().toISOString()
+          updateAtIndex(idx, failed)
+        })
+        .finally(() => {
+          if (runId !== currentRun) return // 有新的刷新开始，丢弃收尾逻辑
+          pending--
+          if (pending === 0) {
+            loading.value = false
+            lastUpdated.value = new Date().toLocaleString('zh-CN')
+            if (successCount === 0) {
+              error.value = '无法获取任何服务器状态'
+            } else {
+              error.value = ''
+            }
+            // 所有请求结束才 resolve
+            resolvePromise()
+          }
+        })
+    })
+    return donePromise
   }
 
   /** 立即开始轮询 */

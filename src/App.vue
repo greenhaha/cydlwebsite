@@ -16,11 +16,14 @@ import HeaderMenu from './components/Layout/HeaderMenu.vue'
 
 const route = useRoute()
 
-// 计算是否显示header的逻辑
+// Header 显示逻辑：某些沉浸式页面隐藏顶部导航
 const shouldShowHeader = computed(() => {
-  const hiddenHeaderRoutes = ['/anniversary',`/challenge`, '/lottery', '/anniversary-preheating', '/wish-credit-exchange', '/wish-exchange', '/activity']
+  const hiddenHeaderRoutes = ['/anniversary', '/challenge', '/lottery', '/anniversary-preheating', '/wish-credit-exchange', '/wish-exchange', '/activity', '/hotpoints-exchange']
   return !hiddenHeaderRoutes.includes(route.path)
 })
+
+// Footer 显示逻辑：只有 meta.hideFooter = true 的路由隐藏，其余显示
+const shouldShowFooter = computed(() => route.matched.every(r => !r.meta?.hideFooter))
 
 const themeOverrides: GlobalThemeOverrides = {
   Menu: {
@@ -55,7 +58,7 @@ const themeOverrides: GlobalThemeOverrides = {
           <n-layout-content class="min-h-[calc(100vh)]">
             <RouterView />
           </n-layout-content>
-          <n-layout-footer v-if="shouldShowHeader" class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
+          <n-layout-footer v-if="shouldShowFooter" class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
         </n-layout>
       </n-space>
     </n-message-provider>
