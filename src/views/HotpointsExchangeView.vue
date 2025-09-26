@@ -306,7 +306,7 @@ const hotpoints = computed(() => hotpointsResp.value?.hotpoints || 0)
 // ============ 活动开放时间窗口配置（显式国内时区 Asia/Shanghai） ============
 // 使用带 +08:00 偏移的绝对时间，避免客户端处于其它时区时出现提前或延迟。
 // 修改活动窗口只需调整下方两个常量。格式务必包含 +08:00。
-const OPEN_START = ref(new Date('2025-10-3T18:00:00+08:00')) // TODO: 调整实际开始时间 (北京时间)
+const OPEN_START = ref(new Date('2025-10-03T18:00:00+08:00')) // TODO: 调整实际开始时间 (北京时间)
 const OPEN_END   = ref(new Date('2025-11-07T23:59:59+08:00')) // TODO: 调整实际结束时间 (北京时间)
 
 // 当前“权威时间” = 本地时间 + serverDelta（后端矫正）
