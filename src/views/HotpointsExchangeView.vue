@@ -192,28 +192,86 @@
         </div>
       </section>
 
-      <!-- 兑换确认 -->
-      <div v-if="showBuyConfirm && selectedItem" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-        <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 border border-white/20 shadow-2xl">
-          <h3 class="text-white text-xl font-bold mb-4 text-center">确认领取</h3>
-          <p class="text-white/90 mb-4 text-center">已达到门槛 <span class="text-orange-300 font-bold">{{ selectedItem.costHotpoints }}</span> 热度值，可领取 <span class="text-white font-semibold">{{ selectedItem.name }}</span>。</p>
-          <p class="text-white/60 text-sm text-center">领取后进入“待入库”状态（热度值不会扣减）。</p>
-          <div class="flex space-x-3 mt-8">
-            <button @click="cancelBuy" class="flex-1 py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors">取消</button>
-            <button :disabled="buying" @click="confirmBuy" class="flex-1 py-2 px-4 rounded-lg transition-colors" :class="buying ? 'bg-orange-400/50 text-white/70' : 'bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white'">{{ buying ? '领取中...' : '确认领取' }}</button>
+      <!-- 领取确认新设计 -->
+      <div v-if="showBuyConfirm && selectedItem" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="buy-title">
+        <div class="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 max-w-lg w-full mx-4 border border-white/15 shadow-[0_20px_50px_-15px_rgba(0,0,0,.6)]">
+          <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-2xl bg-gradient-to-tr from-orange-500 to-pink-500 shadow-xl flex items-center justify-center ring-4 ring-slate-900/70">
+            <svg viewBox="0 0 24 24" class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4 2.5 9-7-5-7 5 2.5-9L2 9h7z"/></svg>
+          </div>
+          <div class="mt-10 text-center flex flex-col gap-2">
+            <h3 id="buy-title" class="text-2xl font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-pink-400 to-fuchsia-400 drop-shadow">领取奖励确认</h3>
+            <div class="flex flex-col gap-2">
+              <p class="text-white/90 text-sm leading-relaxed">您的进度已达标，可领取以下奖励</p>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4 flex flex-col md:flex-row md:items-center gap-3 text-left">
+                <div v-if="selectedItem.iconUrl" class="w-16 h-16 rounded-lg overflow-hidden ring-1 ring-white/15 flex-shrink-0">
+                  <img :src="selectedItem.iconUrl" :alt="selectedItem.name" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 space-y-1">
+                  <div class="text-white font-semibold text-base">{{ selectedItem.name }}</div>
+                  <div class="text-xs text-white/60">所需热度值：<span class="text-orange-300 font-semibold">{{ selectedItem.costHotpoints }}</span></div>
+                  <div class="text-xs text-white/60">当前热度值：<span :class="hotpoints >= selectedItem.costHotpoints ? 'text-emerald-300 font-semibold' : 'text-red-300 font-semibold'">{{ hotpoints }}</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="text-[11px] text-white/50 leading-relaxed">
+              领取后奖品进入 <span class="text-indigo-300 font-medium">待入库</span> 状态，需要您手动确认入库
+            </div>
+            <div class="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent mt-4"></div>
+            <!-- 显式留白 spacer，避免 margin 折叠导致分界线与按钮贴合 -->
+            <div class="h-1"></div>
+          </div>
+          <div class="flex flex-col md:flex-row gap-3">
+            <button @click="cancelBuy" class="flex-1 h-11 rounded-lg bg-white/10 hover:bg-white/15 active:bg-white/20 text-white/90 text-sm font-medium tracking-wide transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400/60">取消</button>
+            <button :disabled="buying" @click="confirmBuy" class="flex-1 h-11 rounded-lg text-sm font-semibold tracking-wide transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 disabled:opacity-60 disabled:cursor-not-allowed" :class="buying ? 'bg-gradient-to-r from-orange-400/60 to-pink-500/60 text-white/80' : 'bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-500/90 hover:to-pink-600/90 text-white shadow-[0_6px_18px_-6px_rgba(244,114,182,.55)]'">
+              <span v-if="buying" class="inline-flex items-center gap-2"><svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9"/><polyline points="3 3 3 9 9 9"/><path d="M3 12a9 9 0 0 0 9 9"/><polyline points="15 15 21 15 21 9"/></svg>领取中...</span>
+              <span v-else>确认领取</span>
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- 入库确认 -->
-      <div v-if="showWarehouseConfirm && selectedItem" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-        <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 border border-white/20 shadow-2xl">
-          <h3 class="text-white text-xl font-bold mb-4 text-center">确认入库</h3>
-          <p class="text-white/90 mb-4 text-center">是否将 <span class="text-white font-semibold">{{ selectedItem.name }}</span> 写入数据库？该操作不可逆（成功后即视为完成奖励发放）。</p>
-          <pre class="bg-black/40 text-xs text-left text-orange-200 p-3 rounded mt-4 overflow-auto max-h-40">{{ warehousePayloadPreview }}</pre>
-          <div class="flex space-x-3 mt-8">
-            <button @click="cancelWarehouse" class="flex-1 py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors">取消</button>
-            <button :disabled="warehousing" @click="confirmWarehouse" class="flex-1 py-2 px-4 rounded-lg transition-colors" :class="warehousing ? 'bg-orange-400/50 text-white/70' : 'bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white'">{{ warehousing ? '入库中...' : '确认入库' }}</button>
+      <!-- 入库确认新设计 -->
+      <div v-if="showWarehouseConfirm && selectedItem" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="warehouse-title">
+        <div class="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-6 md:p-8 max-w-lg w-full mx-4 border border-white/15 shadow-[0_20px_50px_-15px_rgba(0,0,0,.6)]">
+          <div class="absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-500 shadow-xl flex items-center justify-center ring-4 ring-slate-900/70">
+            <svg viewBox="0 0 24 24" class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4Z"/><path d="m3 17 9 4 9-4"/><path d="m3 12 9 4 9-4"/></svg>
+          </div>
+          <!-- 结构与领取确认弹窗统一：flex + gap 控制垂直间距；在按钮前加入分界线 + spacer -->
+          <div class="mt-10 text-center flex flex-col gap-2">
+            <h3 id="warehouse-title" class="text-2xl font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-cyan-300 to-sky-300 drop-shadow">确认入库</h3>
+            <!-- 标题下提示 + 奖励卡片（结构与领取确认一致） -->
+            <div class="flex flex-col gap-2">
+              <p class="text-white/90 text-sm leading-relaxed">请确认信息</p>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4 flex flex-col md:flex-row md:items-center gap-3 text-left">
+                <div v-if="selectedItem.iconUrl" class="w-16 h-16 rounded-lg overflow-hidden ring-1 ring-white/15 flex-shrink-0">
+                  <img :src="selectedItem.iconUrl" :alt="selectedItem.name" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex-1 space-y-1">
+                  <div class="text-white font-semibold text-base">{{ selectedItem.name }}</div>
+                  <div class="text-xs text-white/60">当前状态：<span class="text-indigo-300 font-medium">待入库</span></div>
+                  <div class="text-xs text-white/60">一经兑换：<span class="text-emerald-300 font-medium">不可撤销</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- 小字提示 -->
+            <div class="text-[11px] text-white/55 leading-relaxed">奖励写入后台库存后立即生效，且无法“撤回 / 重新领取”，请确认当前账号无误再继续</div>
+            <!-- 额外说明列表 -->
+            <div class="bg-black/40 text-xs text-left text-white/70 p-4 rounded-xl leading-relaxed border border-white/10">
+              <ul class="list-disc list-inside marker:text-emerald-300 space-y-1">
+                <li>生效后可在历史记录中查看入库时间</li>
+                <li>网络波动时请勿频繁重复点击</li>
+                <li>异常情况请截图并联系管理员</li>
+              </ul>
+            </div>
+            <div class="h-px bg-gradient-to-r from-transparent via-white/15 to-transparent mt-4"></div>
+            <div class="h-1"></div>
+          </div>
+          <div class="flex flex-col md:flex-row gap-3">
+            <button @click="cancelWarehouse" class="flex-1 h-11 rounded-lg bg-white/10 hover:bg-white/15 active:bg-white/20 text-white/90 text-sm font-medium tracking-wide transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60">取消</button>
+            <button :disabled="warehousing" @click="confirmWarehouse" class="flex-1 h-11 rounded-lg text-sm font-semibold tracking-wide transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/60 disabled:opacity-60 disabled:cursor-not-allowed" :class="warehousing ? 'bg-gradient-to-r from-emerald-400/50 to-cyan-500/50 text-white/80' : 'bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-500/90 hover:to-cyan-500/90 text-white shadow-[0_6px_18px_-6px_rgba(45,212,191,.55)]'">
+              <span v-if="warehousing" class="inline-flex items-center gap-2"><svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9"/><polyline points="3 3 3 9 9 9"/><path d="M3 12a9 9 0 0 0 9 9"/><polyline points="15 15 21 15 21 9"/></svg>入库中...</span>
+              <span v-else>确认入库</span>
+            </button>
           </div>
         </div>
       </div>
@@ -248,7 +306,7 @@ const hotpoints = computed(() => hotpointsResp.value?.hotpoints || 0)
 // ============ 活动开放时间窗口配置（显式国内时区 Asia/Shanghai） ============
 // 使用带 +08:00 偏移的绝对时间，避免客户端处于其它时区时出现提前或延迟。
 // 修改活动窗口只需调整下方两个常量。格式务必包含 +08:00。
-const OPEN_START = ref(new Date('2025-10-03T18:00:00+08:00')) // TODO: 调整实际开始时间 (北京时间)
+const OPEN_START = ref(new Date('2025-9-25T18:00:00+08:00')) // TODO: 调整实际开始时间 (北京时间)
 const OPEN_END   = ref(new Date('2025-11-07T23:59:59+08:00')) // TODO: 调整实际结束时间 (北京时间)
 
 // 当前“权威时间” = 本地时间 + serverDelta（后端矫正）
@@ -359,8 +417,6 @@ function cancelBuy(){ showBuyConfirm.value=false; selectedItem.value=null }
 function onWarehouse(item:HotpointsExchangeItemConfig){ if(!canWarehouse(item)) return; selectedItem.value=item; showWarehouseConfirm.value=true }
 function cancelWarehouse(){ showWarehouseConfirm.value=false; selectedItem.value=null }
 
-const warehousePayloadPreview = computed(()=> selectedItem.value ? JSON.stringify({ action:'WAREHOUSE', itemId:selectedItem.value.id, targetTable:selectedItem.value.targetTable, match:{ field:selectedItem.value.targetMatchField, by:selectedItem.value.targetMatchBy, value:resolveUserIdentifier(selectedItem.value.targetMatchBy) }, writeFields:selectedItem.value.writeFields }, null, 2):'')
-
 function progressPercent(item:HotpointsExchangeItemConfig){ if(item.costHotpoints<=0) return 100; return Math.min(100, Math.floor(hotpoints.value / item.costHotpoints * 100)) }
 
 function progressBarClass(item:HotpointsExchangeItemConfig){
@@ -397,7 +453,6 @@ async function confirmWarehouse(){
   } catch(e:unknown){ const msg = e instanceof Error ? e.message : '入库失败'; console.error(e); showToast(msg,'error') } finally { warehousing.value=false }
 }
 
-function resolveUserIdentifier(mode:'steamId64'|'username'){ return mode==='steamId64' ? (authStore.user?.steamId64||'') : (authStore.user?.username||'') }
 
 // ============ 热度值获取 ============
 async function fetchHotpoints(){
