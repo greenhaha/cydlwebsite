@@ -601,11 +601,11 @@ onMounted(async () => {
     retries++
   }
 
-  if (!isUserReady()) {
-    console.error('用户数据加载超时')
-    router.push('/login')
-    return
-  }
+  // if (!isUserReady()) {
+  //   console.error('用户数据加载超时')
+  //   router.push('/login')
+  //   return
+  // }
 
   // 并行加载数据
   await Promise.all([
