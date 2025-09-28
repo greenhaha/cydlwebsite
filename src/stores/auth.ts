@@ -112,6 +112,33 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
   }
 
+  // 设置错误
+  const setError = (errorMessage: string) => {
+    error.value = errorMessage
+  }
+
+  // 设置Token (用于Steam登录等第三方登录)
+  const setToken = (newToken: string) => {
+    token.value = newToken
+    localStorage.setItem('authToken', newToken)
+  }
+
+  // 获取当前用户信息 (用于第三方登录后获取用户信息)
+  const getCurrentUser = async () => {
+    if (!token.value) {
+      throw new Error('未找到认证token')
+    }
+    
+    try {
+      const userData = await authApi.validateToken()
+      user.value = userData
+      return userData
+    } catch (err) {
+      logout()
+      throw err
+    }
+  }
+
   return {
     // 状态
     user,
@@ -128,5 +155,8 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     initialize,
     clearError,
+    setError,
+    setToken,
+    getCurrentUser,
   }
 })

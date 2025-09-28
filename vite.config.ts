@@ -20,6 +20,12 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api\/v1/, '/api/v1'),
       },
+      '/api/auth': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api\/auth/, '/api/auth'),
+      },
     },
   },
 })
