@@ -2,7 +2,7 @@
   <div class="wish-credit-exchange-page">
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
-      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
            style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
       </div>
     </div>
@@ -14,20 +14,20 @@
       <div class="fixed top-0 left-0 right-0 z-99 bg-black/60 backdrop-blur-md border-b border-white/20">
         <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div class="flex items-center justify-between">
-            <RouterLink 
-              to="/"
+            <RouterLink
+              to="/activity"
               class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-350 rounded-lg hover:bg-white/20 bg-black/30"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
               </svg>
-              返回主页
+              返回活动中心
             </RouterLink>
-            
+
             <!-- 用户信息显示区域 -->
             <div v-if="authStore.isAuthenticated" class="flex items-center space-x-3">
               <!-- 个人资料按钮 -->
-              <RouterLink 
+              <RouterLink
                 to="/profile"
                 class="flex items-center space-x-2 px-4 py-2 bg-white/10 rounded-lg border border-white/20 hover:bg-white/20 transition-colors duration-200"
               >
@@ -54,15 +54,15 @@
               <div class="mx-3 w-2 h-2 bg-yellow-400 rounded-full shadow-lg shadow-yellow-400/50"></div>
               <div class="h-px bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent w-24"></div>
             </div>
-            
+
             <h1 class="text-[36px] md:text-[48px] lg:text-[56px] font-black text-white !mb-3 tracking-tight leading-none drop-shadow-2xl text-shadow-lg">
               祈愿值兑换中心
             </h1>
-            
+
             <h2 class="text-[16px] md:text-[20px] lg:text-[24px] font-medium text-white/95 !mb-4 tracking-wide text-center drop-shadow-lg text-shadow">
               祈愿值 ⇄ Credits积分 双向兑换
             </h2>
-            
+
             <div class="flex items-center justify-center !mb-[32px]">
               <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent w-32"></div>
               <div class="!mx-3 w-1.5 h-1.5 bg-white/60 rounded-full"></div>
@@ -70,7 +70,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="backdrop-blur-lg bg-black/50 rounded-lg !p-4 border border-white/30 shadow-2xl">
           <p class="text-[14px] md:text-[16px] text-white leading-relaxed  mx-auto text-center drop-shadow-lg text-shadow !mb-2">
             1:1比例兑换，祈愿值与Credits积分互相转换
@@ -85,7 +85,7 @@
       <div class="balance-display w-full max-w-[800px] px-4 !mb-8 z-35">
         <div class="backdrop-blur-lg bg-black/50 rounded-xl p-6 border border-white/30 shadow-2xl">
           <h3 class="text-white text-xl font-bold !mb-6 text-center">账户余额</h3>
-          
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- 祈愿值余额 -->
             <div class="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg p-6 border border-purple-400/30">
@@ -123,11 +123,11 @@
               :disabled="isRefreshing"
               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white rounded-lg transition-colors disabled:opacity-50"
             >
-              <svg 
-                class="w-4 h-4 mr-2" 
+              <svg
+                class="w-4 h-4 mr-2"
                 :class="{ 'animate-spin': isRefreshing }"
-                fill="none" 
-                stroke="currentColor" 
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
@@ -260,21 +260,21 @@
           </div>
 
           <div v-else class="space-y-3 max-h-96 overflow-y-auto">
-            <div 
-              v-for="record in exchangeHistory" 
+            <div
+              v-for="record in exchangeHistory"
               :key="record.id"
               class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg"
             >
               <div class="flex items-center space-x-4">
                 <!-- 兑换方向图标 -->
                 <div class="flex items-center space-x-2">
-                  <img 
+                  <img
                     v-if="record.fromType === 'wish'"
-                    src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" 
-                    class="w-8 h-8" 
+                    src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png"
+                    class="w-8 h-8"
                     alt="祈愿值"
                   >
-                  <div 
+                  <div
                     v-else
                     class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center"
                   >
@@ -282,18 +282,18 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                     </svg>
                   </div>
-                  
+
                   <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                   </svg>
-                  
-                  <img 
+
+                  <img
                     v-if="record.exchangeType === 'CREDIT_TO_WISH' || record.toType === 'wish'"
-                    src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" 
-                    class="w-8 h-8" 
+                    src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png"
+                    class="w-8 h-8"
                     alt="祈愿值"
                   >
-                  <div 
+                  <div
                     v-else
                     class="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center"
                   >
@@ -302,16 +302,16 @@
                     </svg>
                   </div>
                 </div>
-                
+
                 <div>
                   <h4 class="text-white font-medium">{{ getExchangeTypeText(record) }}</h4>
                   <p class="text-gray-400 text-sm">{{ formatDateTime(record.createTime || record.exchangeTime) }}</p>
                 </div>
               </div>
-              
+
               <div class="text-right">
                 <div class="text-white font-bold">{{ record.amount }}</div>
-                <span 
+                <span
                   class="text-xs px-2 py-1 rounded"
                   :class="getStatusClass(record.status)"
                 >
@@ -350,14 +350,14 @@ const exchangeHistory = ref<CreditExchangeRecord[]>([])
 
 // 计算属性
 const canExchangeWishToCredits = computed(() => {
-  return wishToCreditsAmount.value && 
-         wishToCreditsAmount.value > 0 && 
+  return wishToCreditsAmount.value &&
+         wishToCreditsAmount.value > 0 &&
          wishToCreditsAmount.value <= userWishPoints.value
 })
 
 const canExchangeCreditsToWish = computed(() => {
-  return creditsToWishAmount.value && 
-         creditsToWishAmount.value > 0 && 
+  return creditsToWishAmount.value &&
+         creditsToWishAmount.value > 0 &&
          creditsToWishAmount.value <= userCredits.value
 })
 
@@ -384,18 +384,14 @@ const getCreditsToWishErrorMessage = computed(() => {
 // 刷新余额
 const refreshBalances = async () => {
   isRefreshing.value = true
-  
   try {
-    // 调用后端API获取用户余额
     const response = await exchangeApi.getUserBalances()
-    
     if (response.success && response.data) {
       userWishPoints.value = response.data.wishPoints
       userCredits.value = response.data.credits
     } else {
       throw new Error(response.message || '获取余额失败')
     }
-    
   } catch (error) {
     console.error('刷新余额失败:', error)
     alert('刷新余额失败，请稍后重试')
@@ -407,34 +403,34 @@ const refreshBalances = async () => {
 // 祈愿值兑换为Credits
 const exchangeWishToCredits = async () => {
   if (!canExchangeWishToCredits.value || isExchanging.value) return
-  
+
   const amount = wishToCreditsAmount.value!
-  
+
   if (!confirm(`确认将 ${amount} 祈愿值兑换为 ${amount} Credits吗？`)) {
     return
   }
-  
+
   isExchanging.value = true
-  
+
   try {
     // 调用后端API进行兑换
     const response = await exchangeApi.exchangeWishToCredits({ amount })
-    
+
     if (response.success) {
       // 刷新余额
       await refreshBalances()
-      
+
       // 重新加载兑换记录
       await loadExchangeHistory()
-      
+
       // 清空输入
       wishToCreditsAmount.value = undefined
-      
+
       alert('兑换成功！')
     } else {
       throw new Error(response.message || '兑换失败')
     }
-    
+
   } catch (error) {
     console.error('兑换失败:', error)
     alert('兑换失败，请稍后重试')
@@ -446,34 +442,34 @@ const exchangeWishToCredits = async () => {
 // Credits兑换为祈愿值
 const exchangeCreditsToWish = async () => {
   if (!canExchangeCreditsToWish.value || isExchanging.value) return
-  
+
   const amount = creditsToWishAmount.value!
-  
+
   if (!confirm(`确认将 ${amount} Credits兑换为 ${amount} 祈愿值吗？`)) {
     return
   }
-  
+
   isExchanging.value = true
-  
+
   try {
     // 调用后端API进行兑换
     const response = await exchangeApi.exchangeCreditsToWish({ amount })
-    
+
     if (response.success) {
       // 刷新余额
       await refreshBalances()
-      
+
       // 重新加载兑换记录
       await loadExchangeHistory()
-      
+
       // 清空输入
       creditsToWishAmount.value = undefined
-      
+
       alert('兑换成功！')
     } else {
       throw new Error(response.message || '兑换失败')
     }
-    
+
   } catch (error) {
     console.error('兑换失败:', error)
     alert('兑换失败，请稍后重试')
@@ -485,17 +481,17 @@ const exchangeCreditsToWish = async () => {
 // 加载兑换记录
 const loadExchangeHistory = async () => {
   isLoadingHistory.value = true
-  
+
   try {
     // 调用后端API获取兑换记录
     const response = await exchangeApi.getCreditExchangeHistory()
-    
+
     if (response.success && response.data) {
       exchangeHistory.value = response.data
     } else {
       throw new Error(response.message || '获取兑换记录失败')
     }
-    
+
   } catch (error) {
     console.error('加载兑换记录失败:', error)
   } finally {
@@ -550,7 +546,7 @@ const getStatusText = (status: string) => {
 // 格式化日期时间
 const formatDateTime = (dateString: string) => {
   if (!dateString) return '未知'
-  
+
   try {
     const date = new Date(dateString)
     return date.toLocaleDateString('zh-CN', {
@@ -572,8 +568,8 @@ onMounted(async () => {
     router.push('/login')
     return
   }
-  
-  // 加载数据
+
+  // 不再从全局 store 预填，直接刷新接口获取
   await refreshBalances()
   await loadExchangeHistory()
 })

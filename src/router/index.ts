@@ -93,7 +93,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LoginView.vue'),
-      meta: { requiresGuest: true }, // 游客页面（已登录用户不应访问）
+      meta: { requiresGuest: true, hideFooter: true }, // 次级页面隐藏页脚
     },
     {
       path: '/register',
@@ -102,7 +102,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/RegisterView.vue'),
-      meta: { requiresGuest: true }, // 游客页面（已登录用户不应访问）
+      meta: { requiresGuest: true, hideFooter: true }, // 注册也视为次级页面
     },
     {
       path: '/profile',
@@ -111,7 +111,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ProfileView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
+      meta: { requiresAuth: true, hideFooter: true }, // 次级页面
     },
     {
       path: '/wish-exchange',
@@ -120,7 +120,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/WishValueExchangeView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
+      meta: { requiresAuth: true, hideFooter: true }, // 次级页面
     },
     {
       path: '/wish-credit-exchange',
@@ -129,7 +129,7 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/WishValueCreditExchangeView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
+      meta: { requiresAuth: true, hideFooter: true }, // 次级页面
     },
     {
       path: '/activity',
@@ -138,7 +138,13 @@ const router = createRouter({
       // this generates a separate chunk for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/ActivityView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
+      meta: { requiresAuth: true, hideFooter: true }, // 次级页面
+    },
+    {
+      path: '/hotpoints-exchange',
+      name: 'hotpoints-exchange',
+      component: () => import('../views/HotpointsExchangeView.vue'),
+      meta: { requiresAuth: true, hideFooter: true }, // 次级页面
     },
     // 临时移除不存在的ActivityTestView路由
     // {

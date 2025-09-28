@@ -139,21 +139,21 @@
             </div>
 
             <div v-else class="stats-grid">
-              <!-- 活动积分 -->
+              <!-- 活动积分(外部积分) 卡片 -->
               <div class="stat-card">
                 <div class="stat-icon">💎</div>
-                <div class="stat-value">{{ userBalances?.wishPoints || 0 }}</div>
+                <div class="stat-value">{{ activityPoints || 0 }}</div>
                 <div class="stat-label">活动积分</div>
-                <div class="stat-sublabel">祈愿值</div>
+                <div class="stat-sublabel">活动服获取积分</div>
                 <div class="stat-glow"></div>
               </div>
 
-              <!-- 热度值 -->
+              <!-- 热度值 卡片 -->
               <div class="stat-card">
                 <div class="stat-icon">🔥</div>
-                <div class="stat-value">{{ userBalances?.credits || 0 }}</div>
+                <div class="stat-value">{{ hotpointsValue || 0 }}</div>
                 <div class="stat-label">热度值</div>
-                <div class="stat-sublabel">Credits</div>
+                <div class="stat-sublabel">活动积分 : 热度值 = 10 : 1</div>
                 <div class="stat-glow"></div>
               </div>
 
@@ -181,16 +181,16 @@
                 <div class="balance-card">
                   <div class="balance-icon">💎</div>
                   <div class="balance-info">
-                    <div class="balance-label">祈愿值</div>
-                    <div class="balance-value">{{ formatNumber(userBalances?.wishPoints || 0) }}</div>
+                    <div class="balance-label">网站祈愿值</div>
+                    <div class="balance-value">{{ formatNumber(displayWishPoints) }}</div>
                   </div>
                   <div class="balance-glow"></div>
                 </div>
                 <div class="balance-card">
                   <div class="balance-icon">🪙</div>
                   <div class="balance-info">
-                    <div class="balance-label">积分</div>
-                    <div class="balance-value">{{ formatNumber(userBalances?.credits || 0) }}</div>
+                    <div class="balance-label">正式服积分</div>
+                    <div class="balance-value">{{ formatNumber(displayInternalCredits) }}</div>
                   </div>
                   <div class="balance-glow"></div>
                 </div>
@@ -220,15 +220,14 @@
                   <div class="action-btn-glow"></div>
                 </RouterLink>
 
-                <!-- 热度值皮肤兑换按钮 -->
+                <!-- 热度值兑换按钮 -->
                 <RouterLink
-                  to="/wish-exchange"
-                  class="exchange-action-btn heat-exchange-btn"
-                >
+                  to="/hotpoints-exchange"
+                  class="exchange-action-btn heat-exchange-btn">
                   <div class="action-btn-icon" style="color: #f97316;">🔥</div>
                   <div class="action-btn-content">
                     <div class="action-btn-title" style="color: #f97316;">热度值兑换</div>
-                    <div class="action-btn-subtitle">兑换限定游戏皮肤</div>
+                    <div class="action-btn-subtitle">热度值 → 奖励</div>
                   </div>
                   <div class="action-btn-arrow" style="color: #f97316;">→</div>
                   <div class="action-btn-glow"></div>
@@ -302,8 +301,8 @@
           <!-- 第四部分：全服排名 -->
           <div class="server-rankings !mb-12">
             <div class="section-header">
-              <h3 class="section-title">全服排行榜</h3>
-              <p class="section-subtitle">活动结束后前三名将获得额外热度值奖励</p>
+              <h3 class="section-title">活动排行榜</h3>
+              <p class="section-subtitle">活动服中的部分数据排名</p>
             </div>
 
             <div v-if="isLoadingRankings" class="loading-container">
@@ -399,7 +398,7 @@
           <div class="playtime-rankings !mb-12">
             <div class="section-header">
               <h3 class="section-title">游玩时长排行榜</h3>
-              <p class="section-subtitle">感谢各位玩家的陪伴与支持！（此排名不参与奖励）</p>
+              <p class="section-subtitle">感谢各位玩家的陪伴与支持！</p>
             </div>
 
             <div v-if="isLoadingPlayTimeRankings" class="loading-container">
@@ -452,9 +451,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { wishExchangeApi, k4StatsApi, k4TimesApi, type WishExchangeItem, type UserBalances, type K4PlayerRankingInfo, type K4TimesPlayerRankingInfo } from '@/services/api'
+import { exchangeApi } from '@/services/api'
+import { wishExchangeApi, k4StatsApi, k4TimesApi, hotpointsApi, type WishExchangeItem, type UserBalances, type K4PlayerRankingInfo, type K4TimesPlayerRankingInfo, type HotpointsResponse } from '@/services/api'
+import { playTimeApi } from '@/services/api'
 
 // 状态管理
 const authStore = useAuthStore()
@@ -471,6 +472,7 @@ const isExchanging = ref(false)
 // 用户数据
 const userBalances = ref<UserBalances | null>(null)
 const userPlayTime = ref(0)
+const hotpoints = ref<HotpointsResponse | null>(null)
 
 // 兑换商品
 const exchangeItems = ref<WishExchangeItem[]>([])
@@ -582,24 +584,33 @@ const getMedal = (index: number): string => {
 }
 
 // 加载用户数据
-const loadUserData = async () => {
-  // 检查用户是否准备好
-  if (!isUserReady()) {
-    console.warn('用户数据尚未准备好，跳过加载用户数据')
-    return
+// 提取内部余额获取逻辑，供首次加载与认证状态监听复用
+const fetchInternalBalances = async () => {
+  // 只要已认证就尝试获取，不等待 user.id，后端基于 token 解析 steamId/用户
+  if (!authStore.isAuthenticated) return
+  try {
+    const resp = await exchangeApi.getUserBalances()
+    if (resp.success && resp.data) {
+      userBalances.value = resp.data
+    }
+  } catch (e) {
+    console.error('获取内部余额失败', e)
   }
+}
 
+const loadUserData = async () => {
+  if (!authStore.isAuthenticated) return
   isLoadingUserData.value = true
   try {
-    // 加载用户余额
-    const balancesResponse = await wishExchangeApi.getUserBalances()
-    if (balancesResponse.success && balancesResponse.data) {
-      userBalances.value = balancesResponse.data
+    await fetchInternalBalances()
+    try {
+      const ptResp = await playTimeApi.getMyPlayTime()
+      if (ptResp.success && ptResp.data) {
+        userPlayTime.value = ptResp.data.totalTime || 0
+      }
+    } catch (e) {
+      console.warn('获取游玩时长失败或暂无数据', e)
     }
-
-    // TODO: 加载用户游玩时长（需要后端API）
-    // 这里暂时设置一个示例值
-    userPlayTime.value = 3600 * 24 + 1800 // 24小时30分钟
   } catch (error) {
     console.error('加载用户数据失败:', error)
   } finally {
@@ -630,6 +641,29 @@ const loadExchangeItems = async () => {
     console.error('加载兑换商品失败:', error)
   } finally {
     isLoadingExchangeItems.value = false
+  }
+}
+
+// 添加新的响应式变量：活动积分(外部库Credits) 与 热度值(hotpoints)
+const activityPoints = ref<number>(0) // 外部库原始积分(表2 Credits)
+const hotpointsValue = ref<number>(0)  // 热度值(外部积分 * factor)
+
+// 供模板使用的显示余额（与兑换系统分离）
+const displayWishPoints = computed(() => userBalances.value?.wishPoints || 0)
+const displayInternalCredits = computed(() => userBalances.value?.credits || 0)
+
+// 修改加载热度值逻辑
+const loadHotpoints = async () => {
+  if (!authStore.isAuthenticated) return
+  try {
+    const resp = await hotpointsApi.getMyHotpoints()
+    if (resp.success && resp.data) {
+      hotpoints.value = resp.data
+      activityPoints.value = resp.data.credits // 原始积分
+      hotpointsValue.value = resp.data.hotpoints // 热度值
+    }
+  } catch (e) {
+    console.error('获取热度值失败', e)
   }
 }
 
@@ -743,28 +777,30 @@ const handleExchange = async (item: WishExchangeItem) => {
 // 生命周期
 onMounted(async () => {
   startAutoSlide()
-
-  // 如果用户已登录，等待用户数据准备好
   if (authStore.isAuthenticated) {
-    let retries = 0
-    const maxRetries = 10
-    while (!isUserReady() && retries < maxRetries) {
-      await new Promise(resolve => setTimeout(resolve, 100))
-      retries++
-    }
+    // 立即尝试拉取余额，避免首屏 0 闪烁
+    fetchInternalBalances()
   }
-
-  // 并行加载所有数据
   await Promise.all([
     loadUserData(),
     loadExchangeItems(),
     loadRankings(),
-    loadPlayTimeRankings()
+    loadPlayTimeRankings(),
+    loadHotpoints()
   ])
 })
 
 onUnmounted(() => {
   stopAutoSlide()
+})
+
+
+// 监听用户认证状态变化，自动加载余额和热度值
+watch(() => authStore.isAuthenticated, (val) => {
+  if (val) {
+    fetchInternalBalances()
+    loadHotpoints()
+  }
 })
 </script>
 
@@ -1116,16 +1152,16 @@ onUnmounted(() => {
   padding: 1.5rem;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 51, 234, 0.15));
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 1rem;
+  color: white;
   transition: all 0.3s ease;
-  overflow: hidden;
 }
 
 .balance-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+  transform: translateY(-4px);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 15px 40px rgba(16, 185, 129, 0.3);
 }
 
 .balance-icon {
