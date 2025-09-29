@@ -121,7 +121,37 @@
           <!-- 分割线 -->
           <div class="!my-6 flex items-center">
             <div class="flex-1 h-px bg-white/20"></div>
-            <span class="px-4 text-white/60 text-sm">或</span>
+            <span class="px-4 text-white/60 text-sm">或使用第三方登录</span>
+            <div class="flex-1 h-px bg-white/20"></div>
+          </div>
+
+          <!-- Steam登录按钮 -->
+          <button
+            @click="handleSteamLogin"
+            :disabled="steamLoading"
+            type="button"
+            class="w-full py-3 px-4 bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-800 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3"
+          >
+            <div v-if="steamLoading" class="flex items-center justify-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              跳转中...
+            </div>
+            <div v-else class="flex items-center justify-center space-x-3">
+              <!-- Steam Logo -->
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                <path d="M8.5 12.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5-2.5 1.12-2.5 2.5zm7 0c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5-2.5 1.12-2.5 2.5z"/>
+              </svg>
+              <span>使用 Steam 登录</span>
+            </div>
+          </button>
+
+          <!-- 分割线 -->
+          <div class="!my-6 flex items-center">
+            <div class="flex-1 h-px bg-white/20"></div>
             <div class="flex-1 h-px bg-white/20"></div>
           </div>
 
@@ -161,6 +191,8 @@ const loginForm = ref({
 
 // 密码显示控制
 const showPassword = ref(false)
+// Steam登录状态
+const steamLoading = ref(false)
 
 // 切换密码显示
 const togglePassword = () => {
@@ -181,6 +213,48 @@ const handleLogin = async () => {
   } catch (error) {
     // 错误已经在store中处理
     console.error('登录失败:', error)
+  }
+}
+
+// 处理Steam登录
+const handleSteamLogin = async () => {
+  try {
+    steamLoading.value = true
+    authStore.clearError()
+    
+    // 调用后端获取Steam登录URL
+    const response = await fetch('/api/auth/steam/login', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('HTTP Error:', response.status, errorText)
+      throw new Error(`HTTP ${response.status}: 获取Steam登录URL失败`)
+    }
+    
+    const data = await response.json()
+    console.log('Steam login response:', data)
+    
+    if (!data.success) {
+      throw new Error(data.message || 'Steam登录失败')
+    }
+    
+    // 重定向到Steam登录页面
+    window.location.href = data.loginUrl
+  } catch (error) {
+    console.error('Steam登录失败:', error)
+    if (error instanceof SyntaxError) {
+      authStore.setError('服务器响应格式错误，请检查后端服务是否正常运行')
+    } else {
+      authStore.setError(error instanceof Error ? error.message : 'Steam登录失败')
+    }
+  } finally {
+    steamLoading.value = false
   }
 }
 

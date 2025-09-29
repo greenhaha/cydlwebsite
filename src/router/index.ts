@@ -105,6 +105,13 @@ const router = createRouter({
       meta: { requiresGuest: true, hideFooter: true }, // 注册也视为次级页面
     },
     {
+      path: '/login/success',
+      name: 'login-success',
+      // Steam登录成功页面
+      component: () => import('../views/LoginSuccessView.vue'),
+      meta: { hideFooter: true },
+    },
+    {
       path: '/profile',
       name: 'profile',
       // route level code-splitting
