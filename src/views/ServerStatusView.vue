@@ -152,7 +152,7 @@ import ServerPreviewCard from '@/components/ServerStatus/ServerPreviewCard.vue'
 interface ServerConfig { name: string; address: string }
 const serverConfigs: ServerConfig[] = [
   { name: '娱乐对抗正式服', address: '110.42.41.225:27015' },
-  { name: '活动专用服务器 - 测试中', address: '' }
+  { name: '活动专用服务器 - 测试中', address: '115.231.176.88:27015' }
 ]
 const serverAddresses = serverConfigs.map(c => c.address)
 
