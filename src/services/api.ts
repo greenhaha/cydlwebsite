@@ -70,6 +70,26 @@ export interface AuthResponse {
   }
 }
 
+// Steam 用户资料（与后端 steamProfile 对应字段，全部可选）
+export interface SteamUserProfile {
+  steamId?: string
+  personaName?: string
+  profileUrl?: string
+  avatar?: string
+  avatarMedium?: string
+  avatarFull?: string
+  realName?: string
+  countryCode?: string
+}
+
+// 完成 Steam 待注册返回的数据
+export interface SteamCompleteRegisterData {
+  token: string
+  user: ValidateTokenResponse
+  steamProfile?: SteamUserProfile
+  message?: string
+}
+
 export interface ApiResponse<T> {
   success: boolean
   message: string
@@ -249,6 +269,26 @@ export const authApi = {
       }
     } catch (error) {
       console.error('注册失败:', error)
+      throw error
+    }
+  },
+
+  // 完成 Steam 待注册
+  async completeSteamRegister(payload: { steamId64: string; steamTicket: string; username: string; password: string; email?: string }): Promise<SteamCompleteRegisterData> {
+    try {
+      const response = await apiRequest<ApiResponse<SteamCompleteRegisterData>>('/auth/steam/complete-register', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      })
+      if (response.success && response.data) {
+        // 存储 token 供后续自动登录
+        localStorage.setItem('authToken', response.data.token)
+        return response.data
+      } else {
+        throw new Error(response.message || 'Steam 注册失败')
+      }
+    } catch (error) {
+      console.error('Steam 完成注册失败:', error)
       throw error
     }
   },
