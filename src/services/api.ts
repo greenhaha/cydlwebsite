@@ -275,18 +275,51 @@ export const authApi = {
 
   // 完成 Steam 待注册
   async completeSteamRegister(payload: { steamId64: string; steamTicket: string; username: string; password: string; email?: string }): Promise<SteamCompleteRegisterData> {
+    // 注意：Steam 完成注册接口目前后端路径为 /api/auth/steam/complete-register（无 /v1 前缀），
+    // 且返回结构为 { success:boolean, token, user, steamProfile?, message? }，并非统一的 ApiResponse 包装。
+    // 这里直接使用 fetch，避开 API_BASE_URL 叠加造成的 404。
     try {
-      const response = await apiRequest<ApiResponse<SteamCompleteRegisterData>>('/auth/steam/complete-register', {
+      const response = await fetch('/api/auth/steam/complete-register', {
         method: 'POST',
-        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       })
-      if (response.success && response.data) {
-        // 存储 token 供后续自动登录
-        localStorage.setItem('authToken', response.data.token)
-        return response.data
-      } else {
-        throw new Error(response.message || 'Steam 注册失败')
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
       }
+
+      // 定义一个最小的可兼容类型，避免使用 any
+      type SteamCompleteRaw = {
+        success?: boolean
+        token?: string
+        user?: ValidateTokenResponse
+        steamProfile?: SteamUserProfile
+        message?: string
+        data?: {
+          token?: string
+          user?: ValidateTokenResponse
+          steamProfile?: SteamUserProfile
+          message?: string
+        }
+      }
+      const json: SteamCompleteRaw = await response.json()
+      if (!json.success) {
+        throw new Error(json.message || 'Steam 注册失败')
+      }
+
+      // 兼容两种结构：直接返回(token,user,...) 或 包在 data 里
+      const token = json.token ?? json.data?.token
+      const user = json.user ?? json.data?.user
+      const steamProfile = json.steamProfile ?? json.data?.steamProfile
+      const message = json.message ?? json.data?.message
+
+      if (!token || !user) {
+        throw new Error('返回数据缺少 token 或 user')
+      }
+
+      localStorage.setItem('authToken', token)
+      return { token, user, steamProfile, message }
     } catch (error) {
       console.error('Steam 完成注册失败:', error)
       throw error
