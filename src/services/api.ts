@@ -66,7 +66,8 @@ export interface AuthResponse {
     isActive: boolean
     qqId?: string
     steamId64?: string
-    lastLoginAt?: string
+    lastLoginTime?: string  // 实际后端字段
+    lastLoginAt?: string    // 兼容旧命名（如果后端曾用过）
   }
 }
 
@@ -159,7 +160,8 @@ export interface UserProfileResponse {
   isActive: boolean
   qqId?: string
   steamId64?: string
-  lastLoginAt?: string
+  lastLoginTime?: string
+  lastLoginAt?: string // 兼容
 }
 
 export interface ValidateTokenResponse {
@@ -170,7 +172,8 @@ export interface ValidateTokenResponse {
   isActive: boolean
   qqId?: string
   steamId64?: string
-  lastLoginAt?: string
+  lastLoginTime?: string
+  lastLoginAt?: string // 兼容
 }
 
 // 抽奖相关类型定义
@@ -491,6 +494,38 @@ export const bindingApi = {
       console.error('解绑Steam账户失败:', error)
       throw error
     }
+  }
+}
+
+// Steam 绑定辅助 API（自动绑定版）
+export const steamBindApi = {
+  async getBindLoginUrl(): Promise<string> {
+    // 允许后端两种结构：统一包装 / 或直接返回
+    // 新方案：后端改为 /bind-start，返回 { success:true, loginUrl, bindSessionId }
+    const resp = await apiRequest<unknown>('/auth/steam/bind-start', { method: 'GET' })
+    // 可能是统一包装，也可能直接 {success:true, loginUrl:"..."}
+    if (typeof resp === 'object' && resp !== null) {
+      // 直接结构
+      const direct = resp as { success?: boolean; loginUrl?: string; message?: string; data?: { loginUrl?: string } }
+      if (direct.success && direct.data?.loginUrl) return direct.data.loginUrl
+      if (direct.success && direct.loginUrl) return direct.loginUrl
+      if ('success' in direct) throw new Error(direct.message || '获取Steam绑定登录URL失败')
+      if (direct.loginUrl) return direct.loginUrl
+    }
+    throw new Error('获取Steam绑定登录URL失败')
+  },
+  async completeBind(steamId64: string, ticket: string): Promise<{ steamId64:string; remainingCount:number; message?:string }> {
+    const raw = await apiRequest<unknown>('/auth/steam/complete-bind', {
+      method: 'POST',
+      body: JSON.stringify({ steamId64, ticket })
+    })
+    if (typeof raw === 'object' && raw !== null) {
+      const variant = raw as { success?: boolean; data?: { steamId64:string; remainingCount:number; message?:string }; steamId64?:string; remainingCount?:number; message?:string }
+      if (variant.success && variant.data) return variant.data
+      if (variant.success && variant.steamId64) return { steamId64: variant.steamId64, remainingCount: variant.remainingCount ?? 0, message: variant.message }
+      if (variant.success === false) throw new Error(variant.message || 'Steam绑定失败')
+    }
+    throw new Error('Steam绑定失败')
   }
 }
 

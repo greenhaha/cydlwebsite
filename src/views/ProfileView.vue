@@ -2,7 +2,7 @@
   <div class="profile-page">
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
-      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
            style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
       </div>
       <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
@@ -14,7 +14,7 @@
       <div class="fixed top-0 left-0 right-0 z-30 bg-black/60 backdrop-blur-md border-b border-white/20">
         <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div class="flex items-center justify-between">
-            <RouterLink 
+            <RouterLink
               to="/"
               class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/20 bg-black/30"
             >
@@ -23,7 +23,7 @@
               </svg>
               返回主页
             </RouterLink>
-            
+
             <!-- 用户信息显示 -->
             <div v-if="authStore.isAuthenticated" class="flex items-center space-x-3">
               <div class="flex items-center space-x-2 px-4 py-2 bg-white/10 rounded-lg border border-white/20">
@@ -51,19 +51,19 @@
               <div class="mx-3 w-2 h-2 bg-blue-400 rounded-full shadow-lg shadow-blue-400/50"></div>
               <div class="h-px bg-gradient-to-r from-transparent via-blue-400/60 to-transparent w-24"></div>
             </div>
-            
+
             <!-- 主标题 -->
             <div class="!mb-4 relative text-center">
               <h1 class="text-[24px] md:text-[24px] lg:text-[24px] font-black text-white mb-3 tracking-tight leading-none drop-shadow-2xl text-shadow-lg">
                 个人信息
               </h1>
             </div>
-            
+
             <!-- 副标题 -->
             <h2 class="text-[16px] md:text-[16px] lg:text-[16px] font-medium text-white/95 mb-4 tracking-wide text-center drop-shadow-lg text-shadow">
               管理你的个人资料和游戏信息
             </h2>
-            
+
             <!-- 底部装饰线 -->
             <div class="flex items-center justify-center !mb-8">
               <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent w-32"></div>
@@ -83,13 +83,13 @@
             <span class="text-white">正在加载用户信息...</span>
           </div>
         </div>
-        
+
         <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- 左侧：基本信息 -->
           <div class="backdrop-blur-lg bg-black/70 rounded-2xl p-8 border border-white/20 shadow-2xl">
             <div class="mb-6">
               <h3 class="text-2xl font-bold text-white mb-2 text-shadow-lg">基本信息</h3>
-              <p class="text-white/80 text-sm">查看你的账户基本信息</p>
+              <p class="text-white/80 text-sm">查看你的账户信息</p>
             </div>
 
             <!-- 用户头像 -->
@@ -117,11 +117,11 @@
               </div>
               <div class="flex items-center justify-between p-3">
                 <span class="text-white/80 text-sm">最后登录</span>
-                <span class="text-white font-medium">{{ formatDate(currentUser?.lastLoginAt) || '未知' }}</span>
+                <span class="text-white font-medium">{{ formatDate((currentUser as any)?.lastLoginTime || currentUser?.lastLoginAt) || '未知' }}</span>
               </div>
               <!-- 绑定状态快览 -->
               <div class="border-t border-white/10 pt-3">
-                <p class="text-white/80 text-sm !mb-2 pl-2">账户绑定状态</p>
+                <p class="text-white/90 text-m !mb-2 pl-2">账户绑定状态</p>
                 <div class="flex items-center justify-between p-2 !mt-2">
                   <span class="text-white/70 text-sm">QQ账户</span>
                   <span class="text-sm font-medium" :class="currentUser?.qqId ? 'text-green-300' : 'text-gray-400'">
@@ -146,7 +146,7 @@
             </div>
 
             <!-- 修改次数提示 -->
-            
+
             <!-- 错误提示 -->
             <div v-if="error" class="!mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
               <p class="text-red-300 text-sm">{{ error }}</p>
@@ -163,12 +163,12 @@
               <div class="p-5 bg-blue-500/20 border border-blue-500/50 rounded-lg">
                 <div class="flex items-center justify-between !mb-4">
                   <h4 class="text-blue-300 font-medium text-lg">QQ账户绑定</h4>
-                  <span class="px-3 py-1 rounded-full text-sm font-medium border" 
+                  <span class="px-3 py-1 rounded-full text-sm font-medium border"
                         :class="currentUser?.qqId ? 'bg-green-500/20 border-green-500/50 text-green-300' : 'bg-gray-500/20 border-gray-500/50 text-gray-300'">
                     {{ currentUser?.qqId ? '已绑定' : '未绑定' }}
                   </span>
                 </div>
-                
+
                 <div v-if="currentUser?.qqId" class="space-y-4">
                   <div class="p-3 bg-green-500/20 border border-green-500/50 rounded-lg !mb-4">
                     <p class="text-green-300 font-medium">已绑定QQ: {{ currentUser.qqId }}</p>
@@ -184,7 +184,7 @@
                     <span>解绑QQ账户</span>
                   </button>
                 </div>
-                
+
                 <div v-else class="space-y-4">
                   <div class="relative !mb-4">
                     <input
@@ -205,27 +205,27 @@
                     </svg>
                     <span>绑定QQ账户</span>
                     <span class="text-sm">
-                      (剩余: {{ remainingModifications }}次)
+                      （今日剩余{{ remainingModifications }}次）
                     </span>
                   </button>
                 </div>
-                
-                <p class="text-blue-200 text-sm !mt-2">用于游戏内联系和活动通知</p>
+
+                <p class="text-blue-200 text-sm !mt-2">用于联系和通知（与签到系统绑定不互通）</p>
               </div>
 
               <!-- Steam64ID绑定 -->
               <div class="p-5 bg-green-500/20 border border-green-500/50 rounded-lg !mt-4">
                 <div class="flex items-center justify-between !mb-4">
                   <h4 class="text-green-300 font-medium text-lg">Steam账户绑定</h4>
-                  <span class="px-3 py-1 rounded-full text-sm font-medium border" 
+                  <span class="px-3 py-1 rounded-full text-sm font-medium border"
                         :class="currentUser?.steamId64 ? 'bg-green-500/20 border-green-500/50 text-green-300' : 'bg-gray-500/20 border-gray-500/50 text-gray-300'">
                     {{ currentUser?.steamId64 ? '已绑定' : '未绑定' }}
                   </span>
                 </div>
-                
+
                 <div v-if="currentUser?.steamId64" class="space-y-4">
                   <div class="p-3 bg-green-500/20 border border-green-500/50 rounded-lg !mb-4">
-                    <p class="text-green-300 font-medium">已绑定Steam ID: {{ currentUser.steamId64 }}</p>
+                    <p class="text-green-300 font-medium">已绑定SteamID: {{ currentUser.steamId64 }}</p>
                   </div>
                   <button
                     @click="handleUnbindSteam"
@@ -238,37 +238,35 @@
                     <span>解绑Steam账户</span>
                   </button>
                 </div>
-                
+
                 <div v-else class="space-y-4">
-                  <div class="relative !mb-4">
-                    <input
-                      v-model="formData.steamId64"
-                      type="text"
-                      placeholder="请输入你的Steam64ID"
-                      class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
-                      :disabled="isLoading || remainingModifications <= 0"
-                    />
+                  <div class="p-3 bg-white/5 rounded-lg text-white/70 flex items-center justify-between !mb-4">
+                    <span>Steam64ID</span>
+                    <span class="text-white/50">通过 Steam 登录获取</span>
                   </div>
                   <button
-                    @click="handleBindSteam"
-                    :disabled="isLoading || remainingModifications <= 0 || !formData.steamId64.trim()"
-                    class="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 rounded-lg text-white font-medium hover:from-green-600 hover:to-green-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                    @click="openSteamBind"
+                    :disabled="steamBind.loading || steamBind.inProgress || isLoading || remainingModifications <= 0"
+                    class="w-full py-3 bg-gradient-to-r from-green-500 to-green-600 rounded-lg text-white font-medium hover:from-green-600 hover:to-green-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                   >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg v-if="steamBind.loading || steamBind.inProgress" class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                     </svg>
-                    <span>绑定Steam账户</span>
-                    <span class="text-sm">
-                      (剩余: {{ remainingModifications }}次)
-                    </span>
+                    <span>{{ steamBind.loading || steamBind.inProgress ? '正在通过Steam获取...' : 'Steam绑定' }}</span>
+                    <span class="text-sm">（今日剩余{{ remainingModifications }}次）</span>
                   </button>
+                  <p v-if="steamBind.error" class="text-red-300 text-sm">{{ steamBind.error }}</p>
                 </div>
-                
+
                 <p class="text-green-200 text-sm !mt-2">用于游戏数据统计和奖励发放</p>
               </div>
             </div>
 
-            
+
           </div>
         </div>
       </div>
@@ -277,10 +275,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { bindingApi, authApi, type UserProfileResponse } from '@/services/api'
+import { bindingApi, authApi, steamBindApi, type UserProfileResponse } from '@/services/api'
 
 // 路由和认证store
 const router = useRouter()
@@ -297,7 +295,16 @@ const isLoadingProfile = ref(false)
 // 表单数据
 const formData = ref({
   qqId: '',
-  steamId64: ''
+  steamId64: '' // 只读显示（通过Steam绑定获取）
+})
+
+// Steam 绑定流程状态
+const steamBind = ref({
+  loading: false,
+  popup: null as Window | null,
+  ticket: '',
+  error: '',
+  inProgress: false
 })
 
 // 计算属性：获取当前用户数据（优先使用 userProfile）
@@ -306,7 +313,7 @@ const currentUser = computed(() => userProfile.value || authStore.user)
 // 格式化日期
 const formatDate = (dateString: string | undefined) => {
   if (!dateString) return '未知'
-  
+
   try {
     const date = new Date(dateString)
     return date.toLocaleDateString('zh-CN', {
@@ -334,13 +341,13 @@ const loadUserProfile = async () => {
   try {
     isLoadingProfile.value = true
     error.value = null
-    
+
     const profile = await authApi.getUserProfile()
     userProfile.value = profile
-    
+
     // 更新表单数据
     initializeForm()
-    
+
   } catch (err) {
     console.error('获取用户信息失败:', err)
     error.value = err instanceof Error ? err.message : '获取用户信息失败'
@@ -367,20 +374,20 @@ const handleBindQQ = async () => {
     successMessage.value = null
 
     await bindingApi.bindQQAccount(formData.value.qqId.trim())
-    
+
     // 更新认证store中的用户信息
     await authStore.initialize()
-    
+
     // 重新获取用户详细信息
     await loadUserProfile()
-    
+
     // 减少剩余修改次数
     remainingModifications.value--
     saveModificationCount()
-    
+
     successMessage.value = 'QQ账户绑定成功！'
     formData.value.qqId = ''
-    
+
     // 3秒后清除成功消息
     setTimeout(() => {
       successMessage.value = null
@@ -406,19 +413,19 @@ const handleUnbindQQ = async () => {
     successMessage.value = null
 
     await bindingApi.unbindQQAccount()
-    
+
     // 更新认证store中的用户信息
     await authStore.initialize()
-    
+
     // 重新获取用户详细信息
     await loadUserProfile()
-    
+
     // 减少剩余修改次数
     remainingModifications.value--
     saveModificationCount()
-    
+
     successMessage.value = 'QQ账户解绑成功！'
-    
+
     // 3秒后清除成功消息
     setTimeout(() => {
       successMessage.value = null
@@ -432,46 +439,59 @@ const handleUnbindQQ = async () => {
 }
 
 // 绑定Steam账户
-const handleBindSteam = async () => {
-  if (!formData.value.steamId64.trim()) {
-    error.value = '请输入Steam64ID'
+// 启动 Steam 绑定弹窗
+const openSteamBind = async () => {
+  if (currentUser.value?.steamId64) {
+    error.value = '您已绑定Steam账户，如需更换请先解绑'
     return
   }
-
   if (remainingModifications.value <= 0) {
     error.value = '今日修改次数已用完，请明天再试'
     return
   }
-
   try {
-    isLoading.value = true
-    error.value = null
-    successMessage.value = null
-
-    await bindingApi.bindSteamAccount(formData.value.steamId64.trim())
-    
-    // 更新认证store中的用户信息
-    await authStore.initialize()
-    
-    // 重新获取用户详细信息
-    await loadUserProfile()
-    
-    // 减少剩余修改次数
-    remainingModifications.value--
-    saveModificationCount()
-    
-    successMessage.value = 'Steam账户绑定成功！'
-    formData.value.steamId64 = ''
-    
-    // 3秒后清除成功消息
-    setTimeout(() => {
-      successMessage.value = null
-    }, 3000)
-
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Steam账户绑定失败，请重试'
+    steamBind.value.loading = true
+    error.value = ''
+    const url = await steamBindApi.getBindLoginUrl()
+    const popup = window.open(url, 'steamBindWindow', 'width=860,height=640')
+    if (!popup) {
+      throw new Error('浏览器阻止了弹窗，请允许弹窗')
+    }
+    steamBind.value.popup = popup
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
+    error.value = msg || '获取Steam绑定URL失败'
   } finally {
-    isLoading.value = false
+    steamBind.value.loading = false
+  }
+}
+
+// 接收弹窗消息并自动完成绑定
+const onMessage = async (evt: MessageEvent) => {
+  if (evt.origin !== window.location.origin) return
+  const data = evt.data
+  if (!data || data.type !== 'steam-bind') return
+  if (!data.success) {
+    steamBind.value.error = data.error || 'Steam 验证失败'
+    return
+  }
+  // 拿到 steamId64 + ticket，调用 complete-bind
+  try {
+    steamBind.value.inProgress = true
+    const result = await steamBindApi.completeBind(data.steamId64, data.ticket)
+    successMessage.value = result.message || 'Steam账户绑定成功！'
+    steamBind.value.ticket = ''
+    // 刷新用户信息
+    await authStore.initialize()
+    await loadUserProfile()
+    // 使用后端剩余次数覆盖本地（若后续拆分 qq/steam 可分别管理）
+    remainingModifications.value = result.remainingCount
+    saveModificationCount()
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : 'Steam绑定失败'
+  } finally {
+    steamBind.value.inProgress = false
+    steamBind.value.popup?.close()
   }
 }
 
@@ -488,19 +508,19 @@ const handleUnbindSteam = async () => {
     successMessage.value = null
 
     await bindingApi.unbindSteamAccount()
-    
+
     // 更新认证store中的用户信息
     await authStore.initialize()
-    
+
     // 重新获取用户详细信息
     await loadUserProfile()
-    
+
     // 减少剩余修改次数
     remainingModifications.value--
     saveModificationCount()
-    
+
     successMessage.value = 'Steam账户解绑成功！'
-    
+
     // 3秒后清除成功消息
     setTimeout(() => {
       successMessage.value = null
@@ -519,7 +539,7 @@ const loadModificationCount = async () => {
     // 这里可以调用API获取今日已使用的修改次数
     // const response = await authApi.getModificationCount()
     // remainingModifications.value = 3 - response.usedCount
-    
+
     // 暂时使用本地存储模拟
     const today = new Date().toDateString()
     const savedData = localStorage.getItem(`profile_modifications_${today}`)
@@ -548,6 +568,11 @@ onMounted(async () => {
   // 初始化表单和数据
   await loadUserProfile()
   await loadModificationCount()
+  window.addEventListener('message', onMessage)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('message', onMessage)
 })
 
 // 监听修改次数变化，保存到本地存储
