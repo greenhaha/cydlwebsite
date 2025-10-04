@@ -66,23 +66,22 @@
           class="page-title text-[36px] md:text-[42px] font-black text-white mb-4 leading-tight tracking-tight drop-shadow-lg"
         >
           <span
-            class="block bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 bg-clip-text text-transparent drop-shadow-md"
+              class="block bg-gradient-to-r from-blue-500 via-purple-400 to-pink-800 bg-clip-text text-transparent drop-shadow-md"
           >
             每日签到
           </span>
         </h1>
-        <div class="subtitle-container !mb-6">
-          <p
-            class="page-subtitle text-[16px] md:text-[18px] text-white/90 leading-relaxed font-medium drop-shadow-md"
-          >
-            坚持每日签到，获得丰厚祈愿值奖励
-          </p>
-        </div>
-        <div class="flex justify-center space-x-2 !mb-6">
-          <div class="w-8 h-0.5 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full"></div>
-          <div class="w-6 h-0.5 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full"></div>
-          <div class="w-8 h-0.5 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full"></div>
-        </div>
+      <div class="subtitle-container !mb-6">
+        <p
+          class="page-subtitle text-[16px] md:text-[18px] text-white/90 leading-relaxed font-medium drop-shadow-md subtitle-stroke"
+        >
+          每日签到，领取积分
+        </p>
+      </div>
+      <div class="flex justify-center space-x-2 !mb-6">
+        <div class="w-8 h-0.5 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full"></div>
+        <div class="w-6 h-0.5 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full"></div>
+        <div class="w-8 h-0.5 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full"></div>
       </div>
 
       <!-- 签到卡片容器 -->
@@ -135,7 +134,7 @@
                   签到中心
                 </h2>
                 <p class="text-gray-600 text-sm font-medium drop-shadow-sm">
-                  完成每日签到，祈愿值奖励等你来拿
+                  完成每日签到，连续签到有额外积分奖励
                 </p>
               </div>
 
@@ -161,7 +160,7 @@
                           />
                         </svg>
                       </div>
-                      QQ号码
+                      > 签到QQ号
                     </span>
                   </label>
                   <div class="relative">
@@ -322,12 +321,14 @@
             </svg>
           </div>
           <span class="text-sm font-medium drop-shadow-md"
-            >每日签到可获得祈愿值奖励，连续签到奖励更丰厚</span
+            >> 每日签到可获得积分奖励，连续签到奖励更丰厚
+            </span
           >
         </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -426,7 +427,7 @@ export default defineComponent({
         }
 
         // 添加Authorization请求头
-        const response = await axios.post('/api/v1/signin', 
+        const response = await axios.post('/api/v1/signin',
           { userId: qqNumber.value },
           {
             headers: {
@@ -520,7 +521,7 @@ export default defineComponent({
 }
 
 .home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.1), #f5f5f5);
 }
 
 /* 装饰性浮动形状 */
@@ -608,12 +609,6 @@ export default defineComponent({
     0 2px 4px rgba(0, 0, 0, 0.3),
     0 4px 8px rgba(0, 0, 0, 0.2),
     0 0 20px rgba(255, 255, 255, 0.1); */
-}
-
-.page-title span {
-  /* text-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.2),
-    0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 .page-subtitle {

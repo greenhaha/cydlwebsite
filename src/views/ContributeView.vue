@@ -4,7 +4,7 @@
     <div class="fixed inset-0 w-full h-full">
       <div class="pointer-events-none absolute inset-0">
         <video
-          src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/YokaiSecret.mp4"
+          src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/4K.mp4"
           muted
           autoplay="true"
           class="w-full h-full bg-cover bg-center min-w-full min-h-full object-cover globalVideo"
@@ -24,7 +24,7 @@
         <h1 class="hero-title text-4xl md:text-6xl font-bold text-white !mb-4 text-shadow-lg">
           致谢贡献者
         </h1>
-        <p class="hero-subtitle text-lg md:text-xl text-white/110 max-w-2xl mx-auto text-shadow">
+        <p class="hero-subtitle text-lg md:text-xl text-white max-w-2xl mx-auto subtitle-stroke">
           感谢所有为HLYM服务器发展做出贡献的朋友们，正是因为有了你们的支持，我们才能为大家提供更好的游戏体验
         </p>
       </div>
@@ -36,10 +36,10 @@
         <!-- 捐赠者区域 -->
         <section class="donors-section mb-12">
           <div class="section-header text-center !mb-8">
-            <h2 class="section-title text-3xl md:text-4xl font-bold text-white mb-4 text-shadow">
-              💝 赞助支持者
+            <h2 class="section-title text-3xl md:text-4xl font-bold mb-4 text-shadow">
+              <span class="emoji-title">💝</span> <span class="block bg-gradient-to-r from-blue-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-md" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">赞助支持者</span>
             </h2>
-            <p class="section-description text-black/80 text-lg text-shadow">
+            <p class="section-description text-white text-lg subtitle-stroke">
               感谢以下朋友们的慷慨赞助，为服务器的运营提供了强有力的支持
             </p>
           </div>
@@ -49,13 +49,13 @@
             <div v-if="loading" class="col-span-full text-center py-8">
               <div class="text-white text-lg">正在加载贡献者数据...</div>
             </div>
-            
+
             <!-- 错误状态 -->
             <div v-else-if="error" class="col-span-full text-center py-8">
               <div class="text-red-300 text-lg mb-4">{{ error }}</div>
               <n-button @click="fetchContributors" type="primary">重试</n-button>
             </div>
-            
+
             <!-- 贡献者列表 -->
             <div
               v-else
@@ -88,10 +88,10 @@
         <!-- 技术支持者区域 -->
         <section class="tech-supporters-section !mt-12">
           <div class="section-header text-center !mb-8">
-            <h2 class="section-title text-3xl md:text-4xl font-bold text-white mb-4 text-shadow">
-              🛠️ 技术开发团队
+            <h2 class="section-title text-3xl md:text-4xl font-bold mb-4 text-shadow">
+              <span class="emoji-title">🛠️</span> <span class="block bg-gradient-to-r from-blue-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-md" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">技术开发团队</span>
             </h2>
-            <p class="section-description text-white/80 text-lg text-shadow">
+            <p class="section-description text-white text-lg subtitle-stroke">
               感谢开发团队成员们的辛勤付出，为大家提供了优质的技术支持和功能开发
             </p>
           </div>
@@ -101,13 +101,13 @@
             <div v-if="loading" class="col-span-full text-center py-8">
               <div class="text-white text-lg">正在加载技术支持者数据...</div>
             </div>
-            
+
             <!-- 错误状态 -->
             <div v-else-if="error" class="col-span-full text-center py-8">
               <div class="text-red-300 text-lg mb-4">{{ error }}</div>
               <n-button @click="fetchContributors" type="primary">重试</n-button>
             </div>
-            
+
             <!-- 技术支持者列表 -->
             <div
               v-else
@@ -140,18 +140,18 @@
           <!-- 感谢语 -->
         <section class="thanks-section text-center mt-16 py-12">
           <div class="thanks-card max-w-4xl mx-auto">
-            <n-card class="backdrop-blur-sm !bg-white/10 border border-white/20" :bordered="false">
+            <n-card class="backdrop-blur-sm bg-gradient-to-b from-black/40 via-gray-800/60 to-black/40 !bg-none border border-white/20" :bordered="false" style="background: linear-gradient(180deg,rgba(0,0,0,0.4),rgba(31,41,55,0.6),rgba(0,0,0,0.4));">
               <div class="p-8">
                 <h3 class="text-2xl md:text-3xl font-bold text-white !mb-6 text-shadow">
                   🙏 特别感谢
                 </h3>
-                <p class="text-white/110 text-lg leading-relaxed text-shadow">
+                <p class="text-white text-lg leading-relaxed subtitle-stroke">
                   每一份支持都弥足珍贵，每一个贡献都值得铭记。HLYM服务器能够持续为大家提供优质的游戏环境，离不开所有贡献者的无私付出。
                   未来我们将继续努力，为大家带来更好的游戏体验！
                 </p>
                 <div class="!mt-8">
                   <n-button type="primary" size="large" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-lg" @click="goToQQGroup">
-                    加入我们
+                    联系我们获取更多支持
                   </n-button>
                 </div>
               </div>
@@ -236,7 +236,7 @@ const goToQQGroup = () => {
 }
 
 .home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.6), #f5f5f5);
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.1), #f5f5f5);
 }
 
 .pointer-events-none {
@@ -324,5 +324,19 @@ const goToQQGroup = () => {
   background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+</style>
+<style scoped>
+.emoji-title {
+  color: #fff;
+  display: inline-block;
+  margin-right: 0.2em;
+}
+</style>
+<style scoped>
+.subtitle-stroke {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3);
 }
 </style>

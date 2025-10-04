@@ -16,14 +16,23 @@
     </div>
     <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
 
-    <!-- 页面标题 -->
-    <div class="page-header w-full max-w-[1280px] px-4 mb-8 z-20">
-      <h1 class="page-title text-[32px] md:text-[40px] font-bold text-center text-white mb-4 text-shadow-lg">
-        模型展示
+    <!-- 页面标题（统一风格，无顶部图标） -->
+  <div class="page-header w-full max-w-[1280px] px-4 mb-8 z-20 flex flex-col items-center text-center pt-12">
+      <h1 class="page-title text-[36px] md:text-[42px] font-black mb-4 leading-tight tracking-tight drop-shadow-lg">
+        <span class="block bg-gradient-to-r from-blue-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-md" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          模型图鉴
+        </span>
       </h1>
-      <p class="page-subtitle text-[16px] md:text-[18px] text-center text-white/90 text-shadow">
-        探索丰富的角色模型，发现你的专属皮肤
-      </p>
+      <div class="subtitle-container !mb-6">
+        <p class="page-subtitle text-[16px] md:text-[18px] text-white/90 leading-relaxed font-medium drop-shadow-md subtitle-stroke">
+          探索丰富的角色模型，发现你的专属皮肤
+        </p>
+      </div>
+      <div class="flex justify-center space-x-2 !mb-10">
+        <div class="w-8 h-0.5 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full"></div>
+        <div class="w-6 h-0.5 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full"></div>
+        <div class="w-8 h-0.5 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full"></div>
+      </div>
     </div>
 
     <!-- 搜索和筛选区域 -->
@@ -334,7 +343,7 @@ export default defineComponent({
 }
 
 .home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.1), #f5f5f5);
 }
 
 /* 页面标题样式 */
@@ -552,6 +561,13 @@ export default defineComponent({
 
 .models-section {
   animation-delay: 0.4s;
+}
+</style>
+<style scoped>
+.subtitle-stroke {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3);
 }
 </style>
 <style>

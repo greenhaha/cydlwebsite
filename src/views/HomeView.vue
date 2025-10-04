@@ -93,15 +93,26 @@
                   <span class="feature-title text-orange-800 font-semibold">活跃社区</span>
                 </div>
               </template>
-              <div class="feature-content text-orange-700 leading-relaxed min-h-[60px] flex items-center">
-                加入QQ群，获取更多游戏攻略和玩家交流
+              <div class="feature-content text-orange-700 leading-relaxed min-h-[60px] flex flex-col items-center gap-3">
+                <span>点击按钮加入QQ群，或者通过上方服务器状态标签加入服务器</span>
+                <div class="w-full flex justify-center">
+                  <n-button
+                    type="primary"
+                    size="medium"
+                    class="qqgroup-btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-md hover:shadow-lg transition-all duration-300 mt-2 text-white font-semibold px-4 py-2 rounded-lg text-base"
+                    @click="goToQQGroup"
+                  >
+                    <ShareIcon class="w-[16px] h-[16px] text-white mr-1" />
+                    点击加入QQ交流群
+                  </n-button>
+                </div>
               </div>
             </n-card>
           </n-grid-item>
         </n-grid>
       </div>
       <!-- 统计数据区域 -->
-      <div class="stats-section flex flex-wrap justify-around mt-4 w-full pt-24 max-w-[1200px] z-20 px-4">
+  <div class="stats-section flex flex-wrap justify-around mt-3 w-full pt-5 max-w-[1200px] z-20 px-4">
         <n-grid cols="4 xs:3 s:3 m:3 l:3 " x-gap="24" y-gap="24" responsive="screen">
           <n-grid-item>
             <div class="stat-card text-center p-6 rounded-xl backdrop-blur-lg bg-gray-50/95 border border-gray-200/60 hover:bg-gray-100/95 transition-all duration-300 h-full flex flex-col justify-center">
@@ -196,26 +207,7 @@
         </n-grid>
       </div> -->
 
-      <!-- 行动召唤区域 -->
-      <div class="cta-section mt-4 w-full pt-24 max-w-[1200px] z-20 text-center px-4 ">
-        <div class="cta-card p-8 rounded-2xl backdrop-blur-lg bg-gradient-to-br from-white/95 to-gray-50/95 border border-gray-200/60 mx-auto max-w-2xl shadow-2xl">
-          <h3 class="cta-title text-[26px] md:text-[30px] font-bold w-full text-center text-gray-800 mb-4">
-            立即加入我们
-          </h3>
-          <p class="cta-description text-[16px] md:text-[18px] w-full text-center text-gray-600 mb-8 leading-relaxed">
-            点击上方的"服务器状态"按钮来查询服务器并加入游戏
-          </p>
-          <n-button
-            type="primary"
-            size="large"
-            class="cta-button bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-            @click="goToQQGroup"
-          >
-            <ShareIcon class="w-[18px] h-[18px] text-white mr-2" />
-            加入QQ群 黄粱一梦CS2社区
-          </n-button>
-        </div>
-      </div>
+
     </div>
   </div>
 </template>
@@ -228,7 +220,7 @@
 }
 
 .home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.1), #f5f5f5);
 }
 
 .pointer-events-none {
@@ -287,24 +279,23 @@
 
 /* .stat-number 样式已通过Tailwind类处理 */
 
-/* CTA 区域样式 */
-.cta-card {
-  transition: all 0.3s ease;
-  margin: 0 auto;
+
+/* QQ群按钮样式 */
+.qqgroup-btn {
+  min-width: 160px;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px 0 rgba(80, 80, 180, 0.10);
 }
 
-.cta-card:hover {
-  filter: brightness(1.1);
-  transform: translateY(-2px);
-}
-
-.cta-button {
-  transition: all 0.3s ease;
-  font-weight: 600;
-}
-
-.cta-button:hover {
-  transform: translateY(-2px);
+@media (max-width: 768px) {
+  .qqgroup-btn {
+    width: 100%;
+    min-width: 0;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.5rem;
+  }
 }
 
 /* 响应式优化 */

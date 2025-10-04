@@ -18,22 +18,30 @@
 
     <!-- 页面内容 -->
     <div class="faq-container relative z-20 max-w-4xl mx-auto px-4">
-      <!-- 页面标题区域 -->
-      <div class="text-center !mb-8 pt-8 flex flex-col items-center">
+      <!-- 页面标题区域（统一格式，位置和问号图标保持原样） -->
+      <div class="text-center !mb-8 pt-12 flex flex-col items-center">
+        <!--
         <div class="inline-flex items-center justify-center p-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 mb-6">
           <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
         </div>
-        <h1 class="page-title text-[48px] md:text-[56px] font-bold text-white mb-6 leading-tight">
-          <span class="block bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 bg-clip-text text-transparent">
+        -->
+        <h1 class="page-title text-[36px] md:text-[42px] font-black text-white mb-4 leading-tight tracking-tight drop-shadow-lg">
+          <span class="block bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 bg-clip-text text-transparent drop-shadow-md">
             常见问题
           </span>
         </h1>
-        <p class="page-subtitle text-[20px] md:text-[22px] text-white/80 max-w-2xl mx-auto leading-relaxed">
-          快速找到您需要的答案，解决疑惑
-        </p>
-        <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto mt-8 rounded-full"></div>
+        <div class="subtitle-container !mb-6">
+          <p class="page-subtitle text-[16px] md:text-[18px] text-white/90 leading-relaxed font-medium drop-shadow-md subtitle-stroke">
+            快速找到您需要的答案，解决疑惑
+          </p>
+        </div>
+        <div class="flex justify-center space-x-2 !mb-6">
+          <div class="w-8 h-0.5 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full"></div>
+          <div class="w-6 h-0.5 bg-gradient-to-r from-purple-400 to-purple-500 rounded-full"></div>
+          <div class="w-8 h-0.5 bg-gradient-to-r from-pink-400 to-pink-500 rounded-full"></div>
+        </div>
       </div>
 
       <!-- FAQ列表 - 一问一答格式 -->
@@ -59,7 +67,7 @@
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base">
                     <span class="font-semibold text-blue-600 mr-2">A:</span>
-                    在绑定页面中请点击页面上的"获取Steam 64位 ID"按钮，并按照提示进行操作。注意：在绑定前请确保自己打开游戏加速，可以正常访问steam社区。
+                    推荐使用Steam账户登陆，或在个人资料页面中点击"通过Steam绑定"按钮，并按照提示进行操作。注意：访问steam社区可能需要加速器。
                   </p>
                 </div>
               </div>
@@ -88,7 +96,7 @@
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base">
                     <span class="font-semibold text-green-600 mr-2">A:</span>
-                    目前支持2种绑定方式：网页绑定和游戏内绑定。推荐使用网页绑定，操作更加便捷。
+                    目前支持2种绑定方式：网页绑定和游戏内绑定。网页绑定服务于活动中心，游戏绑定服务于积分签到系统。
                   </p>
                 </div>
               </div>
@@ -117,7 +125,7 @@
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base">
                     <span class="font-semibold text-purple-600 mr-2">A:</span>
-                    进入社区服务器，打开聊天窗口，输入 <code class="bg-purple-100 px-2 py-1 rounded text-purple-700 font-mono">!bind 空格+QQ号</code> 即可绑定。
+                    进入社区服务器，打开聊天窗口，输入 <code class="bg-purple-100 px-2 py-1 rounded text-purple-700 font-mono">!bind空格+QQ号</code> 即可绑定。
                   </p>
                 </div>
               </div>
@@ -176,7 +184,7 @@
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base mb-4">
                     <span class="font-semibold text-red-600 mr-2">A:</span>
-                    如遇贴图错误或地图丢失，请先检查网络，然后删除本地社区文件。如有其他问题，请联系群管理。
+                    如遇贴图错误或地图丢失，请先检查网络，或者删除本地社区文件。如有其他问题，请联系管理员。
                   </p>
                   <a
                     href="https://qm.qq.com/cgi-bin/qm/qr?k=Sh4gcapxVV57FqXxe7ZU07-v9u8YvKVN&jump_from=webapi&authKey=HiFkDO97IWzVgJEO6SWn59U3r7vJPEfvGNq8+Y4RVgOHFRN8+CB9WhpjYJmRvyky"
@@ -184,7 +192,7 @@
                     rel="noopener noreferrer"
                   >
                     <n-button type="primary" size="medium" class="action-btn bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 border-none shadow-lg hover:shadow-xl">
-                      🔗 加入QQ群 342289459
+                      🔗 加入QQ群获取帮助
                     </n-button>
                   </a>
                 </div>
@@ -355,7 +363,7 @@
                 <div class="answer-section">
                   <p class="text-gray-700 leading-relaxed text-base">
                     <span class="font-semibold text-cyan-600 mr-2">A:</span>
-                    常用指令包括：<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!bind</code> 绑定账号、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!steamid</code> 查看ID、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!help</code> 查看服务器帮助、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!store</code> 查看商店等。
+                    常用指令包括：<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!bind</code> 绑定账号、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!steamid</code> 查看ID、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!help</code> 查看服务器帮助和使用快捷指令、<code class="bg-cyan-100 px-2 py-1 rounded text-cyan-700 font-mono">!store/!bp</code> 查看商店/换肤模型等。
                   </p>
                 </div>
               </div>
@@ -451,7 +459,7 @@
         </div>
 
         <!-- FAQ项目14 -->
-        <div class="faq-item">
+        <!--<div class="faq-item">
           <div class="faq-card bg-white/95 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-1">
             <div class="flex items-start gap-6">
               <div class="faq-icon-wrapper flex-shrink-0">
@@ -477,7 +485,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div>-->
 
         <!-- FAQ项目15 -->
         <div class="faq-item">
@@ -515,7 +523,7 @@
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          还有疑问？随时联系我们的客服团队
+          若还有疑问请联系QQ群管理员
         </div>
       </div>
     </div>
@@ -547,7 +555,7 @@ export default defineComponent({
   margin: 0 auto;
 }
 .home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.1), #f5f5f5);
 }
 
 /* 页面标题样式 */
@@ -644,6 +652,12 @@ export default defineComponent({
 @keyframes shimmer {
   0% { transform: translateX(-100%) rotate(45deg); }
   100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.text-dark-shadow {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 /* 问答部分样式 */
@@ -792,5 +806,12 @@ code {
 /* 底部提示动画 */
 .text-center > div {
   animation: fadeInUp 1s ease-out 1s both;
+}
+</style>
+<style scoped>
+.subtitle-stroke {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3);
 }
 </style>

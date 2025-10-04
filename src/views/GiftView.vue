@@ -120,7 +120,7 @@ export default defineComponent({
   padding: 4px;
 }
 .home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.4), #f5f5f5);
+  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.1), #f5f5f5);
 }
 .live-room-grid {
   display: grid;
