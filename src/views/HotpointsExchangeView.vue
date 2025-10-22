@@ -376,6 +376,20 @@ interface RuntimeItemState { bought:boolean; warehoused:boolean }
 
 const ITEM_CONFIGS: HotpointsExchangeItemConfig[] = [
   {
+    id: 'anniversary',
+    name: '周年庆限定标签',
+    description: '完结撒花，感谢陪伴',
+    iconUrl: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/anniversary_tag.png',
+    costHotpoints: 500,
+    rarity: '标签',
+    targetTable: 'store_permissions',
+    targetMatchField: 'steamid',         // 用于后端获取用户 steamid (match.by = steamId64)
+    targetMatchBy: 'steamId64',
+    writeFields: {
+      item: '周年庆限定标签'       // 实际写入 item 字段的内容，可根据需要自定义
+    }
+  },
+  {
     id: 'vrc_lime',
     name: '[周年庆限定]lime',
     description: '捐赠人oVo，周年庆限定皮肤，活动期间限时兑换',
