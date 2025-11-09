@@ -143,7 +143,7 @@
               <div class="stat-card">
                 <div class="stat-icon">💎</div>
                 <div class="stat-value">{{ activityPoints || 0 }}</div>
-                <div class="stat-label">活动积分</div>
+                <div class="stat-label">活动积分（已结束）</div>
                 <div class="stat-sublabel">活动服获取积分</div>
                 <div class="stat-glow"></div>
               </div>
@@ -152,7 +152,7 @@
               <div class="stat-card">
                 <div class="stat-icon">🔥</div>
                 <div class="stat-value">{{ hotpointsValue || 0 }}</div>
-                <div class="stat-label">热度值</div>
+                <div class="stat-label">热度值（已结束）</div>
                 <div class="stat-sublabel">活动积分 : 热度值 = 10 : 1</div>
                 <div class="stat-glow"></div>
               </div>
@@ -161,7 +161,7 @@
               <div class="stat-card">
                 <div class="stat-icon">⏰</div>
                 <div class="stat-value">{{ formatPlayTime(userPlayTime) }}</div>
-                <div class="stat-label">游玩时长</div>
+                <div class="stat-label">全服游玩时长</div>
                 <div class="stat-sublabel">总时长</div>
                 <div class="stat-glow"></div>
               </div>
@@ -172,7 +172,7 @@
           <div ref="exchangeSection" class="exchange-section !mb-12">
             <div class="section-header">
               <h3 class="section-title">兑换中心</h3>
-              <p class="section-subtitle">使用祈愿值兑换精美皮肤和道具</p>
+              <p class="section-subtitle">使用祈愿值兑换皮肤和道具</p>
             </div>
 
             <!-- 用户积分显示区域 -->
@@ -301,8 +301,8 @@
           <!-- 第四部分：全服排名 -->
           <div class="server-rankings !mb-12">
             <div class="section-header">
-              <h3 class="section-title">活动排行榜</h3>
-              <p class="section-subtitle">活动服中的部分数据排名</p>
+              <h3 class="section-title">往期活动排行榜</h3>
+              <p class="section-subtitle">活动服中的部分数据排名（已结束）</p>
             </div>
 
             <div v-if="isLoadingRankings" class="loading-container">
@@ -397,8 +397,8 @@
           <!-- 第五部分：游玩时长排行榜 -->
           <div class="playtime-rankings !mb-12">
             <div class="section-header">
-              <h3 class="section-title">游玩时长排行榜</h3>
-              <p class="section-subtitle">感谢各位玩家的陪伴与支持！</p>
+              <h3 class="section-title">全服游玩时长排行榜</h3>
+              <p class="section-subtitle">TOP10</p>
             </div>
 
             <div v-if="isLoadingPlayTimeRankings" class="loading-container">
@@ -430,7 +430,7 @@
               </div>
             </div>
 
-            <!-- 感谢语 -->
+            <!-- 感谢语
             <div class="thanks-section">
               <div class="thanks-card">
                 <div class="text-4xl !mb-4">❤️</div>
@@ -441,7 +441,7 @@
                 </p>
                 <div class="text-2xl !mt-4">🎮✨🚀</div>
               </div>
-            </div>
+            </div> -->
           </div>
 
         </div>
@@ -487,7 +487,7 @@ const playTimeRanking = ref<K4TimesPlayerRankingInfo[]>([])
 // 精选奖品数据（轮播展示）
 const featuredPrizes = ref([
   {
-    name: '[周年庆限定]lime',
+    name: '往期活动奖品：[周年庆限定]lime',
     description: '捐赠人oVo，周年庆限定皮肤，活动期间限时兑换',
     image: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lime_1.png',
     price: 1000,

@@ -375,34 +375,34 @@ interface RuntimeItemState { bought:boolean; warehoused:boolean }
 // 7. 如果后端决定始终 INSERT，可忽略 match.field 做直接插入；若要做“存在则拒绝”，就先查 (steamid,item)
 
 const ITEM_CONFIGS: HotpointsExchangeItemConfig[] = [
-  {
-    id: 'anniversary',
-    name: '周年庆限定标签',
-    description: '完结撒花，感谢陪伴',
-    iconUrl: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/anniversary_tag.png',
-    costHotpoints: 500,
-    rarity: '标签',
-    targetTable: 'store_permissions',
-    targetMatchField: 'steamid',         // 用于后端获取用户 steamid (match.by = steamId64)
-    targetMatchBy: 'steamId64',
-    writeFields: {
-      item: '周年庆限定标签'       // 实际写入 item 字段的内容，可根据需要自定义
-    }
-  },
-  {
-    id: 'vrc_lime',
-    name: '[周年庆限定]lime',
-    description: '捐赠人oVo，周年庆限定皮肤，活动期间限时兑换',
-    iconUrl: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lime_1.png',
-    costHotpoints: 1000,
-    rarity: '换肤模型',
-    targetTable: 'store_permissions',
-    targetMatchField: 'steamid',         // 用于后端获取用户 steamid (match.by = steamId64)
-    targetMatchBy: 'steamId64',
-    writeFields: {
-      item: '[捐赠][周年庆限定]lime'       // 实际写入 item 字段的内容，可根据需要自定义
-    }
-  }
+  //{
+  //  id: 'anniversary',
+  //  name: '周年庆限定标签',
+  //  description: '完结撒花，感谢陪伴',
+  //  iconUrl: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/anniversary_tag.png',
+  //  costHotpoints: 500,
+  //  rarity: '标签',
+  //  targetTable: 'store_permissions',
+  //  targetMatchField: 'steamid',         // 用于后端获取用户 steamid (match.by = steamId64)
+  //  targetMatchBy: 'steamId64',
+  //  writeFields: {
+  //    item: '周年庆限定标签'       // 实际写入 item 字段的内容，可根据需要自定义
+  //  }
+  //},
+  //{
+  //  id: 'vrc_lime',
+  //  name: '[周年庆限定]lime',
+  //  description: '捐赠人oVo，周年庆限定皮肤，活动期间限时兑换',
+  //  iconUrl: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lime_1.png',
+  //  costHotpoints: 1000,
+  //  rarity: '换肤模型',
+  //  targetTable: 'store_permissions',
+  //  targetMatchField: 'steamid',         // 用于后端获取用户 steamid (match.by = steamId64)
+  //  targetMatchBy: 'steamId64',
+  //  writeFields: {
+  //    item: '[捐赠][周年庆限定]lime'       // 实际写入 item 字段的内容，可根据需要自定义
+  //  }
+  //},
   //{
   //  id: 'testers',
   //  name: '[测试限定标签][质检员]',
