@@ -15,9 +15,10 @@
       </div>
     </div>
     <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
+    <div class="registration-overlay pointer-events-none fixed inset-0 z-10"></div>
 
     <!-- 装饰性背景元素 -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-20">
       <div class="floating-shapes">
         <div class="shape shape-1"></div>
         <div class="shape shape-2"></div>
@@ -29,7 +30,7 @@
     </div>
 
     <!-- 页面内容 -->
-    <div class="relative z-20 h-screen flex flex-col justify-center items-center px-4">
+    <div class="relative z-30 h-screen flex flex-col justify-center items-center px-4">
       <!-- 页面标题区域 -->
       <div class="text-center mb-8 max-w-2xl">
         <!-- 装饰性顶部元素 -->
@@ -99,9 +100,9 @@
             class="card-inner bg-white/98 backdrop-blur-2xl rounded-[2rem] border border-white/30 shadow-2xl hover:shadow-3xl transition-all duration-700"
           >
             <!-- 卡片顶部装饰条 -->
-            <div
-              class="card-header-decoration h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-[2rem] mb-0"
-            ></div>
+            <div class="signin-card-header">
+              <div class="signin-card-accent"></div>
+            </div>
 
             <div class="p-8">
               <!-- 卡片头部 -->
@@ -585,6 +586,16 @@ export default defineComponent({
   background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.1), #f5f5f5);
 }
 
+.registration-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.18) 40%,
+    rgba(245, 245, 245, 0.85) 100%
+  );
+  opacity: 1;
+}
+
 /* 装饰性浮动形状 */
 .floating-shapes {
   position: absolute;
@@ -715,6 +726,22 @@ export default defineComponent({
 /* 签到卡片样式 */
 .signin-card {
   animation: cardEntry 1.2s ease-out;
+}
+
+.signin-card-header {
+  display: flex;
+  justify-content: center;
+  padding: 0 2rem;
+  margin-bottom: 0;
+}
+
+.signin-card-accent {
+  width: 65%;
+  max-width: 220px;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3b82f6, #9333ea, #ec4899);
+  box-shadow: 0 6px 18px rgba(147, 51, 234, 0.25);
 }
 
 .card-inner {
