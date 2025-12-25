@@ -731,13 +731,12 @@ export default defineComponent({
 .signin-card-header {
   display: flex;
   justify-content: center;
-  padding: 0 2rem;
+  padding: 0 0.5rem;
   margin-bottom: 0;
 }
 
 .signin-card-accent {
-  width: 65%;
-  max-width: 220px;
+  width: 100%;
   height: 6px;
   border-radius: 999px;
   background: linear-gradient(90deg, #3b82f6, #9333ea, #ec4899);
