@@ -44,21 +44,21 @@
             </p>
           </div>
 
-          <div class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- 加载状态 -->
-            <div v-if="loading" class="col-span-full text-center py-8">
-              <div class="text-white text-lg">正在加载贡献者数据...</div>
+          <div v-if="loading" class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div v-for="s in 8" :key="'donor-skeleton-' + s" class="contributor-card">
+              <div class="skeleton-card">
+                <div class="skeleton-avatar"></div>
+                <div class="skeleton-line skeleton-line-lg"></div>
+                <div class="skeleton-line skeleton-line-sm"></div>
+              </div>
             </div>
-
-            <!-- 错误状态 -->
-            <div v-else-if="error" class="col-span-full text-center py-8">
-              <div class="text-red-300 text-lg mb-4">{{ error }}</div>
-              <n-button @click="fetchContributors" type="primary">重试</n-button>
-            </div>
-
-            <!-- 贡献者列表 -->
+          </div>
+          <div v-else-if="error" class="contributor-feedback text-center py-8">
+            <div class="text-red-300 text-lg mb-4">{{ error }}</div>
+            <n-button @click="fetchContributors" type="primary">重试</n-button>
+          </div>
+          <div v-else class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <div
-              v-else
               v-for="donor in contributeList.donors"
               :key="donor.name"
               class="contributor-card group"
@@ -96,21 +96,21 @@
             </p>
           </div>
 
-          <div class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- 加载状态 -->
-            <div v-if="loading" class="col-span-full text-center py-8">
-              <div class="text-white text-lg">正在加载技术支持者数据...</div>
+          <div v-if="loading" class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div v-for="s in 8" :key="'support-skeleton-' + s" class="contributor-card">
+              <div class="skeleton-card">
+                <div class="skeleton-avatar"></div>
+                <div class="skeleton-line skeleton-line-lg"></div>
+                <div class="skeleton-line skeleton-line-sm"></div>
+              </div>
             </div>
-
-            <!-- 错误状态 -->
-            <div v-else-if="error" class="col-span-full text-center py-8">
-              <div class="text-red-300 text-lg mb-4">{{ error }}</div>
-              <n-button @click="fetchContributors" type="primary">重试</n-button>
-            </div>
-
-            <!-- 技术支持者列表 -->
+          </div>
+          <div v-else-if="error" class="contributor-feedback text-center py-8">
+            <div class="text-red-300 text-lg mb-4">{{ error }}</div>
+            <n-button @click="fetchContributors" type="primary">重试</n-button>
+          </div>
+          <div v-else class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <div
-              v-else
               v-for="supporter in contributeList.techSupporters"
               :key="supporter.name"
               class="contributor-card group"
@@ -275,6 +275,61 @@ const goToQQGroup = () => {
 
 .contributor-card:hover .contributor-avatar {
   transform: translateY(-2px);
+}
+
+.skeleton-card,
+.skeleton-avatar,
+.skeleton-line {
+  background: linear-gradient(120deg, rgba(226, 232, 240, 0.35), rgba(255, 255, 255, 0.55), rgba(226, 232, 240, 0.35));
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.skeleton-card {
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+}
+
+.skeleton-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+.skeleton-line {
+  height: 14px;
+  width: 80%;
+  border-radius: 999px;
+}
+
+.skeleton-line-lg {
+  width: 70%;
+}
+
+.skeleton-line-sm {
+  width: 90%;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.contributor-feedback {
+  color: #f8fafc;
 }
 
 /* 响应式优化 */

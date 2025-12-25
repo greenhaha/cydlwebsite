@@ -67,7 +67,6 @@ import {
   AlertCircle as AlertCircleIcon,
   Book as BookIcon,
   ChevronDown as ChevronDownIcon,
-  Gift as GiftIcon,
   Heart as HeartIcon,
   Home as HomeIcon,
   LogOut as LogOutIcon,
@@ -77,6 +76,7 @@ import {
   // Settings as SettingsIcon,
   WomanSharp as ModelIcon,
   Trophy as TrophyIcon,
+  Videocam as VideocamIcon,
 } from '@vicons/ionicons5'
 import type { MenuOption } from 'naive-ui'
 import {  NButton, NDrawer, NDropdown, NIcon, NMenu } from 'naive-ui'
@@ -173,10 +173,10 @@ const menuOptions: MenuOption[] = [
             path: '/gifts',
           },
         },
-        { default: () => '礼物' },
+        { default: () => '直播' },
       ),
-    key: 'gift-page',
-    icon: renderIcon(GiftIcon),
+    key: 'live-page',
+    icon: renderIcon(VideocamIcon),
   },
   {
     label: () =>
@@ -264,7 +264,7 @@ export default defineComponent({
         '/server-status': 'server-status-page',
         '/anniversary-preheating': 'anniversary-preheating-page',
         '/anniversary': 'anniversary-page',
-        '/gifts': 'gift-page',
+        '/gifts': 'live-page',
         '/contribute': 'contribute-page',
         '/activity': 'activity-page',
       }

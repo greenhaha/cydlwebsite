@@ -234,6 +234,106 @@ export interface LotteryPrize {
   probability: number
 }
 
+export type ShowcaseType = 'LIVE' | 'VIDEO'
+
+export type ShowcaseStatus = 'PUBLISHED' | 'REVIEWING' | 'REJECTED'
+
+export interface ShowcaseResponse {
+  id: number
+  type: ShowcaseType
+  status: ShowcaseStatus
+  title: string
+  author: string
+  coverUrl?: string
+  originalUrl: string
+  submittedBy?: string
+  submitterId?: number
+  createdAt: string
+}
+
+export interface ShowcaseAdminProfile {
+  admin: boolean
+  email?: string | null
+}
+
+export interface PagedResponse<T> {
+  items: T[]
+  total: number
+  page: number
+  size: number
+  hasNext: boolean
+}
+
+export interface ShowcaseListParams {
+  type?: ShowcaseType
+  status?: ShowcaseStatus
+  page?: number
+  size?: number
+}
+
+export const showcaseApi = {
+  async list(params: ShowcaseListParams = {}) {
+    const { type, status, page, size } = params
+    const searchParams = new URLSearchParams()
+    if (type) searchParams.append('type', type)
+    if (status) searchParams.append('status', status)
+    if (page !== undefined) searchParams.append('page', String(page))
+    if (size !== undefined) searchParams.append('size', String(size))
+    const query = searchParams.toString()
+    const response = await apiRequest<ApiResponse<PagedResponse<ShowcaseResponse>>>(
+      `/showcases${query ? `?${query}` : ''}`
+    )
+    if (!response.success || !response.data) {
+      throw new Error(response.message || '获取投稿列表失败')
+    }
+    return response.data
+  },
+  async submit(type: ShowcaseType, url: string) {
+    const response = await apiRequest<ApiResponse<ShowcaseResponse>>('/showcases', {
+      method: 'POST',
+      body: JSON.stringify({ type, url }),
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || '投稿失败')
+    }
+    return response.data
+  },
+  async update(id: number, payload: { url: string }) {
+    const response = await apiRequest<ApiResponse<ShowcaseResponse>>(`/showcases/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || '更新失败')
+    }
+    return response.data
+  },
+  async remove(id: number) {
+    const response = await apiRequest<ApiResponse<null>>(`/showcases/${id}`, {
+      method: 'DELETE',
+    })
+    if (!response.success) {
+      throw new Error(response.message || '删除失败')
+    }
+  },
+  async adminProfile() {
+    const response = await apiRequest<ApiResponse<ShowcaseAdminProfile>>('/showcases/admin/profile')
+    if (!response.success || !response.data) {
+      throw new Error(response.message || '查询管理员信息失败')
+    }
+    return response.data
+  },
+  async refresh(type?: ShowcaseType) {
+    const params = type ? `?type=${type}` : ''
+    const response = await apiRequest<ApiResponse<null>>(`/showcases/refresh${params}`, {
+      method: 'POST',
+    })
+    if (!response.success) {
+      throw new Error(response.message || '刷新失败')
+    }
+  },
+}
+
 // 认证API
 export const authApi = {
   // 用户登录

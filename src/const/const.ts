@@ -8,6 +8,92 @@ export const groupType = {
   7: '活动皮肤',
 }
 
+type TagColor = {
+    color: string
+    textColor: string
+    borderColor: string
+}
+
+type AttributeMetaMap = {
+    [key: number]: {
+        label: string
+        color: TagColor
+    }
+}
+
+export const modelTypeMeta: AttributeMetaMap = {
+    0: {
+        label: '免费模型',
+        color: { color: '#ecfccb', textColor: '#365314', borderColor: '#84cc16' },
+    },
+    1: {
+        label: '普通模型',
+        color: { color: '#dbeafe', textColor: '#1e3a8a', borderColor: '#2563eb' },
+    },
+    2: {
+        label: '换肤模型',
+        color: { color: '#ede9fe', textColor: '#5b21b6', borderColor: '#8b5cf6' },
+    },
+}
+
+export const modelQualityMeta: AttributeMetaMap = {
+    1: {
+        label: 'F',
+        color: { color: '#fee2e2', textColor: '#991b1b', borderColor: '#fca5a5' },
+    },
+    2: {
+        label: 'E',
+        color: { color: '#ffe4e6', textColor: '#9d174d', borderColor: '#f472b6' },
+    },
+    3: {
+        label: 'D',
+        color: { color: '#fef3c7', textColor: '#92400e', borderColor: '#fcd34d' },
+    },
+    4: {
+        label: 'C',
+        color: { color: '#e0f2fe', textColor: '#075985', borderColor: '#38bdf8' },
+    },
+    5: {
+        label: 'B',
+        color: { color: '#dcfce7', textColor: '#166534', borderColor: '#86efac' },
+    },
+    6: {
+        label: 'SR',
+        color: { color: '#ede9fe', textColor: '#5b21b6', borderColor: '#c4b5fd' },
+    },
+    7: {
+        label: 'SSR',
+        color: { color: '#fef9c3', textColor: '#92400e', borderColor: '#fde047' },
+    },
+}
+
+export const modelCategoryMeta: AttributeMetaMap = {
+    1: {
+        label: '社区皮肤',
+        color: { color: '#e0f2fe', textColor: '#0c4a6e', borderColor: '#38bdf8' },
+    },
+    2: {
+        label: '个人皮肤',
+        color: { color: '#fef2f2', textColor: '#991b1b', borderColor: '#fecaca' },
+    },
+    3: {
+        label: '通用皮肤',
+        color: { color: '#f5f5f4', textColor: '#3f3f46', borderColor: '#d6d3d1' },
+    },
+    4: {
+        label: '捐赠皮肤',
+        color: { color: '#fff7ed', textColor: '#9a3412', borderColor: '#fdba74' },
+    },
+    5: {
+        label: '权限皮肤',
+        color: { color: '#f3e8ff', textColor: '#6b21a8', borderColor: '#d8b4fe' },
+    },
+    6: {
+        label: '其他皮肤',
+        color: { color: '#ede9fe', textColor: '#4c1d95', borderColor: '#c4b5fd' },
+    },
+}
+
 export const modelList = [
   {
       "modelId": 1,

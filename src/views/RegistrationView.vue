@@ -333,7 +333,10 @@
 
 <script lang="ts">
 import axios from 'axios'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
+import { authApi } from '@/services/api'
 
 export default defineComponent({
   setup() {
@@ -342,6 +345,64 @@ export default defineComponent({
     const gainedPoints = ref(0)
     const errorMessage = ref('')
     const isLoading = ref(false)
+    const authStore = useAuthStore()
+    const { user, isAuthenticated, token } = storeToRefs(authStore)
+    const profilePrefillAttempted = ref(false)
+
+    const tryAutoFillQQ = () => {
+      if (isAuthenticated.value && user.value?.qqId && !qqNumber.value) {
+        qqNumber.value = user.value.qqId
+      }
+    }
+
+    const fetchBoundQQ = async () => {
+      if (!isAuthenticated.value || profilePrefillAttempted.value) {
+        return
+      }
+
+      profilePrefillAttempted.value = true
+      try {
+        const profile = await authApi.getUserProfile()
+        if (profile.qqId && !qqNumber.value) {
+          qqNumber.value = profile.qqId
+        }
+      } catch (error) {
+        console.error('获取用户QQ信息失败:', error)
+        profilePrefillAttempted.value = false
+      }
+    }
+
+    onMounted(() => {
+      if (!user.value && token.value) {
+        authStore.validateToken().catch(() => {
+          /* token 校验失败时保持静默，点击签到时再提示 */
+        }).finally(() => {
+          fetchBoundQQ()
+        })
+      } else {
+        fetchBoundQQ()
+      }
+    })
+
+    watch(
+      () => isAuthenticated.value,
+      (authenticated) => {
+        if (!authenticated) {
+          profilePrefillAttempted.value = false
+          return
+        }
+        tryAutoFillQQ()
+        fetchBoundQQ()
+      },
+      { immediate: true }
+    )
+
+    watch(
+      () => user.value?.qqId,
+      () => {
+        tryAutoFillQQ()
+      }
+    )
 
     // 创建消息弹窗函数
     const showMessage = (type: 'success' | 'error', title: string, content: string) => {

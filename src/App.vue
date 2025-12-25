@@ -8,18 +8,20 @@ import {
   NLayoutHeader,
   NSpace,
   NMessageProvider,
+  NDialogProvider,
 } from 'naive-ui'
 import { RouterView, useRoute } from 'vue-router'
 import { computed } from 'vue'
 import AppFooter from './components/Layout/AppFooter.vue'
 import HeaderMenu from './components/Layout/HeaderMenu.vue'
+import FloatingQuickActions from './components/common/FloatingQuickActions.vue'
 
 const route = useRoute()
 
 // Header 显示逻辑：某些沉浸式页面隐藏顶部导航
 const shouldShowHeader = computed(() => {
-  const hiddenHeaderRoutes = ['/anniversary', '/challenge', '/lottery', '/anniversary-preheating', '/wish-credit-exchange', '/wish-exchange', '/activity', '/hotpoints-exchange']
-  return !hiddenHeaderRoutes.includes(route.path)
+  const hiddenHeaderPrefixes = ['/anniversary', '/challenge', '/lottery', '/anniversary-preheating', '/wish-credit-exchange', '/wish-exchange', '/activity', '/hotpoints-exchange', '/profile']
+  return !hiddenHeaderPrefixes.some(prefix => route.path === prefix || route.path.startsWith(`${prefix}/`))
 })
 
 // Footer 显示逻辑：只有 meta.hideFooter = true 的路由隐藏，其余显示
@@ -47,20 +49,23 @@ const themeOverrides: GlobalThemeOverrides = {
 <template>
   <n-config-provider preflight-style-disabled :theme-overrides="themeOverrides">
     <n-message-provider>
-      <n-space vertical size="large">
-        <n-layout class="relative">
-          <n-layout-header v-if="shouldShowHeader" class="n-layout-header absolute top-0 left-0 right-0 z-1">
-            <div class="w-full flex align-middle"><HeaderMenu /></div>
+      <n-dialog-provider>
+        <n-space vertical size="large">
+          <n-layout class="relative">
+            <n-layout-header v-if="shouldShowHeader" class="n-layout-header absolute top-0 left-0 right-0 z-1">
+              <div class="w-full flex align-middle"><HeaderMenu /></div>
 
-            <!-- <div><RouterLink to="/">Home</RouterLink></div>
-            <div><RouterLink to="/about">About</RouterLink></div> -->
-          </n-layout-header>
-          <n-layout-content class="min-h-[calc(100vh)]">
-            <RouterView />
-          </n-layout-content>
-          <n-layout-footer v-if="shouldShowFooter" class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
-        </n-layout>
-      </n-space>
+              <!-- <div><RouterLink to="/">Home</RouterLink></div>
+              <div><RouterLink to="/about">About</RouterLink></div> -->
+            </n-layout-header>
+            <n-layout-content class="min-h-[calc(100vh)]">
+              <RouterView />
+            </n-layout-content>
+            <n-layout-footer v-if="shouldShowFooter" class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
+            <FloatingQuickActions />
+          </n-layout>
+        </n-space>
+      </n-dialog-provider>
     </n-message-provider>
   </n-config-provider>
 </template>
@@ -77,6 +82,7 @@ export default defineComponent({
     NLayoutHeader,
     NLayoutFooter,
     NSpace,
+    NDialogProvider,
   },
 })
 </script>
@@ -90,6 +96,7 @@ export default defineComponent({
   background-color: #001529;
   width: 100vw;
   display: flex;
+  z-index: 50;
 }
 
 n-layout-footer {
