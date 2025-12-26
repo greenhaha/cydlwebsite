@@ -101,7 +101,16 @@
                   <n-ellipsis :line-clamp="2" class="card-title">{{ item.title }}</n-ellipsis>
                   <p class="card-author">{{ item.type === 'LIVE' ? '主播' : '作者' }}：{{ item.author }}</p>
                   <div class="card-meta">
-                    <span>提交人：{{ item.submittedBy }}</span>
+                    <span class="card-submitter">
+                      <span>提交人：{{ item.submittedBy }}</span>
+                      <span
+                        v-if="item.submitterTag"
+                        class="submitter-tag"
+                        :style="getSubmitterTagStyle(item.submitterTagColor)"
+                      >
+                        {{ item.submitterTag }}
+                      </span>
+                    </span>
                     <n-button
                       v-if="canDeleteEntry(item)"
                       size="tiny"
@@ -228,6 +237,8 @@ type ShowcaseEntry = {
   createdAt: string
   status: ShowcaseStatus
   submitterId?: number
+  submitterTag?: string | null
+  submitterTagColor?: string | null
   type: ShowcaseType
 }
 
@@ -303,6 +314,36 @@ const extractRoomId = (parsed: URL): string | null => {
   return match ? match[1] : null
 }
 
+const HEX_COLOR_RE = /^#(?:[0-9a-fA-F]{3}){1,2}$/
+
+const toHalfWidth = (value: string) =>
+  value.replace(/[\uFF01-\uFF5E]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0)).replace(/\u3000/g, ' ')
+
+const sanitizeColorValue = (value: string | null | undefined) => {
+  if (!value) return ''
+  return toHalfWidth(value).trim()
+}
+
+const normalizeHexColor = (value: string) => {
+  if (value.length === 4) {
+    return `#${value
+      .slice(1)
+      .split('')
+      .map((ch) => ch + ch)
+      .join('')}`
+  }
+  return value
+}
+
+const hexToRgba = (value: string, alpha: number) => {
+  const normalized = normalizeHexColor(value)
+  const numeric = parseInt(normalized.slice(1), 16)
+  const r = (numeric >> 16) & 255
+  const g = (numeric >> 8) & 255
+  const b = numeric & 255
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
 const validateBilibiliUrl = (value: string, type: ShowcaseType): ValidationResult => {
   const trimmed = value.trim()
   if (!trimmed) {
@@ -338,6 +379,8 @@ const transformEntry = (item: ShowcaseResponse): ShowcaseEntry => ({
   createdAt: item.createdAt,
   status: item.status,
   submitterId: item.submitterId,
+  submitterTag: item.submitterTag || null,
+  submitterTagColor: item.submitterTagColor || null,
   type: item.type,
 })
 
@@ -441,6 +484,23 @@ export default defineComponent({
       const sanitizedUrl = validation.value || url.trim()
       const response = await showcaseApi.submit(type, sanitizedUrl)
       return transformEntry(response)
+    }
+
+    const getSubmitterTagStyle = (color?: string | null): Record<string, string> => {
+      const sanitized = sanitizeColorValue(color)
+      if (!sanitized) return {}
+      if (HEX_COLOR_RE.test(sanitized)) {
+        const normalized = normalizeHexColor(sanitized)
+        return {
+          '--tag-fg': normalized,
+          '--tag-border': hexToRgba(normalized, 0.45),
+          '--tag-bg': hexToRgba(normalized, 0.18),
+        }
+      }
+      return {
+        '--tag-fg': sanitized,
+        '--tag-border': sanitized,
+      }
     }
 
     const doDelete = async (type: ShowcaseType, entryId: number) => {
@@ -702,6 +762,7 @@ export default defineComponent({
       closeManageModal,
       manageTarget,
       submitPlaceholder,
+      getSubmitterTagStyle,
     }
   },
 })
@@ -1021,6 +1082,24 @@ export default defineComponent({
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.card-submitter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.submitter-tag {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--tag-bg, rgba(59, 130, 246, 0.18));
+  color: var(--tag-fg, #bfdbfe);
+  border: 1px solid var(--tag-border, rgba(59, 130, 246, 0.35));
 }
 
 .add-card {

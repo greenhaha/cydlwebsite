@@ -248,12 +248,16 @@ export interface ShowcaseResponse {
   originalUrl: string
   submittedBy?: string
   submitterId?: number
+  submitterTag?: string | null
+  submitterTagColor?: string | null
   createdAt: string
 }
 
 export interface ShowcaseAdminProfile {
   admin: boolean
   email?: string | null
+  tag?: string | null
+  tagColor?: string | null
 }
 
 export interface PagedResponse<T> {
