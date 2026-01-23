@@ -301,8 +301,8 @@
           <!-- 第四部分：全服排名 -->
           <div class="server-rankings !mb-12">
             <div class="section-header">
-              <h3 class="section-title">往期活动排行榜</h3>
-              <p class="section-subtitle">活动服中的部分数据排名（已结束）</p>
+              <h3 class="section-title">全服排行榜</h3>
+              <p class="section-subtitle">TOP3</p>
             </div>
 
             <div v-if="isLoadingRankings" class="loading-container">
