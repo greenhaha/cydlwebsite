@@ -642,6 +642,7 @@ export interface Supporter {
 export interface ContributeResponse {
   donors: Supporter[]
   techSupporters: Supporter[]
+  specialThanks: Supporter[]
 }
 
 // 贡献者API

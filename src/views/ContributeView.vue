@@ -22,10 +22,10 @@
         <!-- 页面标题 -->
       <div class="hero-section text-center py-12 px-4">
         <h1 class="hero-title text-4xl md:text-6xl font-bold text-white !mb-4 text-shadow-lg">
-          致谢贡献者
+          贡献者名单
         </h1>
         <p class="hero-subtitle text-lg md:text-xl text-white max-w-2xl mx-auto subtitle-stroke">
-          感谢所有为HLYM服务器发展做出贡献的朋友们，正是因为有了你们的支持，我们才能为大家提供更好的游戏体验
+          感谢所有为服务器提供了帮助、赞助、以及技术支持的个人或团体
         </p>
       </div>
       </div>
@@ -37,10 +37,10 @@
         <section class="donors-section mb-12">
           <div class="section-header text-center !mb-8">
             <h2 class="section-title text-3xl md:text-4xl font-bold mb-4 text-shadow">
-              <span class="emoji-title">💝</span> <span class="block bg-gradient-to-r from-blue-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-md" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">赞助支持者</span>
+              <span class="emoji-title">💝</span> <span class="block bg-gradient-to-r from-blue-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-md" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">赞助者名单</span>
             </h2>
             <p class="section-description text-white text-lg subtitle-stroke">
-              感谢以下朋友们的慷慨赞助，为服务器的运营提供了强有力的支持
+              感谢你们的慷慨赞助，为服务器的运营提供了强有力的支持！
             </p>
           </div>
 
@@ -89,7 +89,7 @@
         <section class="tech-supporters-section !mt-12">
           <div class="section-header text-center !mb-8">
             <h2 class="section-title text-3xl md:text-4xl font-bold mb-4 text-shadow">
-              <span class="emoji-title">🛠️</span> <span class="block bg-gradient-to-r from-blue-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-md" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">技术开发团队</span>
+              <span class="emoji-title">🛠️</span> <span class="block bg-gradient-to-r from-blue-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-md" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">技术开发者名单</span>
             </h2>
             <p class="section-description text-white text-lg subtitle-stroke">
               感谢开发团队成员们的辛勤付出，为大家提供了优质的技术支持和功能开发
@@ -136,6 +136,58 @@
             </div>
           </div>
         </section>
+
+        <section class="special-thanks-section !mt-12">
+          <div class="section-header text-center !mb-8">
+            <h2 class="section-title text-3xl md:text-4xl font-bold mb-4 text-shadow">
+              <span class="emoji-title">🌟</span>
+              <span class="block bg-gradient-to-r from-blue-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-md" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">特别鸣谢</span>
+            </h2>
+            <p class="section-description text-white text-lg subtitle-stroke">
+              特别感谢以下个人或团体的支持与协助
+            </p>
+          </div>
+
+          <div v-if="loading" class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div v-for="s in 8" :key="'special-skeleton-' + s" class="contributor-card">
+              <div class="skeleton-card">
+                <div class="skeleton-avatar"></div>
+                <div class="skeleton-line skeleton-line-lg"></div>
+                <div class="skeleton-line skeleton-line-sm"></div>
+              </div>
+            </div>
+          </div>
+          <div v-else-if="error" class="contributor-feedback text-center py-8">
+            <div class="text-red-300 text-lg mb-4">{{ error }}</div>
+            <n-button @click="fetchContributors" type="primary">重试</n-button>
+          </div>
+          <div v-else class="contributors-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div
+              v-for="supporter in contributeList.specialThanks"
+              :key="supporter.name"
+              class="contributor-card group"
+            >
+              <n-card
+                class="h-full backdrop-blur-md !bg-white/95 border border-white/40 hover:bg-white/98 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl"
+                :bordered="false"
+              >
+                <div class="text-center">
+                  <div class="contributor-avatar mb-4">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                      {{ getInitials(supporter.name) }}
+                    </div>
+                  </div>
+                   <h3 class="contributor-name text-xl font-semibold text-gray-950 mb-3 font-bold drop-shadow-sm">
+                     {{ supporter.name.trim() }}
+                   </h3>
+                   <p class="contributor-description text-gray-800 text-sm leading-relaxed font-medium drop-shadow-sm">
+                     {{ supporter.supportDescription }}
+                   </p>
+                </div>
+              </n-card>
+            </div>
+          </div>
+        </section>
         <div class="flex justify-center">
           <!-- 感谢语 -->
         <section class="thanks-section text-center mt-16 py-12">
@@ -143,11 +195,10 @@
             <n-card class="backdrop-blur-sm bg-gradient-to-b from-black/40 via-gray-800/60 to-black/40 !bg-none border border-white/20" :bordered="false" style="background: linear-gradient(180deg,rgba(0,0,0,0.4),rgba(31,41,55,0.6),rgba(0,0,0,0.4));">
               <div class="p-8">
                 <h3 class="text-2xl md:text-3xl font-bold text-white !mb-6 text-shadow">
-                  🙏 特别感谢
+                  🙏 开发者寄言
                 </h3>
                 <p class="text-white text-lg leading-relaxed subtitle-stroke">
-                  每一份支持都弥足珍贵，每一个贡献都值得铭记。HLYM服务器能够持续为大家提供优质的游戏环境，离不开所有贡献者的无私付出。
-                  未来我们将继续努力，为大家带来更好的游戏体验！
+                  感谢各位长久的支持，我们将会继续努力，为大家带来更好的服务和体验！如果你也想成为贡献者，欢迎加入我们的QQ群与我们联系！成为贡献者将会有特别奖励！
                 </p>
                 <div class="!mt-8">
                   <n-button type="primary" size="large" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-lg" @click="goToQQGroup">
@@ -176,7 +227,8 @@ import { contributeApi, type ContributeResponse } from '../services/api'
 // 响应式数据
 const contributeList = ref<ContributeResponse>({
   donors: [],
-  techSupporters: []
+  techSupporters: [],
+  specialThanks: []
 })
 const loading = ref(true)
 const error = ref<string | null>(null)
