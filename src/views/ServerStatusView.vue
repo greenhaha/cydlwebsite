@@ -278,7 +278,7 @@ onUnmounted(() => {
 <style scoped>
 /* 页面背景容器：允许添加自定义背景图片与遮罩 */
 .server-status-page { position:relative; min-height:100vh; overflow:hidden; }
-.status-bg-image { background: var(--server-bg-image, url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg5.gif')) center/cover no-repeat; filter:brightness(var(--server-bg-brightness,1.15)); }
+.status-bg-image { background: var(--server-bg-image, url('https://oss.kigermap.com/frontend/assets/image/bg5.gif')) center/cover no-repeat; filter:brightness(var(--server-bg-brightness,1.15)); }
 
 .server-status-container { position:relative; min-height:calc(100vh - 80px); padding:120px 24px 80px; display:flex; justify-content:center; align-items:flex-start; z-index:10; pointer-events:none; }
 

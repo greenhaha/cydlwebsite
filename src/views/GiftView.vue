@@ -2,7 +2,7 @@
   <div class="gift-page">
     <div class="gift-bg">
       <video
-        src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/giftbg.mp4"
+        src="https://oss.kigermap.com/frontend/assets/video/bg/giftbg.mp4"
         muted
         autoplay
         loop

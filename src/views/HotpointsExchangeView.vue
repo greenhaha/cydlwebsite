@@ -3,7 +3,7 @@
     <!-- 背景层，与祈愿值页面统一 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')"></div>
+          style="background-image: url('https://oss.kigermap.com/frontend/assets/image/bg1.webp')"></div>
     </div>
     <div class="pointer-events-none fixed inset-0 z-0"></div>
 
@@ -379,7 +379,7 @@ const ITEM_CONFIGS: HotpointsExchangeItemConfig[] = [
   //  id: 'anniversary',
   //  name: '周年庆限定标签',
   //  description: '完结撒花，感谢陪伴',
-  //  iconUrl: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/anniversary_tag.png',
+  //  iconUrl: 'https://oss.kigermap.com/frontend/assets/image/anniversary_tag.png',
   //  costHotpoints: 500,
   //  rarity: '标签',
   //  targetTable: 'store_permissions',
@@ -393,7 +393,7 @@ const ITEM_CONFIGS: HotpointsExchangeItemConfig[] = [
   //  id: 'vrc_lime',
   //  name: '[周年庆限定]lime',
   //  description: '捐赠人oVo，周年庆限定皮肤，活动期间限时兑换',
-  //  iconUrl: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lime_1.png',
+  //  iconUrl: 'https://oss.kigermap.com/frontend/assets/image/lime_1.png',
   //  costHotpoints: 1000,
   //  rarity: '换肤模型',
   //  targetTable: 'store_permissions',
@@ -407,7 +407,7 @@ const ITEM_CONFIGS: HotpointsExchangeItemConfig[] = [
   //  id: 'testers',
   //  name: '[测试限定标签][质检员]',
   //  description: '参与9月26~10月1日测试奖励',
-  //  iconUrl: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/hlymcn.jpg',
+  //  iconUrl: 'https://oss.kigermap.com/frontend/assets/image/hlymcn.jpg',
   //  costHotpoints: 100,
   //  rarity: '标签',
   //  targetTable: 'store_permissions',
