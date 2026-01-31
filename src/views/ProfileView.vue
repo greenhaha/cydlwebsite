@@ -210,7 +210,7 @@
                   </button>
                 </div>
 
-                <p class="text-blue-200 text-sm !mt-2">用于联系和通知（与签到系统绑定不互通）</p>
+                <p class="text-blue-200 text-sm !mt-2">服务器内绑定账号后请重新登陆网站刷新！</p>
               </div>
 
               <!-- Steam64ID绑定 -->
