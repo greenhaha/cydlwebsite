@@ -43,6 +43,31 @@ const themeOverrides: GlobalThemeOverrides = {
     itemIconColorActiveHorizontal: '#FFFFFFFF',
     itemIconColorActiveHoverHorizontal: '#FFFFFFFF',
   },
+  Select: {
+    color: 'var(--theme-secondary-bg)',
+    textColor: 'var(--theme-text)',
+    placeholderColor: 'var(--theme-muted)',
+    border: '1px solid var(--theme-border)',
+    borderHover: '1px solid var(--theme-border)',
+    borderActive: '1px solid var(--theme-border)',
+    menuColor: 'var(--theme-card-bg)',
+    optionColorPending: 'var(--theme-secondary-bg)',
+    optionColorActive: 'var(--theme-secondary-bg)',
+    optionColorSelected: 'var(--theme-secondary-bg)',
+    optionTextColor: 'var(--theme-text)',
+    optionTextColorActive: 'var(--theme-text)',
+    optionTextColorSelected: 'var(--theme-text)',
+    optionCheckColor: '#22c55e',
+  },
+  InternalSelection: {
+    color: 'var(--theme-secondary-bg)',
+    textColor: 'var(--theme-text)',
+    placeholderColor: 'var(--theme-muted)',
+    border: '1px solid var(--theme-border)',
+    borderHover: '1px solid var(--theme-border)',
+    borderActive: '1px solid var(--theme-border)',
+  },
+
 }
 </script>
 
@@ -88,16 +113,18 @@ export default defineComponent({
 </script>
 <style scoped>
 .n-layout-header {
-  height: 64px;
-  padding: 0 50px;
-  color: #fff;
-  line-height: 64px;
-  /* background: #ebebeb; */
-  background-color: #001529;
+  height: 0;
+  padding: 0;
+  color: var(--theme-text);
+  line-height: 0;
+  background-color: transparent;
   width: 100vw;
   display: flex;
   z-index: 50;
 }
+
+
+
 
 n-layout-footer {
   text-align: center;

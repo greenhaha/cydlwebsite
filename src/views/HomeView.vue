@@ -1,414 +1,371 @@
-
-
-<template>
+﻿<template>
   <div class="home-page">
-    <!-- 背景视频 -->
-    <div class="fixed inset-0 w-full h-full">
-      <div class="pointer-events-none absolute inset-0">
-        <video
-          src="https://oss.kigermap.com/frontend/assets/video/bg/hecheng1.mp4"
-          muted
-          autoplay="true"
-          class="w-full h-full bg-cover bg-center min-w-full min-h-full object-cover globalVideo"
-          loop="true"
-          preload="metadata"
-          transition="all duration-100 cubic-bezier(.4,0,.2,1)"
-        ></video>
-      </div>
+    <div class="home-bg">
+      <video
+        src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/hecheng1.mp4"
+        muted
+        autoplay
+        loop
+        playsinline
+        preload="metadata"
+      ></video>
+      <div class="bg-overlay"></div>
     </div>
-    <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
 
-    <!-- 主内容区域 -->
-    <div class="home-content inset-0 h-full top-[0px] z-10 flex flex-col items-center justify-center pb-16">
-      <!-- 英雄区域 -->
-      <div class="hero-section !mt-24 z-20 text-center px-4 flex flex-col items-center justify-center">
-        <div class="hero-title-wrapper mb-6">
-          <n-h1 class="hero-title text-center !text-[42px] md:!text-[52px] font-bold text-white mb-4 text-shadow-lg">
-            HLYM CS2 社区服务器
-          </n-h1>
-          <div class="hero-subtitle-wrapper">
-            <n-h5 class="hero-subtitle text-center text-lg md:text-xl text-white/95 max-w-3xl mx-auto text-shadow">
-              面向所有CS2玩家的公益服务器，所有内容均免费！
-            </n-h5>
+    <div class="home-content">
+      <section class="page-hero">
+        <div class="title-block">
+          <div class="title-eyebrow-row">
+            <p class="eyebrow">{{ eyebrowText }}</p>
+            <n-tag type="success" round size="small">{{ statusTag }}</n-tag>
+          </div>
+          <h1>{{ heroTitle }}</h1>
+          <p class="lead">{{ heroLead }}</p>
+          <div class="hero-actions">
+            <router-link to="/app-download" class="inline-flex">
+              <n-button type="primary" size="large" class="hero-download-btn">
+                {{ downloadButtonText }}
+              </n-button>
+            </router-link>
+            <n-button size="large" class="hero-secondary-btn" @click="goToQQGroup">
+              {{ joinGroupText }}
+            </n-button>
           </div>
         </div>
-        <div class="hero-accent h-1 w-24 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full mb-8"></div>
-      </div>
 
-      <!-- 特性卡片区域 -->
-      <div class="features-section flex flex-wrap justify-center mt-4 w-full pt-16 max-w-[1200px] px-4">
-        <n-grid cols="4 xs:2 s:2 m:4 l:4 " x-gap="24" y-gap="24" responsive="screen">
-          <n-grid-item>
-            <n-card class="feature-card h-full backdrop-blur-lg bg-blue-50/90 border border-blue-200/60 hover:bg-blue-100/95 transition-all duration-300 hover:scale-105 hover:shadow-2xl" hoverable>
-              <template #header>
-                <div class="feature-header flex items-center gap-3 min-h-[48px]">
-                  <div class="feature-icon-wrapper p-2 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg">
-                    <ServerIcon class="w-[20px] h-[20px] text-white" />
-                  </div>
-                  <span class="feature-title text-blue-800 font-semibold">免费公益</span>
-                </div>
-              </template>
-              <div class="feature-content text-blue-700 leading-relaxed min-h-[60px] flex items-center">
-                包括积分、玩家皮肤在内的所有功能完全免费，永不收费
-              </div>
-            </n-card>
-          </n-grid-item>
-          <n-grid-item>
-            <n-card class="feature-card h-full backdrop-blur-lg bg-emerald-50/90 border border-emerald-200/60 hover:bg-emerald-100/95 transition-all duration-300 hover:scale-105 hover:shadow-2xl" hoverable>
-              <template #header>
-                <div class="feature-header flex items-center gap-3 min-h-[48px]">
-                  <div class="feature-icon-wrapper p-2 rounded-full bg-gradient-to-br from-green-400 to-green-600 shadow-lg">
-                    <GameIcon class="w-[20px] h-[20px] text-white" />
-                  </div>
-                  <span class="feature-title text-emerald-800 font-semibold">丰富玩法</span>
-                </div>
-              </template>
-              <div class="feature-content text-emerald-700 leading-relaxed min-h-[60px] flex items-center">
-                主打MG娱乐对抗，内置40多张小游戏地图
-              </div>
-            </n-card>
-          </n-grid-item>
-          <n-grid-item>
-            <n-card class="feature-card h-full backdrop-blur-lg bg-violet-50/90 border border-violet-200/60 hover:bg-violet-100/95 transition-all duration-300 hover:scale-105 hover:shadow-2xl" hoverable>
-              <template #header>
-                <div class="feature-header flex items-center gap-3 min-h-[48px]">
-                  <div class="feature-icon-wrapper p-2 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 shadow-lg">
-                    <ShirtIcon class="w-[20px] h-[20px] text-white" />
-                  </div>
-                  <span class="feature-title text-violet-800 font-semibold">个性装扮</span>
-                </div>
-              </template>
-              <div class="feature-content text-violet-700 leading-relaxed min-h-[60px] flex items-center">
-                多余款精美模型，部分模型支持自定义换肤
-              </div>
-            </n-card>
-          </n-grid-item>
-          <n-grid-item>
-            <n-card class="feature-card h-full backdrop-blur-lg bg-orange-50/90 border border-orange-200/60 hover:bg-orange-100/95 transition-all duration-300 hover:scale-105 hover:shadow-2xl" hoverable>
-              <template #header>
-                <div class="feature-header flex items-center gap-3 min-h-[48px]">
-                  <div class="feature-icon-wrapper p-2 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 shadow-lg">
-                    <WechatIcon class="w-[20px] h-[20px] text-white" />
-                  </div>
-                  <span class="feature-title text-orange-800 font-semibold">活跃社区</span>
-                </div>
-              </template>
-              <div class="feature-content text-orange-700 leading-relaxed min-h-[60px] flex flex-col items-center gap-3">
-                <span>点击按钮加入QQ群，或者通过上方服务器状态标签加入服务器</span>
-                <div class="w-full flex justify-center">
-                  <n-button
-                    type="primary"
-                    size="medium"
-                    class="qqgroup-btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-md hover:shadow-lg transition-all duration-300 mt-2 text-white font-semibold px-4 py-2 rounded-lg text-base"
-                    @click="goToQQGroup"
-                  >
-                    <ShareIcon class="w-[16px] h-[16px] text-white mr-1" />
-                    点击加入QQ交流群
-                  </n-button>
-                </div>
-              </div>
-            </n-card>
-          </n-grid-item>
-        </n-grid>
-      </div>
-      <!-- 统计数据区域 -->
-  <div class="stats-section flex flex-wrap justify-around mt-3 w-full pt-5 max-w-[1200px] z-20 px-4">
-        <n-grid cols="4 xs:3 s:3 m:3 l:3 " x-gap="24" y-gap="24" responsive="screen">
-          <n-grid-item>
-            <div class="stat-card text-center p-6 rounded-xl backdrop-blur-lg bg-gray-50/95 border border-gray-200/60 hover:bg-gray-100/95 transition-all duration-300 h-full flex flex-col justify-center">
-              <div class="stat-number text-[28px] md:text-[32px] font-bold text-blue-600 mb-2">80+</div>
-              <div class="stat-label text-[18px] md:text-[20px] font-semibold text-gray-700">游戏地图</div>
+        <div class="hero-panel">
+          <p class="panel-eyebrow">{{ panelEyebrow }}</p>
+          <h3>{{ panelTitle }}</h3>
+          <div class="panel-stats">
+            <div class="panel-stat" v-for="stat in stats" :key="stat.label">
+              <span class="stat-value">{{ stat.value }}</span>
+              <span class="stat-label">{{ stat.label }}</span>
             </div>
-          </n-grid-item>
-          <n-grid-item>
-            <div class="stat-card text-center p-6 rounded-xl backdrop-blur-lg bg-gray-50/95 border border-gray-200/60 hover:bg-gray-100/95 transition-all duration-300 h-full flex flex-col justify-center">
-              <div class="stat-number text-[28px] md:text-[32px] font-bold text-emerald-600 mb-2">100+</div>
-              <div class="stat-label text-[18px] md:text-[20px] font-semibold text-gray-700">人物模型</div>
-            </div>
-          </n-grid-item>
-          <n-grid-item>
-            <div class="stat-card text-center p-6 rounded-xl backdrop-blur-lg bg-gray-50/95 border border-gray-200/60 hover:bg-gray-100/95 transition-all duration-300 h-full flex flex-col justify-center">
-              <div class="stat-number text-[28px] md:text-[32px] font-bold text-violet-600 mb-2">10+</div>
-              <div class="stat-label text-[18px] md:text-[20px] font-semibold text-gray-700">自定义内容</div>
-            </div>
-          </n-grid-item>
-        </n-grid>
-      </div>
-
-      <!-- 活动推广区域 -->
-      <!-- <div class="activities-section mt-4 w-full pt-20 max-w-[1200px] z-20 px-4">
-        <div class="activities-header text-center mb-8">
-          <h2 class="text-[28px] md:text-[32px] font-bold text-white mb-4 text-shadow-lg">
-            🎉 精彩活动
-          </h2>
-          <p class="text-[16px] md:text-[18px] text-white/90 text-shadow">
-            参与社区活动，赢取丰厚奖励！
-          </p>
+          </div>
         </div>
-        <n-grid cols="2 xs:1 s:1 m:2 l:2" x-gap="24" y-gap="24" responsive="screen">
-          <n-grid-item>
-            <RouterLink to="/lottery" class="block">
-              <n-card class="activity-card h-full backdrop-blur-lg bg-gradient-to-br from-purple-600/90 to-pink-600/90 border border-purple-300/60 hover:from-purple-500/95 hover:to-pink-500/95 transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer" hoverable>
-                <template #header>
-                  <div class="activity-header flex items-center gap-3">
-                    <div class="activity-icon-wrapper p-3 rounded-full bg-white/20 shadow-lg">
-                      <span class="text-2xl">🎰</span>
-                    </div>
-                    <div>
-                      <span class="activity-title text-white font-bold text-lg">幸运转盘</span>
-                      <div class="activity-status text-xs text-white/80 bg-green-500/30 px-2 py-1 rounded-full mt-1">
-                        🔥 火热进行中
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <div class="activity-content text-white/90 leading-relaxed">
-                  每日免费抽奖机会，赢取积分奖励！超低概率获得万分大奖，快来试试手气吧！
-                </div>
-                <template #action>
-                  <div class="activity-action text-right">
-                    <span class="text-white/80 text-sm hover:text-white transition-colors">
-                      立即参与 →
-                    </span>
-                  </div>
-                </template>
-              </n-card>
-            </RouterLink>
-          </n-grid-item>
-          <n-grid-item>
-            <RouterLink to="/challenge" class="block">
-              <n-card class="activity-card h-full backdrop-blur-lg bg-gradient-to-br from-orange-600/90 to-red-600/90 border border-orange-300/60 hover:from-orange-500/95 hover:to-red-500/95 transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer" hoverable>
-                <template #header>
-                  <div class="activity-header flex items-center gap-3">
-                    <div class="activity-icon-wrapper p-3 rounded-full bg-white/20 shadow-lg">
-                      <span class="text-2xl">🏆</span>
-                    </div>
-                    <div>
-                      <span class="activity-title text-white font-bold text-lg">全服挑战</span>
-                      <div class="activity-status text-xs text-white/80 bg-yellow-500/30 px-2 py-1 rounded-full mt-1">
-                        ⚡ 实时更新
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <div class="activity-content text-white/90 leading-relaxed">
-                  全服玩家共同挑战，累计在线时长、击杀数等数据，达成目标获得丰厚奖励！
-                </div>
-                <template #action>
-                  <div class="activity-action text-right">
-                    <span class="text-white/80 text-sm hover:text-white transition-colors">
-                      查看详情 →
-                    </span>
-                  </div>
-                </template>
-              </n-card>
-            </RouterLink>
-          </n-grid-item>
-        </n-grid>
-      </div> -->
+      </section>
 
-
+      <section class="feature-section">
+        <div class="section-head">
+          <p class="section-eyebrow">{{ featureEyebrow }}</p>
+          <h2>{{ featureTitle }}</h2>
+          <p class="section-lead">{{ featureLead }}</p>
+        </div>
+        <div class="feature-grid">
+          <div
+            class="feature-card"
+            v-for="item in features"
+            :key="item.title"
+            :style="{ '--icon-bg': item.accent }"
+          >
+            <div class="feature-icon">
+              <component :is="item.icon" class="feature-icon-svg" />
+            </div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.desc }}</p>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
+<script setup lang="ts">
+import { NButton, NTag } from 'naive-ui'
+import {
+  GameController as GameIcon,
+  People as PeopleIcon,
+  Server as ServerIcon,
+  Shirt as ShirtIcon,
+} from '@vicons/ionicons5'
+
+const eyebrowText = 'HLYM社区 · CS2公益服务器'
+const statusTag = '公益免费'
+const heroTitle = 'HLYM CS2 公益服务器'
+const heroLead = '面向所有 CS2 玩家，永久免费开放'
+const downloadButtonText = '安卓APP下载'
+const joinGroupText = '加入QQ交流群'
+
+const panelEyebrow = 'Live Stats'
+const panelTitle = '丰富内容，持续更新'
+
+const stats = [
+  { label: '地图', value: '100+' },
+  { label: '模型', value: '150+' },
+  { label: '自定义内容', value: '20+' },
+]
+
+const featureEyebrow = 'Features'
+const featureTitle = '核心特色'
+const featureLead = '一站式玩法与服务，让你轻松上手'
+
+const features = [
+  {
+    title: '免费公益',
+    desc: '全部功能免费，长期维护更新',
+    icon: ServerIcon,
+    accent: 'linear-gradient(135deg, #2563eb, #60a5fa)',
+  },
+  {
+    title: '丰富玩法',
+    desc: 'MG娱乐对抗，多地图轮换',
+    icon: GameIcon,
+    accent: 'linear-gradient(135deg, #7c3aed, #c084fc)',
+  },
+  {
+    title: '个性装扮',
+    desc: '模型皮肤丰富，支持自定义',
+    icon: ShirtIcon,
+    accent: 'linear-gradient(135deg, #f97316, #fb923c)',
+  },
+  {
+    title: '活跃社区',
+    desc: 'QQ群交流，活动持续更新',
+    icon: PeopleIcon,
+    accent: 'linear-gradient(135deg, #14b8a6, #2dd4bf)',
+  },
+]
+
+const goToQQGroup = () => {
+  window.open(
+    'https://qm.qq.com/cgi-bin/qm/qr?k=Sh4gcapxVV57FqXxe7ZU07-v9u8YvKVN&jump_from=webapi&authKey=HiFkDO97IWzVgJEO6SWn59U3r7vJPEfvGNq8+Y4RVgOHFRN8+CB9WhpjYJmRvyky',
+    '_blank'
+  )
+}
+</script>
+
 <style scoped>
 .home-page {
-  min-height: 100vh;
   position: relative;
+  min-height: 100vh;
+  color: var(--theme-text);
+}
+
+
+.home-bg {
+  position: fixed;
+  inset: 0;
   z-index: 0;
 }
 
-.home-grass {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0.1), #f5f5f5);
+.home-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--theme-video-filter);
 }
 
-.pointer-events-none {
-  pointer-events: none;
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--theme-overlay);
 }
 
-/* 英雄区域样式 */
-.hero-title {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.home-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 120px 28px 160px;
 }
 
-.text-shadow {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.page-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: end;
+  margin-bottom: 48px;
 }
 
-.text-shadow-sm {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+.title-block h1 {
+  font-size: 48px;
+  margin: 12px 0 10px;
+  letter-spacing: 1px;
 }
 
-.text-shadow-lg {
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+.title-block .lead {
+  color: var(--theme-muted);
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
-/* 特性卡片样式 */
-.feature-card {
-  max-width: 300px;
-  transition: all 0.3s ease;
+.title-eyebrow-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-download-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%) !important;
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0 30px !important;
+  height: 46px !important;
+  font-weight: 700;
+  box-shadow: 0 14px 32px rgba(37, 99, 235, 0.35);
+}
+
+.hero-secondary-btn {
+  border-radius: 999px !important;
+  border: 1px solid var(--theme-secondary-border) !important;
+  background: var(--theme-secondary-bg) !important;
+  color: var(--theme-text) !important;
+  height: 46px !important;
+  padding: 0 26px !important;
+  font-weight: 600;
+  backdrop-filter: blur(12px);
+}
+
+.hero-panel {
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-border);
+  border-radius: 28px;
+  padding: 24px 24px 20px;
+  box-shadow: var(--theme-card-shadow);
+}
+
+.panel-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.8);
+  margin-bottom: 8px;
+}
+
+.hero-panel h3 {
+  margin: 0 0 16px;
+  font-size: 22px;
+}
+
+.panel-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.panel-stat {
+  background: var(--theme-chip-bg);
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--theme-muted);
+  display: block;
+  margin-top: 4px;
+}
+
+.feature-section {
+  margin-top: 56px;
+}
+
+.section-head {
+  margin-bottom: 24px;
+}
+
+.section-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.8);
+}
+
+.section-head h2 {
+  font-size: 32px;
+  margin: 8px 0 10px;
+}
+
+.section-lead {
+  color: var(--theme-muted);
+  max-width: 520px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.feature-card {
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-border);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: var(--theme-card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .feature-card:hover {
   transform: translateY(-4px);
+  box-shadow: 0 28px 60px rgba(2, 6, 23, 0.45);
 }
 
-.feature-icon-wrapper {
-  transition: all 0.3s ease;
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--icon-bg);
+  color: #fff;
+  margin-bottom: 16px;
 }
 
-.feature-card:hover .feature-icon-wrapper {
-  transform: scale(1.1);
+.feature-icon-svg {
+  width: 24px;
+  height: 24px;
 }
 
-/* 统计卡片样式 */
-.stat-card {
-  transition: all 0.3s ease;
+.feature-card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
 }
 
-.stat-card:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
+.feature-card p {
+  color: var(--theme-muted);
+  line-height: 1.6;
+  font-size: 14px;
 }
 
-/* .stat-number 样式已通过Tailwind类处理 */
-
-
-/* QQ群按钮样式 */
-.qqgroup-btn {
-  min-width: 160px;
-  padding: 0.5rem 1.25rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px 0 rgba(80, 80, 180, 0.10);
-}
-
-@media (max-width: 768px) {
-  .qqgroup-btn {
-    width: 100%;
-    min-width: 0;
-    font-size: 0.95rem;
-    padding: 0.5rem 0.5rem;
+@media (max-width: 960px) {
+  .page-hero {
+    grid-template-columns: 1fr;
   }
 }
 
-/* 响应式优化 */
-@media (max-width: 768px) {
-  .hero-section {
-    padding: 2rem 1rem;
+@media (max-width: 640px) {
+  .home-content {
+    padding: 100px 18px 140px;
   }
 
-  .features-section,
-  .stats-section,
-  .cta-section {
-    padding-left: 1rem;
-    padding-right: 1rem;
+  .title-block h1 {
+    font-size: 36px;
   }
 
-  .feature-card,
-  .stat-card {
-    margin: 0 auto;
-    min-height: 140px;
+  .panel-stats {
+    grid-template-columns: 1fr;
   }
-
-  /* 移动端卡片高度统一 */
-  .feature-card .n-card {
-    height: 100%;
-  }
-
-  .feature-header {
-    align-items: flex-start !important;
-  }
-
-  .feature-content {
-    flex: 1;
-    display: flex;
-    align-items: center;
-  }
-}
-
-/* 深色模式优化 */
-@media (prefers-color-scheme: dark) {
-  .feature-card,
-  .stat-card,
-  .cta-card {
-    background: rgba(248, 250, 252, 0.95) !important;
-    border: 1px solid rgba(226, 232, 240, 0.6) !important;
-  }
-}
-
-/* 动画效果 */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero-section,
-.features-section,
-.stats-section,
-.cta-section {
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.features-section {
-  animation-delay: 0.2s;
-}
-
-.stats-section {
-  animation-delay: 0.4s;
-}
-
-.cta-section {
-  animation-delay: 0.6s;
 }
 </style>
-<script lang="ts">
-import {
-  GameController as GameIcon,
-  Server as ServerIcon,
-  ShareSocial as ShareIcon,
-  Shirt as ShirtIcon,
-  LogoWechat as WechatIcon,
-} from '@vicons/ionicons5'
-import { NButton, NCard, NGrid, NGridItem, NH1, NH5 } from 'naive-ui'
-import { defineComponent } from 'vue'
-// import { RouterLink } from 'vue-router'
-
-export default defineComponent({
-  components: {
-    NCard,
-    NButton,
-    ServerIcon,
-    GameIcon,
-    ShirtIcon,
-    WechatIcon,
-    ShareIcon,
-    NGrid,
-    NGridItem,
-    NH1,
-    NH5,
-    // RouterLink,
-  },
-
-  setup() {
-    const goToQQGroup = () => {
-      window.open('https://qm.qq.com/cgi-bin/qm/qr?k=Sh4gcapxVV57FqXxe7ZU07-v9u8YvKVN&jump_from=webapi&authKey=HiFkDO97IWzVgJEO6SWn59U3r7vJPEfvGNq8+Y4RVgOHFRN8+CB9WhpjYJmRvyky', '_blank')
-    }
-    return {
-      goToQQGroup,
-    }
-  },
-})
-</script>

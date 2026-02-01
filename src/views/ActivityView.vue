@@ -3,7 +3,7 @@
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-           style="background-image: url('https://oss.kigermap.com/frontend/assets/image/bg2.webp')">
+           style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg2.webp')">
       </div>
       <!-- 渐变遮罩层 -->
       <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80"></div>
@@ -489,21 +489,21 @@ const featuredPrizes = ref([
   {
     name: '往期活动奖品：[周年庆限定]lime',
     description: '捐赠人oVo，周年庆限定皮肤，活动期间限时兑换',
-    image: 'https://oss.kigermap.com/frontend/assets/image/lime_1.png',
+    image: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lime_1.png',
     price: 1000,
     rarity: '换肤模型'
   },
   // {
   //   name: '史诗级换肤模型',
   //   description: '精美史诗级角色皮肤，展现你的独特品味',
-  //   image: 'https://oss.kigermap.com/frontend/assets/image/eika_mode.webp',
+  //   image: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp',
   //   price: 3000,
   //   rarity: '史诗'
   // },
   // {
   //   name: '稀有级换肤模型',
   //   description: '经典稀有级角色皮肤，性价比超高的选择',
-  //   image: 'https://oss.kigermap.com/frontend/assets/image/eika_mode.webp',
+  //   image: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp',
   //   price: 1500,
   //   rarity: '稀有'
   // }

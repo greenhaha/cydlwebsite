@@ -1,21 +1,33 @@
 <template>
-  <div class="preview-card" @click="handleExpand" tabindex="0">
-    <div class="status-icon" :class="statusClass" role="status" :aria-label="statusAria" />
-    <div class="main-info">
-      <h4 class="name" :title="displayName">{{ displayName }}</h4>
-      <div class="map" :title="mapFull">地图: {{ mapDisplay }}</div>
-      <div class="meta">
-        <span class="players" :class="utilClass">{{ server.players }}/{{ server.maxPlayers || '?' }}</span>
-        <span class="sep">•</span>
-  <span class="ping" :class="pingClass">{{ pingText }}</span>
-  <span class="ping-bar" :class="pingBarClass" aria-hidden="true" />
+  <div
+    class="preview-card"
+    :class="{ offline: !server.online }"
+    @click="handleExpand"
+    tabindex="0"
+    role="button"
+    :aria-label="`查看${displayName}详情`"
+    @keydown.enter.prevent="handleExpand"
+    @keydown.space.prevent="handleExpand"
+  >
+    <div class="card-header">
+      <span class="status-dot" :class="statusClass" aria-hidden="true"></span>
+      <div class="header-text">
+        <h4 class="server-name" :title="displayName">{{ displayName }}</h4>
+        <p class="server-map" :title="mapFull">地图: {{ mapDisplay }}</p>
       </div>
+      <span class="status-pill" :class="statusClass">{{ statusText }}</span>
     </div>
-    <div class="actions" @click.stop>
-      <button class="connect-btn" :class="buttonVariant" @click.stop.prevent="emit('expand')">
-        <span v-if="!server.online" class="off-icon" aria-hidden="true">⏻</span>
-        详情
-      </button>
+
+    <div class="card-stats">
+      <div class="stat">
+        <span class="stat-label">玩家</span>
+        <span class="stat-value" :class="utilClass">{{ playersText }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">延迟</span>
+        <span class="stat-value" :class="pingClass">{{ pingText }}</span>
+      </div>
+      <button class="detail-btn" type="button" @click.stop.prevent="emit('expand')">查看详情</button>
     </div>
   </div>
 </template>
@@ -37,16 +49,28 @@ interface ServerDataLite {
 const props = defineProps<{ server: ServerDataLite; label: string; expandable?: boolean }>()
 const emit = defineEmits<{ (e: 'expand'): void }>()
 
-// 预览卡名称始终使用配置的 label；仅当 label 为空时回退服务器自身名称
+const isExpandable = computed(() => props.expandable !== false)
 const displayName = computed(() => props.label || props.server.name || '未命名服务器')
 const effectivePing = computed(() => props.server.ping ?? props.server.queryDuration ?? null)
-const pingText = computed(() => effectivePing.value != null ? effectivePing.value + 'ms' : '未知')
+const pingText = computed(() => (effectivePing.value != null ? `${effectivePing.value}ms` : '--'))
 const mapFull = computed(() => props.server.map || '未知地图')
 const mapDisplay = computed(() => {
   const m = mapFull.value
-  return m.length > 18 ? m.slice(0, 16) + '…' : m
+  return m.length > 18 ? m.slice(0, 16) + '?' : m
+})
+const playersText = computed(() => {
+  const max = props.server.maxPlayers || 0
+  return max ? `${props.server.players}/${max}` : `${props.server.players}/--`
 })
 
+const statusClass = computed(() => (props.server.online ? 'is-online' : 'is-offline'))
+const statusText = computed(() => (props.server.online ? '在线' : '离线'))
+const utilClass = computed(() => {
+  const ratio = props.server.maxPlayers ? props.server.players / props.server.maxPlayers : 0
+  if (ratio >= 0.9) return 'util-high'
+  if (ratio >= 0.6) return 'util-mid'
+  return 'util-low'
+})
 const pingClass = computed(() => {
   const v = effectivePing.value
   if (v == null) return 'ping-unknown'
@@ -56,32 +80,9 @@ const pingClass = computed(() => {
   return 'ping-bad'
 })
 
-const statusClass = computed(() => props.server.online ? 's-online' : 's-offline')
-const statusAria = computed(() => props.server.online ? '在线' : '离线')
-const utilClass = computed(() => {
-  const ratio = props.server.maxPlayers ? props.server.players / props.server.maxPlayers : 0
-  if (ratio >= .9) return 'util-high'
-  if (ratio >= .6) return 'util-mid'
-  return 'util-low'
-})
-
-// 按钮颜色跟随在线状态
-const buttonVariant = computed(() => props.server.online ? 'btn-online' : 'btn-offline')
-
-// Ping 条 class
-const pingBarClass = computed(() => {
-  const v = effectivePing.value
-  if (v == null) return 'bar-unknown'
-  if (v <= 40) return 'bar-good'
-  if (v <= 80) return 'bar-ok'
-  if (v <= 120) return 'bar-warn'
-  return 'bar-bad'
-})
-
-// 连接相关逻辑已移除，按钮仅用于展开详情
-
 const handleExpand = () => {
-  if (props.expandable) emit('expand')
+  if (!isExpandable.value) return
+  emit('expand')
 }
 </script>
 
@@ -89,51 +90,211 @@ const handleExpand = () => {
 .preview-card {
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 14px;
-  padding: 14px 16px 14px 14px;
-  background: linear-gradient(135deg,#ffffff 0%, #f1f5f9 100%);
-  border: 1px solid #d6dee9;
-  border-radius: 18px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-border);
+  color: var(--theme-text);
+  box-shadow: var(--theme-card-shadow);
+  backdrop-filter: blur(10px);
   cursor: pointer;
-  transition: box-shadow .25s, transform .18s, border-color .25s;
-  min-width: 240px;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   overflow: hidden;
-  color:#334155;
 }
-.preview-card::after { content:""; position:absolute; inset:0; background:radial-gradient(circle at 80% 20%, rgba(99,102,241,0.14), transparent 60%); opacity:0; transition:opacity .5s ease; }
-.preview-card:hover { box-shadow:0 10px 28px -8px rgba(30,41,59,.22); transform:translateY(-3px); border-color:#b3c0cf; }
-.preview-card:hover::after { opacity:1; }
-.status-icon { width:14px; height:14px; border-radius:50%; box-shadow:0 0 0 3px rgba(0,0,0,.05); flex-shrink:0; }
-.s-online { background:linear-gradient(135deg,#34d399,#059669); }
-.s-offline { background:linear-gradient(135deg,#94a3b8,#64748b); }
-.main-info { flex:1; min-width:0; }
-.name { font-size:14px; font-weight:600; margin:0 0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#1e293b; }
-.map { font-size:11px; line-height:1.2; margin:-2px 0 4px; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.meta { font-size:12px; display:flex; align-items:center; gap:6px; color:#475569; font-weight:500; }
-.sep { opacity:.4; }
-.players { font-variant-numeric:tabular-nums; }
-.util-low { color:#2563EB; }
-.util-mid { color:#0D9488; }
-.util-high { color:#DC2626; }
-.ping { font-variant-numeric:tabular-nums; }
-.ping-good { color:#059669; }
-.ping-ok { color:#2563EB; }
-.ping-warn { color:#D97706; }
-.ping-bad { color:#DC2626; }
-.ping-unknown { color:#64748B; }
-.ping-bar { width:55px; height:4px; border-radius:3px; background:#cbd5e1; margin-left:2px; position:relative; top:0; }
-.bar-good { background:linear-gradient(90deg,#34c58f,#058a5d); }
-.bar-ok { background:linear-gradient(90deg,#2563EB,#3B82F6); }
-.bar-warn { background:linear-gradient(90deg,#F59E0B,#D97706); }
-.bar-bad { background:linear-gradient(90deg,#EF4444,#B91C1C); }
-.bar-unknown { background:linear-gradient(90deg,#94a3b8,#64748b); opacity:.6; }
-.actions { display:flex; align-items:center; }
-.connect-btn { border:none; border-radius:999px; padding:6px 16px; font-size:12px; font-weight:600; cursor:pointer; letter-spacing:.5px; transition:background .28s, transform .18s, box-shadow .28s, color .28s; font-family:inherit; }
-.connect-btn:active { transform:translateY(1px) scale(.97); }
-.connect-btn.btn-online { background:linear-gradient(135deg,#34c58f,#058a5d); color:#fff; box-shadow:0 4px 12px -3px rgba(16,185,129,.45), 0 2px 4px -1px rgba(5,150,105,.35); }
-.connect-btn.btn-online:hover { background:linear-gradient(135deg,#26b07f,#036f4a); }
-.connect-btn.btn-offline { background:linear-gradient(135deg,#E2E8F0,#CBD5E1); color:#475569; box-shadow:0 2px 6px -2px rgba(71,85,105,.25); }
-.connect-btn.btn-offline:hover { background:linear-gradient(135deg,#d7dde5,#98a6b6); color:#1e293b; }
-.off-icon { margin-right:4px; font-size:12px; opacity:.9; }
+
+.preview-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.preview-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.25);
+}
+
+.preview-card:hover::before {
+  opacity: 1;
+}
+
+.preview-card:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.6);
+  outline-offset: 3px;
+}
+
+.preview-card.offline {
+  opacity: 0.88;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.16);
+}
+
+.status-dot.is-online {
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+}
+
+.status-dot.is-offline {
+  background: #94a3b8;
+}
+
+.header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.server-name {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: var(--theme-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.server-map {
+  margin: 0;
+  font-size: 12px;
+  color: var(--theme-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.status-pill.is-online {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.status-pill.is-offline {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.18);
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.card-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 90px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--theme-muted);
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.util-low {
+  color: #60a5fa;
+}
+
+.util-mid {
+  color: #22c55e;
+}
+
+.util-high {
+  color: #f97316;
+}
+
+.ping-good {
+  color: #22c55e;
+}
+
+.ping-ok {
+  color: #60a5fa;
+}
+
+.ping-warn {
+  color: #f59e0b;
+}
+
+.ping-bad {
+  color: #f97316;
+}
+
+.ping-unknown {
+  color: var(--theme-muted);
+}
+
+.detail-btn {
+  margin-left: auto;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-secondary-bg);
+  color: var(--theme-text);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.detail-btn:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.detail-btn:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 640px) {
+  .preview-card {
+    padding: 16px;
+  }
+
+  .card-stats {
+    align-items: flex-start;
+  }
+
+  .detail-btn {
+    width: 100%;
+    text-align: center;
+    margin-left: 0;
+  }
+}
 </style>

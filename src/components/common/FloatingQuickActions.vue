@@ -51,6 +51,7 @@ type ActionKey =
   | 'server'
   | 'activity'
   | 'profile'
+  | 'theme'
 
 const router = useRouter()
 const route = useRoute()
@@ -62,6 +63,7 @@ let unlockTimer: number | null = null
 
 const actions = reactive<{ key: ActionKey; label: string }[]>([
   { key: 'top', label: '回到顶部' },
+  { key: 'theme', label: '\u5207\u6362\u4e3b\u9898' },
   { key: 'home', label: '主菜单' },
   { key: 'models', label: '模型图鉴' },
   { key: 'faq', label: '常见问题' },
@@ -80,6 +82,7 @@ const iconMap: Record<ActionKey, string[]> = {
   server: ['M4 6h16v12H4z', 'M4 10h16', 'M9 14h6', 'M8 18v2', 'M16 18v2'],
   activity: ['M12 4.5l2.05 4.16 4.59.67-3.32 3.22.78 4.54L12 15.9l-4.1 2.19.78-4.54-3.32-3.22 4.59-.67z'],
   profile: ['M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8', 'M6 20c0-3.3137 2.6863-6 6-6s6 2.6863 6 6'],
+  theme: ['M12 3v2','M12 19v2','M4.22 4.22l1.42 1.42','M18.36 18.36l1.42 1.42','M3 12h2','M19 12h2','M4.22 19.78l1.42-1.42','M18.36 5.64l1.42-1.42','M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8'],
 }
 
 const lockInteraction = () => {
@@ -114,6 +117,13 @@ const closeFab = () => {
   releaseInteraction()
 }
 
+const toggleTheme = () => {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'
+  const next = current === 'dark' ? 'light' : 'dark'
+  document.documentElement.setAttribute('data-theme', next)
+  localStorage.setItem('theme', next)
+}
+
 const handleAction = async (key: ActionKey) => {
   switch (key) {
     case 'top':
@@ -139,6 +149,9 @@ const handleAction = async (key: ActionKey) => {
       break
     case 'registration':
       router.push('/registration')
+      break
+    case 'theme':
+      toggleTheme()
       break
   }
   closeFab()
@@ -219,16 +232,17 @@ watch(
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  background: rgba(15, 23, 42, 0.92);
-  color: #f8fafc;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+  background: var(--theme-card-bg);
+  color: var(--theme-text);
+  border: 1px solid var(--theme-border);
+  box-shadow: var(--theme-card-shadow);
   min-width: 150px;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .fab-action-btn:hover {
   transform: translateX(-4px);
-  background: rgba(15, 23, 42, 0.98);
+  background: var(--theme-card-bg);
   box-shadow: 0 16px 32px rgba(15, 23, 42, 0.45);
 }
 

@@ -1,8 +1,8 @@
-<template>
+﻿<template>
   <div class="gift-page">
     <div class="gift-bg">
       <video
-        src="https://oss.kigermap.com/frontend/assets/video/bg/giftbg.mp4"
+        src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/video/bg/giftbg.mp4"
         muted
         autoplay
         loop
@@ -16,11 +16,11 @@
       <section class="page-hero">
         <div class="title-block">
           <div class="title-eyebrow-row">
-            <p class="eyebrow">Bilibili 精彩呈现</p>
+            <p class="eyebrow">Bilibili 精选呈现</p>
             <n-tag v-if="isAdmin" type="success" round size="small">管理员模式</n-tag>
           </div>
           <h1>直播与视频图鉴</h1>
-          <p class="lead">只需贴上链接，系统即刻抓取封面、标题与主播信息，打造沉浸式展示墙。</p>
+          <p class="lead">只需贴上链接，系统即刻抓取封面、标题与主播信息，打造沉浸式展示墙</p>
         </div>
       </section>
 
@@ -80,7 +80,7 @@
                   <n-icon size="44"><AddOutline /></n-icon>
                 </div>
                 <p class="add-title">添加{{ item.type === 'LIVE' ? '直播间' : '视频' }}</p>
-                <p class="add-hint">粘贴 {{ item.type === 'LIVE' ? 'live.bilibili.com' : 'BV 号' }} 链接立即展示</p>
+                <p class="add-hint">粘贴 {{ item.type === 'LIVE' ? 'live.bilibili.com' : 'BV 号' }} 链接即可展示</p>
               </div>
               <article
                 v-else
@@ -270,16 +270,16 @@ const TAB_CONFIGS: Array<{ type: ShowcaseType; tab: string; title: string; eyebr
     tab: '直播图鉴',
     title: '直播间',
     eyebrow: 'Live Rooms',
-    description: '呈现社区主播的实时热度，点击即刻跳转哔哩哔哩直播间。',
-    empty: '暂时还没有直播间投稿，成为第一个分享的人吧。',
+    description: '呈现社区主播的实时热度，点击即可跳转哔哩哔哩直播间',
+    empty: '暂时还没有直播间投稿，成为第一个分享的人吧',
   },
   {
     type: 'VIDEO',
     tab: '视频图鉴',
     title: '视频分享库',
     eyebrow: 'Video Archive',
-    description: '收录玩家自制的攻略、剪辑与赛事高光，轻松沉浸观看。',
-    empty: '这里还空着，欢迎上传你的精彩视频。',
+    description: '收录玩家自制的攻略、剪辑与赛事高光，轻松沉浸观看',
+    empty: '这里还空着，欢迎上传你的精彩视频',
   },
 ]
 
@@ -347,24 +347,24 @@ const hexToRgba = (value: string, alpha: number) => {
 const validateBilibiliUrl = (value: string, type: ShowcaseType): ValidationResult => {
   const trimmed = value.trim()
   if (!trimmed) {
-    return { valid: false, message: type === 'LIVE' ? '请粘贴直播间链接。' : '请粘贴视频链接。' }
+    return { valid: false, message: type === 'LIVE' ? '请粘贴直播间链接' : '请粘贴视频链接' }
   }
   const parsed = tryParseUrl(trimmed.startsWith('http') ? trimmed : `https://${trimmed}`)
   if (!parsed) {
-    return { valid: false, message: '链接格式不正确，请以 https:// 开头。' }
+    return { valid: false, message: '链接格式不正确，请以 https:// 开头' }
   }
   if (!isBilibiliHost(parsed.hostname)) {
-    return { valid: false, message: '目前仅支持哔哩哔哩链接。' }
+    return { valid: false, message: '目前仅支持哔哩哔哩链接' }
   }
   if (type === 'LIVE') {
     if (parsed.hostname !== BILIBILI_LIVE_HOST) {
-      return { valid: false, message: '直播间链接须来自 live.bilibili.com。' }
+      return { valid: false, message: '直播间链接需来自 live.bilibili.com' }
     }
     if (!extractRoomId(parsed)) {
-      return { valid: false, message: '未检测到直播间 ID，请确认链接格式。' }
+      return { valid: false, message: '未检测到直播间 ID，请确认链接格式' }
     }
   } else if (!extractBvid(parsed)) {
-    return { valid: false, message: '请粘贴包含 BV 号的哔哩哔哩视频链接。' }
+    return { valid: false, message: '请粘贴包含 BV 号的哔哩哔哩视频链接' }
   }
   return { valid: true, value: parsed.toString() }
 }
@@ -434,7 +434,7 @@ export default defineComponent({
         const data = await showcaseApi.list({ type, status: 'PUBLISHED', page: 0, size: PAGE_SIZE })
         targetList.value = data.items.map(transformEntry)
       } catch (error) {
-        errorRef.value = error instanceof Error ? error.message : '加载失败，请稍后再试。'
+        errorRef.value = error instanceof Error ? error.message : '加载失败，请稍后再试'
       } finally {
         loadingRef.value = false
       }
@@ -475,11 +475,11 @@ export default defineComponent({
 
     const performSubmission = async (type: ShowcaseType, url: string) => {
       if (!isAuthenticated.value) {
-        throw new Error(type === 'LIVE' ? '请登录后再提交直播间。' : '请登录后再分享视频。')
+        throw new Error(type === 'LIVE' ? '请登录后再提交直播间' : '请登录后再分享视频')
       }
       const validation = validateBilibiliUrl(url, type)
       if (!validation.valid) {
-        throw new Error(validation.message || '链接不符合要求。')
+        throw new Error(validation.message || '链接不符合要求')
       }
       const sanitizedUrl = validation.value || url.trim()
       const response = await showcaseApi.submit(type, sanitizedUrl)
@@ -511,7 +511,7 @@ export default defineComponent({
         target.value = target.value.filter((item) => item.id !== entryId)
         message.success('删除成功')
       } catch (error) {
-        message.error(error instanceof Error ? error.message : '删除失败，请稍后再试。')
+        message.error(error instanceof Error ? error.message : '删除失败，请稍后再试')
       } finally {
         updateDeletingSet(entryId, false)
       }
@@ -537,7 +537,7 @@ export default defineComponent({
     const requestDelete = (entry: ShowcaseEntry) => {
       dialog.warning({
         title: '删除确认',
-        content: '删除后无法恢复，确定要删除该投稿吗？',
+        content: '删除后无法恢复，确定要删除该投稿吗',
         positiveText: '删除',
         negativeText: '取消',
         onPositiveClick: () => doDelete(entry.type, entry.id),
@@ -573,7 +573,7 @@ export default defineComponent({
         submitModalVisible.value = false
         message.success(submitModalType.value === 'LIVE' ? '直播间提交成功' : '视频提交成功')
       } catch (error) {
-        submitError.value = error instanceof Error ? error.message : '提交失败，请稍后重试。'
+        submitError.value = error instanceof Error ? error.message : '提交失败，请稍后重试'
       } finally {
         submitLoading.value = false
       }
@@ -606,7 +606,7 @@ export default defineComponent({
         manageModalVisible.value = false
         message.success('投稿已更新')
       } catch (error) {
-        manageError.value = error instanceof Error ? error.message : '更新失败，请稍后再试。'
+        manageError.value = error instanceof Error ? error.message : '更新失败，请稍后再试'
       } finally {
         manageSaving.value = false
       }
@@ -616,7 +616,7 @@ export default defineComponent({
       if (!manageTarget.value) return
       dialog.warning({
         title: '删除投稿',
-        content: '删除后将无法恢复，确定继续吗？',
+        content: '删除后将无法恢复，确定继续吗',
         positiveText: '删除',
         negativeText: '取消',
         onPositiveClick: async () => {
@@ -639,7 +639,7 @@ export default defineComponent({
         await loadEntries(type)
         message.success(`${TAB_LABELS[type]}已刷新`)
       } catch (error) {
-        const msg = error instanceof Error ? error.message : '刷新失败，请稍后再试。'
+        const msg = error instanceof Error ? error.message : '刷新失败，请稍后再试'
         message.error(msg)
       } finally {
         loadingMsg.destroy()
@@ -665,7 +665,7 @@ export default defineComponent({
         await Promise.all([loadEntries('LIVE'), loadEntries('VIDEO')])
         message.success('全部内容已刷新')
       } catch (error) {
-        const msg = error instanceof Error ? error.message : '刷新失败，请稍后再试。'
+        const msg = error instanceof Error ? error.message : '刷新失败，请稍后再试'
         message.error(msg)
       } finally {
         loadingMsg.destroy()
@@ -826,7 +826,7 @@ export default defineComponent({
   color: rgba(248, 250, 252, 0.6);
 }
 
-.title-block .lead {
+ .title-block .lead {
   color: rgba(248, 250, 252, 0.75);
   max-width: 640px;
   line-height: 1.6;
@@ -860,9 +860,14 @@ export default defineComponent({
   font-size: 48px;
   line-height: 1;
   cursor: pointer;
-  color: rgba(248, 250, 252, 0.85);
   user-select: none;
-  transition: color 0.2s ease, transform 0.2s ease;
+
+  /* 颜色永远不在 hover 里变化（亮/暗模式都不会“消失”） */
+  color: var(--theme-text);
+
+  /* 只做轻微位移/透明度变化，手感更轻 */
+  opacity: 0.85;
+  transition: transform 0.18s ease, opacity 0.18s ease;
 }
 
 .tab-arrow-left {
@@ -874,8 +879,16 @@ export default defineComponent({
 }
 
 .tab-arrow:hover {
-  color: #ffffff;
-  transform: translateY(-50%) scale(1.05);
+  opacity: 1;
+}
+
+/* 左右箭头 hover 只偏移一下（不变色） */
+.tab-arrow-left:hover {
+  transform: translateY(-50%) translateX(-4px);
+}
+
+.tab-arrow-right:hover {
+  transform: translateY(-50%) translateX(4px);
 }
 
 .tab-section {
@@ -883,7 +896,7 @@ export default defineComponent({
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 32px;
   padding: 32px;
-  box-shadow: 0 25px 80px rgba(2, 6, 23, 0.65);
+  box-shadow: 0 18px 60px rgba(2, 6, 23, 0.28);
 }
 
 .tab-meta {
@@ -972,8 +985,9 @@ export default defineComponent({
 .showcase-skeleton-card {
   border-radius: 24px;
   padding: 18px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-border);
+  box-shadow: var(--theme-card-shadow);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -983,7 +997,7 @@ export default defineComponent({
 .skeleton-thumb {
   height: 180px;
   border-radius: 18px;
-  background: linear-gradient(120deg, rgba(51, 65, 85, 0.8), rgba(59, 130, 246, 0.35), rgba(51, 65, 85, 0.8));
+  background: linear-gradient(120deg, rgba(148, 163, 184, 0.25), rgba(59, 130, 246, 0.28), rgba(148, 163, 184, 0.25));
   background-size: 200% 200%;
   animation: shimmer 2s linear infinite;
 }
@@ -991,9 +1005,17 @@ export default defineComponent({
 .skeleton-line {
   height: 14px;
   border-radius: 999px;
-  background: linear-gradient(120deg, rgba(71, 85, 105, 0.85), rgba(14, 165, 233, 0.4), rgba(71, 85, 105, 0.85));
+  background: linear-gradient(120deg, rgba(148, 163, 184, 0.35), rgba(59, 130, 246, 0.25), rgba(148, 163, 184, 0.35));
   background-size: 200% 200%;
   animation: shimmer 2s linear infinite;
+}
+
+:global(:root[data-theme='light']) .gift-page .skeleton-thumb {
+  background: linear-gradient(120deg, rgba(148, 163, 184, 0.18), rgba(59, 130, 246, 0.16), rgba(148, 163, 184, 0.18));
+}
+
+:global(:root[data-theme='light']) .gift-page .skeleton-line {
+  background: linear-gradient(120deg, rgba(148, 163, 184, 0.25), rgba(59, 130, 246, 0.14), rgba(148, 163, 184, 0.25));
 }
 
 .skeleton-line-short {
@@ -1020,7 +1042,7 @@ export default defineComponent({
 
 .showcase-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.30);
 }
 
 .card-media {
@@ -1204,31 +1226,32 @@ export default defineComponent({
 
 .glass-panel__header p {
   margin: 6px 0 0;
-  color: rgba(226, 232, 240, 0.75);
+  color: var(--theme-muted);
 }
 
 .glass-panel__eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.5em;
   font-size: 11px;
-  color: rgba(148, 163, 184, 0.9);
+  color: var(--theme-muted);
   margin-bottom: 6px;
 }
 
 .glass-panel__close {
   background: none;
   border: none;
-  color: rgba(248, 250, 252, 0.85);
+  color: var(--theme-text);
   width: 32px;
   height: 32px;
   cursor: pointer;
   font-size: 28px;
   line-height: 1;
-  transition: color 0.2s ease, transform 0.2s ease;
+  opacity: 0.85;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .glass-panel__close:hover {
-  color: #ffffff;
+  opacity: 1;
   transform: rotate(4deg);
 }
 
@@ -1252,7 +1275,7 @@ export default defineComponent({
   font-size: 13px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(226, 232, 240, 0.75);
+  color: var(--theme-muted);
 }
 
 .glass-input {
@@ -1393,4 +1416,96 @@ export default defineComponent({
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
+
+
+/* Theme overrides */
+.gift-page {
+  color: var(--theme-text);
+  --theme-card-shadow: 0 10px 24px rgba(2, 6, 23, 0.14);
+}
+
+.gift-bg video {
+  filter: var(--theme-video-filter);
+}
+
+.bg-overlay {
+  background: var(--theme-overlay);
+}
+
+.title-block .eyebrow,
+.title-block .lead,
+.tab-eyebrow,
+.tab-meta p,
+.tab-counter,
+.card-author,
+.card-meta,
+.add-hint,
+.empty-hint {
+  color: var(--theme-muted);
+}
+
+.tab-section,
+.showcase-card,
+.add-card,
+.glass-panel {
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-border);
+  color: var(--theme-text);
+}
+
+.glass-panel__body,
+.glass-panel__footer {
+  background: transparent !important;
+  border: none !important;
+}
+
+.showcase-card {
+  box-shadow: var(--theme-card-shadow);
+}
+
+.card-type-chip {
+  background: var(--theme-secondary-bg);
+}
+
+.glass-input {
+  background: var(--theme-secondary-bg);
+  border: 1px solid var(--theme-border);
+  color: var(--theme-text);
+}
+
+.glass-input::placeholder {
+  color: var(--theme-muted);
+}
+
+.ghost-btn,
+.link-action {
+  color: var(--theme-text);
+}
+
+:global(:root[data-theme='light']) .gift-page {
+  --theme-text: #0f172a;
+  --theme-muted: rgba(15, 23, 42, 0.72);
+  --theme-card-bg: rgba(255, 255, 255, 0.96);
+  --theme-border: rgba(255, 255, 255, 0.35);
+  --theme-secondary-bg: rgba(226, 232, 240, 0.9);
+}
+
+:global([data-theme='light']) .glass-input::placeholder {
+  color: rgba(15, 23, 42, 0.5) !important;
+}
+
+/* 删除与保存按钮也改为黑色 */
+:global([data-theme='light']) .ghost-btn--danger,
+:global([data-theme='light']) .link-action--success {
+  color: #ff0000 !important;
+}
+
+:global(:root[data-theme='light']) .glass-panel__close {
+  color: #0f172a;
+}
+
+:global(:root[data-theme='light']) .glass-panel__close:hover {
+  color: #000000;
+}
+
 </style>

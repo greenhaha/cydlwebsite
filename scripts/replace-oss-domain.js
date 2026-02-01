@@ -1,8 +1,8 @@
 ﻿import { promises as fs } from "node:fs";
 import path from "node:path";
 
-const OLD_DOMAIN = "https://greenhaha.oss-cn-beijing.aliyuncs.com";
-const NEW_DOMAIN = "https://oss.kigermap.com";
+const OLD_DOMAIN = "https://oss.kigermap.com";
+const NEW_DOMAIN = "https://hlympic.oss-cn-beijing.aliyuncs.com";
 
 const ROOT_DIR = path.resolve(process.cwd(), "src");
 const ALLOWED_EXTS = new Set([
