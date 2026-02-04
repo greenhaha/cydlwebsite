@@ -15,60 +15,61 @@
           <h1>{{ copy.heroTitle }}</h1>
           <p class="lead">{{ copy.heroLead }}</p>
         </div>
-        <div class="hero-stats">
-          <div class="stat">
-            <span>{{ copy.statsDonor }}</span>
-            <strong>{{ donorCount }}</strong>
-          </div>
-          <div class="stat">
-            <span>{{ copy.statsTech }}</span>
-            <strong>{{ techCount }}</strong>
-          </div>
-          <div class="stat">
-            <span>{{ copy.statsSpecial }}</span>
-            <strong>{{ specialCount }}</strong>
-          </div>
-        </div>
-      </section>
-
-      <section v-if="showSponsorSummary" class="sponsor-summary">
-        <div class="sponsor-card">
-          <div class="sponsor-card-header">
-            <div>
-              <span class="section-kicker">{{ copy.sponsorCardLabel }}</span>
-              <h3>{{ copy.sponsorCardTitle }}</h3>
+        <div class="hero-side">
+          <div class="hero-stats">
+            <div class="stat">
+              <span>{{ copy.statsDonor }}</span>
+              <strong>{{ donorCount }}</strong>
+            </div>
+            <div class="stat">
+              <span>{{ copy.statsTech }}</span>
+              <strong>{{ techCount }}</strong>
+            </div>
+            <div class="stat">
+              <span>{{ copy.statsSpecial }}</span>
+              <strong>{{ specialCount }}</strong>
             </div>
           </div>
-          <div class="sponsor-metrics">
-            <template v-if="isAfdianSponsor">
-              <div class="sponsor-metric">
-                <span>{{ copy.sponsorPlan }}</span>
-                <strong>{{ sponsorInfo?.planName || '--' }}</strong>
+          <section v-if="showSponsorSummary" class="sponsor-summary">
+            <div class="sponsor-card">
+              <div class="sponsor-card-header">
+                <div>
+                  <span class="section-kicker">{{ copy.sponsorCardLabel }}</span>
+                  <h3>{{ copy.sponsorCardTitle }}</h3>
+                </div>
               </div>
-              <div class="sponsor-metric">
-                <span>{{ copy.sponsorMonths }}</span>
-                <strong>{{ sponsorInfo?.months ?? '--' }}</strong>
+              <div class="sponsor-metrics">
+                <template v-if="isAfdianSponsor">
+                  <div class="sponsor-metric">
+                    <span>{{ copy.sponsorPlan }}</span>
+                    <strong>{{ sponsorInfo?.planName || '--' }}</strong>
+                  </div>
+                  <div class="sponsor-metric">
+                    <span>{{ copy.sponsorMonths }}</span>
+                    <strong>{{ sponsorInfo?.months ?? '--' }}</strong>
+                  </div>
+                  <div class="sponsor-metric">
+                    <span>{{ copy.sponsorAmount }}</span>
+                    <strong>{{ formatAmount(sponsorInfo?.amount) }}</strong>
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="sponsor-metric">
+                    <span>{{ copy.sponsorTypeLabel }}</span>
+                    <strong>{{ sponsorTypeLabel }}</strong>
+                  </div>
+                  <div class="sponsor-metric">
+                    <span>{{ copy.sponsorContentLabel }}</span>
+                    <strong>{{ sponsorInfo?.sponsorContent || '--' }}</strong>
+                  </div>
+                </template>
               </div>
-              <div class="sponsor-metric">
-                <span>{{ copy.sponsorAmount }}</span>
-                <strong>{{ formatAmount(sponsorInfo?.amount) }}</strong>
+              <div class="sponsor-note">
+                <span>{{ copy.sponsorNote }}</span>
+                <button class="sponsor-link" type="button" @click="openChangeRequest">{{ copy.sponsorChange }}</button>
               </div>
-            </template>
-            <template v-else>
-              <div class="sponsor-metric">
-                <span>{{ copy.sponsorTypeLabel }}</span>
-                <strong>{{ sponsorTypeLabel }}</strong>
-              </div>
-              <div class="sponsor-metric">
-                <span>{{ copy.sponsorContentLabel }}</span>
-                <strong>{{ sponsorInfo?.sponsorContent || '--' }}</strong>
-              </div>
-            </template>
-          </div>
-          <div class="sponsor-note">
-            <span>{{ copy.sponsorNote }}</span>
-            <button class="sponsor-link" type="button" @click="openChangeRequest">{{ copy.sponsorChange }}</button>
-          </div>
+            </div>
+          </section>
         </div>
       </section>
 
@@ -293,7 +294,6 @@
           <div>
             <p class="glass-panel__eyebrow">{{ copy.sponsorKicker }}</p>
             <h3>{{ copy.sponsorUpdateTitle }}</h3>
-            <p>{{ copy.sponsorUpdateDesc }}</p>
           </div>
           <button class="glass-panel__close" type="button" @click="updateModalVisible = false" :aria-label="copy.close">&times;</button>
         </div>
@@ -307,7 +307,7 @@
                 class="glass-input"
                 type="text"
               />
-              <button class="glass-submit verify-submit" type="button" @click="handleUpdateOrder">
+              <button class="glass-submit verify-submit verify-submit-compact" type="button" @click="handleUpdateOrder">
                 {{ copy.sponsorVerifyShort }}
               </button>
             </div>
@@ -422,12 +422,11 @@
           <div class="admin-form admin-change">
             <div class="admin-form-header">
               <h4>{{ copy.sponsorChangeAdminTitle }}</h4>
-              <span>{{ copy.sponsorChangeDesc }}</span>
             </div>
             <div v-if="changeRequests.length === 0" class="admin-empty">
               <p>{{ copy.sponsorChangeAdminEmpty }}</p>
             </div>
-            <div v-else class="admin-list">
+            <div v-else class="admin-list admin-list-scroll">
               <div v-for="request in changeRequests" :key="request.id" class="admin-row">
                 <div class="admin-row-main">
                   <strong>{{ request.username || '--' }}</strong>
@@ -592,6 +591,7 @@ const adminForm = reactive({
   sponsorItem: ''
 })
 const adminTypeOptions = [
+  { value: 'SPONSOR', label: '赞助' },
   { value: 'MODEL', label: '模型赞助' },
   { value: 'OTHER', label: '其他赞助' }
 ]
@@ -649,6 +649,7 @@ const formatSponsorType = (value?: string) => {
   if (!value) return '--'
   const normalized = value.toUpperCase()
   if (normalized === 'AFDIAN') return '爱发电赞助'
+  if (normalized === 'SPONSOR') return '赞助'
   if (normalized === 'MODEL') return '模型赞助'
   if (normalized === 'OTHER') return '其他赞助'
   return value
@@ -1033,11 +1034,25 @@ const formatAmount = (value?: number) => {
   align-items: flex-start;
   justify-content: space-between;
   gap: 32px;
-  margin-bottom: 48px;
+  margin-bottom: 72px;
+  position: relative;
+  padding-right: 420px;
 }
 
 .hero-copy {
   max-width: 640px;
+}
+
+.hero-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: stretch;
+  flex: 0 0 auto;
+  position: absolute;
+  right: 16px;
+  top: 0;
+  width: min(387px, 100%);
 }
 
 .eyebrow-row {
@@ -1077,9 +1092,13 @@ const formatAmount = (value?: number) => {
   gap: 12px;
   width: fit-content;
   max-width: 100%;
-  align-self: flex-start;
+  align-self: flex-end;
+  margin-left: auto;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
   flex: 0 0 auto;
-  margin-right: 16px;
+  margin-right: 0;
   background: var(--theme-card-bg);
   border: 1px solid var(--theme-border);
   border-radius: 20px;
@@ -1150,7 +1169,6 @@ const formatAmount = (value?: number) => {
 }
 
 .sponsor-summary {
-  margin: 0 0 48px;
   display: flex;
   justify-content: flex-end;
 }
@@ -1159,13 +1177,13 @@ const formatAmount = (value?: number) => {
   background: var(--theme-card-bg);
   border: 1px solid var(--theme-border);
   border-radius: 22px;
-  padding: 22px 26px;
+  padding: 16px 22px;
   box-shadow: var(--theme-card-shadow);
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  width: min(720px, 100%);
-  margin-right: 16px;
+  gap: 12px;
+  width: 100%;
+  margin-right: 0;
 }
 
 .sponsor-card-header {
@@ -1182,9 +1200,11 @@ const formatAmount = (value?: number) => {
 }
 
 .sponsor-metrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
 }
 
 .sponsor-metric {
@@ -1193,10 +1213,13 @@ const formatAmount = (value?: number) => {
   gap: 6px;
   font-size: 12px;
   color: var(--theme-muted);
+  align-items: flex-start;
+  text-align: left;
+  min-width: 90px;
 }
 
 .sponsor-metric strong {
-  font-size: 20px;
+  font-size: 18px;
   color: var(--theme-text);
 }
 
@@ -1257,10 +1280,10 @@ const formatAmount = (value?: number) => {
 }
 
 .sponsor-pill-danger {
-  background: rgba(239, 68, 68, 0.18);
-  color: #fecaca;
-  border: 1px solid rgba(239, 68, 68, 0.6);
-  box-shadow: none;
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 12px 24px rgba(239, 68, 68, 0.35);
 }
 
 .modal-actions {
@@ -1403,6 +1426,7 @@ const formatAmount = (value?: number) => {
 .glass-submit {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   border: none;
   border-radius: 20px;
@@ -1414,6 +1438,7 @@ const formatAmount = (value?: number) => {
   box-shadow: 0 12px 30px rgba(22, 163, 74, 0.35);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  white-space: nowrap;
 }
 
 .glass-submit:not(:disabled):hover {
@@ -1423,6 +1448,12 @@ const formatAmount = (value?: number) => {
 
 .verify-submit {
   min-width: 72px;
+}
+
+.verify-submit-compact {
+  min-width: 56px;
+  padding: 12px 16px;
+  height: 48px;
 }
 
 .modal-tip {
@@ -1539,6 +1570,13 @@ const formatAmount = (value?: number) => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.admin-list-scroll {
+  max-height: 220px;
 }
 
 .admin-row {
@@ -1761,6 +1799,13 @@ const formatAmount = (value?: number) => {
   .page-hero {
     flex-direction: column;
     align-items: flex-start;
+    padding-right: 0;
+  }
+
+  .hero-side {
+    width: 100%;
+    align-items: stretch;
+    position: static;
   }
 
   .hero-stats {
@@ -1853,3 +1898,6 @@ const formatAmount = (value?: number) => {
   box-shadow: 0 20px 36px rgba(59, 130, 246, 0.36);
 }
 </style>
+  .sponsor-metrics {
+    flex-wrap: wrap;
+  }
