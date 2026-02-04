@@ -108,7 +108,7 @@
                   </div>
                   <div class="detail-main">
                     <h4 class="detail-name">{{ selectedName }}</h4>
-                    <p class="detail-sub">地图/模式: {{ selectedMap }} / {{ selectedGameType }}</p>
+                    <p class="detail-sub">地图: {{ selectedMap }}</p>
                   </div>
                   <div class="detail-metrics-row">
                     <div class="detail-metrics">
@@ -213,9 +213,6 @@ const totalServers = computed(() => serverDataList.value.length)
 const onlineServers = computed(() => serverDataList.value.filter(s => s.online).length)
 const totalPlayers = computed(() => serverDataList.value.reduce((sum, s) => sum + (s.players || 0), 0))
 const totalMaxPlayers = computed(() => serverDataList.value.reduce((sum, s) => sum + (s.maxPlayers || 0), 0))
-const pingValues = computed(() => serverDataList.value.map(s => s.ping).filter((p): p is number => typeof p === 'number' && p > 0))
-const avgPing = computed(() => pingValues.value.length ? Math.round(pingValues.value.reduce((a, b) => a + b, 0) / pingValues.value.length) : null)
-const avgPingDisplay = computed(() => avgPing.value != null ? `${avgPing.value}ms` : '鏈煡')
 // 颜色标签胶囊已移除，avgPingTagType 不再需要
 const utilizationPercent = computed(() => totalMaxPlayers.value ? (totalPlayers.value / totalMaxPlayers.value) * 100 : 0)
 // 利用率颜色（方案A）：空闲=绿(#10B981) 中等=蓝(#3B82F6) 偏高=橙(#F59E0B) 高危=红(#DC2626)
@@ -271,7 +268,6 @@ const selectedConfig = computed(() => (detailIndex.value !== null ? serverConfig
 const selectedAddress = computed(() => (detailIndex.value !== null ? serverAddresses[detailIndex.value] : ''))
 const selectedName = computed(() => selectedServer.value?.name || selectedConfig.value?.name || '服务器')
 const selectedMap = computed(() => selectedServer.value?.map || '未知地图')
-const selectedGameType = computed(() => selectedServer.value?.gameType || '未知模式')
 const selectedVersion = computed(() => selectedServer.value?.version || '--')
 const selectedBots = computed(() => (selectedServer.value ? selectedServer.value.bots : 0))
 const selectedPlayersText = computed(() => {
@@ -284,23 +280,6 @@ const selectedPingText = computed(() => {
   const s = selectedServer.value
   const v = s ? (s.ping ?? s.queryDuration) : null
   return v != null ? `${v}ms` : '--'
-})
-const selectedUtilPercent = computed(() => {
-  const s = selectedServer.value
-  if (!s || !s.maxPlayers) return null
-  return Math.round((s.players / s.maxPlayers) * 100)
-})
-const selectedUtilColor = computed(() => {
-  const v = selectedUtilPercent.value ?? 0
-  if (v >= 90) return 'rgba(37, 99, 235, 0.95)'
-  if (v >= 75) return 'rgba(59, 130, 246, 0.85)'
-  if (v >= 40) return 'rgba(96, 165, 250, 0.75)'
-  return 'rgba(147, 197, 253, 0.65)'
-})
-const selectedLastUpdate = computed(() => selectedServer.value?.lastUpdate || '--')
-const selectedQueryDuration = computed(() => {
-  const s = selectedServer.value
-  return s?.queryDuration != null ? `${s.queryDuration}ms` : '--'
 })
 
 const canJoinServer = computed(() => {

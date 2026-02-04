@@ -658,6 +658,185 @@ export const contributeApi = {
   },
 }
 
+export interface SponsorVerifyData {
+  found: boolean
+  valid: boolean
+  orderId: string
+  status?: number
+  afdianUserId?: string
+  afdianUserPrivateId?: string
+  afdianUserName?: string
+  sourceUserId?: string
+  planId?: string
+  sponsorType?: string
+  sponsorContent?: string
+  sponsorItem?: string
+  month?: number
+  totalAmount?: string
+  showAmount?: string
+  remark?: string
+  redeemed?: boolean
+  itemInserted?: boolean
+  steamId64?: string
+  userId?: number
+  username?: string
+  message?: string
+}
+
+export interface SponsorChangeRequestRow {
+  id: number
+  userId: number
+  username?: string
+  currentAfdianUserId?: string
+  targetAfdianUserId?: string
+  targetAfdianUserName?: string
+  orderId?: string
+  status?: string
+  createTime?: string
+}
+
+export interface SponsorChangeRequestCreate {
+  orderId: string
+}
+
+export interface SponsorChangeRequestAction {
+  requestId: number
+  note?: string
+}
+
+export interface SponsorAdminRow {
+  orderId: string
+  username?: string
+  userId?: number
+  steamId64?: string
+  afdianUserId?: string
+  afdianUserPrivateId?: string
+  afdianUserName?: string
+  sourceUserId?: string
+  planId?: string
+  sponsorType?: string
+  sponsorContent?: string
+  sponsorItem?: string
+  month?: number
+  totalAmount?: string
+  showAmount?: string
+  status?: number
+  claimed?: boolean
+  redeemTime?: string
+}
+
+export interface SponsorAdminItem {
+  id: number
+  name: string
+  itemValue: string
+}
+
+export interface SponsorAdminAddRequest {
+  steamId64: string
+  sponsorType: string
+  sponsorContent: string
+  sponsorItem: string
+  displayName: string
+}
+
+export const sponsorApi = {
+  async verify(orderId: string): Promise<SponsorVerifyData> {
+    const response = await apiRequest<ApiResponse<SponsorVerifyData>>('/sponsor/verify', {
+      method: 'POST',
+      body: JSON.stringify({ orderId })
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'verify failed')
+    }
+    return response.data
+  },
+  async redeem(orderId: string): Promise<SponsorVerifyData> {
+    const response = await apiRequest<ApiResponse<SponsorVerifyData>>('/sponsor/redeem', {
+      method: 'POST',
+      body: JSON.stringify({ orderId })
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'redeem failed')
+    }
+    return response.data
+  },
+  async me(): Promise<SponsorVerifyData | null> {
+    const response = await apiRequest<ApiResponse<SponsorVerifyData>>('/sponsor/me')
+    if (!response.success) {
+      throw new Error(response.message || 'me failed')
+    }
+    return response.data ?? null
+  },
+  async adminList(): Promise<SponsorAdminRow[]> {
+    const response = await apiRequest<ApiResponse<SponsorAdminRow[]>>('/sponsor/admin/list')
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'admin list failed')
+    }
+    return response.data
+  },
+  async adminItems(): Promise<SponsorAdminItem[]> {
+    const response = await apiRequest<ApiResponse<SponsorAdminItem[]>>('/sponsor/admin/items')
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'admin items failed')
+    }
+    return response.data
+  },
+  async adminAdd(payload: SponsorAdminAddRequest): Promise<SponsorVerifyData> {
+    const response = await apiRequest<ApiResponse<SponsorVerifyData>>('/sponsor/admin/add', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'admin add failed')
+    }
+    return response.data
+  },
+  async adminRevoke(orderId: string): Promise<void> {
+    const response = await apiRequest<ApiResponse<null>>('/sponsor/admin/revoke', {
+      method: 'POST',
+      body: JSON.stringify({ orderId })
+    })
+    if (!response.success) {
+      throw new Error(response.message || 'revoke failed')
+    }
+  },
+  async changeRequest(orderId: string): Promise<SponsorChangeRequestRow> {
+    const response = await apiRequest<ApiResponse<SponsorChangeRequestRow>>('/sponsor/change-request', {
+      method: 'POST',
+      body: JSON.stringify({ orderId })
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'change request failed')
+    }
+    return response.data
+  },
+  async adminChangeRequests(): Promise<SponsorChangeRequestRow[]> {
+    const response = await apiRequest<ApiResponse<SponsorChangeRequestRow[]>>('/sponsor/admin/change-requests')
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'change request list failed')
+    }
+    return response.data
+  },
+  async adminApproveChange(requestId: number, note?: string): Promise<void> {
+    const response = await apiRequest<ApiResponse<null>>('/sponsor/admin/change-requests/approve', {
+      method: 'POST',
+      body: JSON.stringify({ requestId, note })
+    })
+    if (!response.success) {
+      throw new Error(response.message || 'approve failed')
+    }
+  },
+  async adminRejectChange(requestId: number, note?: string): Promise<void> {
+    const response = await apiRequest<ApiResponse<null>>('/sponsor/admin/change-requests/reject', {
+      method: 'POST',
+      body: JSON.stringify({ requestId, note })
+    })
+    if (!response.success) {
+      throw new Error(response.message || 'reject failed')
+    }
+  }
+}
+
 // 抽奖API
 export const lotteryApi = {
   // 执行抽奖

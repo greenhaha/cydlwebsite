@@ -119,7 +119,7 @@ const copyLink = async () => {
       document.body.removeChild(textarea)
     }
     message.success('下载链接已复制')
-  } catch (error) {
+  } catch {
     message.error('复制失败，请手动下载')
   }
 }

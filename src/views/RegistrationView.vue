@@ -70,7 +70,7 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { authApi } from '@/services/api'
@@ -179,12 +179,13 @@ watch(
   }
 )
 
-const resolvePoints = (payload: any) => {
-  if (!payload) return 0
-  const direct = payload.points ?? payload.point ?? payload.score ?? payload.signPoints ?? payload.signInPoints
+const resolvePoints = (payload: unknown) => {
+  if (!payload || typeof payload !== 'object') return 0
+  const record = payload as Record<string, unknown>
+  const direct = record.points ?? record.point ?? record.score ?? record.signPoints ?? record.signInPoints
   if (typeof direct === 'number') return direct
   if (typeof direct === 'string' && direct.trim() && !Number.isNaN(Number(direct))) return Number(direct)
-  const data = payload.data || {}
+  const data = record.data && typeof record.data === 'object' ? (record.data as Record<string, unknown>) : {}
   const nested =
     data.points ?? data.point ?? data.score ?? data.signPoints ?? data.signInPoints ?? data.rewardPoints
   if (typeof nested === 'number') return nested

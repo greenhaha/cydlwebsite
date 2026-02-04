@@ -18,11 +18,18 @@ import FloatingQuickActions from './components/common/FloatingQuickActions.vue'
 
 const route = useRoute()
 
-// Header 显示逻辑：某些沉浸式页面隐藏顶部导航
-const shouldShowHeader = computed(() => {
-  const hiddenHeaderPrefixes = ['/anniversary', '/challenge', '/lottery', '/anniversary-preheating', '/wish-credit-exchange', '/wish-exchange', '/activity', '/hotpoints-exchange', '/profile']
-  return !hiddenHeaderPrefixes.some(prefix => route.path === prefix || route.path.startsWith(`${prefix}/`))
-})
+// Header 显示逻辑：仅主导航页面显示
+const headerWhitelist = new Set([
+  '/',
+  '/models',
+  '/faq',
+  '/registration',
+  '/server-status',
+  '/gifts',
+  '/contribute',
+  '/app-download',
+])
+const shouldShowHeader = computed(() => headerWhitelist.has(route.path))
 
 // Footer 显示逻辑：只有 meta.hideFooter = true 的路由隐藏，其余显示
 const shouldShowFooter = computed(() => route.matched.every(r => !r.meta?.hideFooter))
