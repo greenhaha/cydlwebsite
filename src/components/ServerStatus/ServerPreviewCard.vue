@@ -9,31 +9,41 @@
     @keydown.enter.prevent="handleExpand"
     @keydown.space.prevent="handleExpand"
   >
-    <div class="card-header">
-      <span class="status-dot" :class="statusClass" aria-hidden="true"></span>
-      <div class="header-text">
-        <h4 class="server-name" :title="displayName">{{ displayName }}</h4>
-        <p class="server-map" :title="mapFull">地图: {{ mapDisplay }}</p>
+    <div class="map-preview" :class="{ empty: !hasMapImage }">
+      <img v-if="hasMapImage" :src="mapImageUrl!" alt="" @error="handleImageError" />
+      <div class="map-overlay">
+        <span class="map-badge">地图预览</span>
+        <span class="map-title" :title="mapFull">{{ mapFull }}</span>
       </div>
-      <span class="status-pill" :class="statusClass">{{ statusText }}</span>
     </div>
 
-    <div class="card-stats">
-      <div class="stat">
-        <span class="stat-label">玩家</span>
-        <span class="stat-value" :class="utilClass">{{ playersText }}</span>
+    <div class="info-body">
+      <div class="card-header">
+        <span class="status-dot" :class="statusClass" aria-hidden="true"></span>
+        <div class="header-text">
+          <div class="name-row">
+            <h4 class="server-name" :title="displayName">{{ displayName }}</h4>
+            <span class="inline-stats">{{ playersText }} <span class="inline-ping" :class="pingClass">{{ pingText }}</span></span>
+          </div>
+          <p class="server-map" :title="mapFull">地图: {{ mapFull }}</p>
+        </div>
+        <span class="status-pill" :class="statusClass">{{ statusText }}</span>
       </div>
-      <div class="stat">
-        <span class="stat-label">延迟</span>
-        <span class="stat-value" :class="pingClass">{{ pingText }}</span>
+
+      <div class="card-stats">
+        <div class="action-row">
+          <div class="capacity-bar">
+            <div class="capacity-fill" :class="utilClass" :style="{ width: capacityPercent + '%' }"></div>
+          </div>
+          <button class="detail-btn" type="button" @click.stop.prevent="emit('expand')">查看详情</button>
+        </div>
       </div>
-      <button class="detail-btn" type="button" @click.stop.prevent="emit('expand')">查看详情</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 interface ServerDataLite {
   online: boolean
@@ -41,6 +51,7 @@ interface ServerDataLite {
   map?: string | null
   players: number
   maxPlayers: number
+  bots?: number
   ping: number | null
   queryDuration?: number | null
   address: string | null
@@ -49,18 +60,29 @@ interface ServerDataLite {
 const props = defineProps<{ server: ServerDataLite; label: string; expandable?: boolean }>()
 const emit = defineEmits<{ (e: 'expand'): void }>()
 
+const imageError = ref(false)
+
 const isExpandable = computed(() => props.expandable !== false)
 const displayName = computed(() => props.label || props.server.name || '未命名服务器')
 const effectivePing = computed(() => props.server.ping ?? props.server.queryDuration ?? null)
 const pingText = computed(() => (effectivePing.value != null ? `${effectivePing.value}ms` : '--'))
 const mapFull = computed(() => props.server.map || '未知地图')
-const mapDisplay = computed(() => {
-  const m = mapFull.value
-  return m.length > 18 ? m.slice(0, 16) + '?' : m
+const mapImageUrl = computed(() => {
+  const mapName = props.server.map?.trim()
+  if (!mapName) return null
+  return `https://servers.upkk.com/mapimage/${encodeURIComponent(mapName)}.webp`
 })
+const hasMapImage = computed(() => !!mapImageUrl.value && !imageError.value)
 const playersText = computed(() => {
   const max = props.server.maxPlayers || 0
   return max ? `${props.server.players}/${max}` : `${props.server.players}/--`
+})
+
+const capacityPercent = computed(() => {
+  const max = props.server.maxPlayers || 0
+  if (!max) return 0
+  const pct = (props.server.players / max) * 100
+  return Math.max(0, Math.min(100, Number.isFinite(pct) ? pct : 0))
 })
 
 const statusClass = computed(() => (props.server.online ? 'is-online' : 'is-offline'))
@@ -80,9 +102,18 @@ const pingClass = computed(() => {
   return 'ping-bad'
 })
 
+watch(() => props.server.map, () => {
+  imageError.value = false
+})
+
+
 const handleExpand = () => {
   if (!isExpandable.value) return
   emit('expand')
+}
+
+const handleImageError = () => {
+  imageError.value = true
 }
 </script>
 
@@ -91,52 +122,101 @@ const handleExpand = () => {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 18px 20px;
-  border-radius: 20px;
+  gap: 0;
+  padding: 0;
+  border-radius: 16px;
   background: var(--theme-card-bg);
   border: 1px solid var(--theme-border);
   color: var(--theme-text);
   box-shadow: var(--theme-card-shadow);
-  backdrop-filter: blur(10px);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.preview-card::before {
-  content: "";
+
+
+.map-preview {
+  position: relative;
+  width: 100%;
+  height: clamp(110px, 14vw, 140px);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.9));
+}
+
+.map-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.map-preview.empty {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+}
+
+
+
+
+.map-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.25), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 8px 10px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(2, 6, 23, 0.65) 100%);
+}
+
+.map-badge {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.map-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  word-break: break-word;
 }
 
 .preview-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(59, 130, 246, 0.5);
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.25);
-}
-
-.preview-card:hover::before {
-  opacity: 1;
 }
 
 .preview-card:focus-visible {
   outline: 2px solid rgba(59, 130, 246, 0.6);
-  outline-offset: 3px;
+  outline-offset: 6px;
 }
 
 .preview-card.offline {
   opacity: 0.88;
 }
 
+.preview-card.offline .map-preview img {
+  filter: grayscale(0.6) brightness(0.7);
+}
+
+.info-body {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  padding-left: 2%;
 }
 
 .status-dot {
@@ -161,30 +241,54 @@ const handleExpand = () => {
   min-width: 0;
 }
 
+.name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
 .server-name {
-  margin: 0 0 4px;
-  font-size: 15px;
+  margin: 0;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.2px;
   color: var(--theme-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.inline-stats {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--theme-text);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.inline-ping {
+  margin-left: 4px;
+  font-weight: 600;
 }
 
 .server-map {
   margin: 0;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--theme-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  word-break: break-word;
 }
 
 .status-pill {
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   border: 1px solid transparent;
   white-space: nowrap;
@@ -204,22 +308,52 @@ const handleExpand = () => {
 
 .card-stats {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.stat {
-  display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 90px;
+  gap: 4px;
+  align-items: stretch;
 }
 
-.stat-label {
+
+.stat-ping {
   font-size: 12px;
-  color: var(--theme-muted);
+  font-weight: 600;
+}
+
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  padding-left: 2%;
+}
+
+.capacity-bar {
+  flex: 1;
+  min-width: 0;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--theme-secondary-bg);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--theme-border);
+}
+
+.capacity-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #60a5fa;
+  transition: width 0.3s ease;
+}
+
+.capacity-fill.util-low {
+  background: #60a5fa;
+}
+
+.capacity-fill.util-mid {
+  background: #22c55e;
+}
+
+.capacity-fill.util-high {
+  background: #f97316;
 }
 
 .stat-value {
@@ -261,15 +395,15 @@ const handleExpand = () => {
 }
 
 .detail-btn {
-  margin-left: auto;
   border: 1px solid var(--theme-border);
   background: var(--theme-secondary-bg);
   color: var(--theme-text);
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  flex-shrink: 0;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
@@ -283,18 +417,25 @@ const handleExpand = () => {
 }
 
 @media (max-width: 640px) {
-  .preview-card {
-    padding: 16px;
+  .card-stats {
+    align-items: stretch;
   }
 
-  .card-stats {
-    align-items: flex-start;
+  .map-preview {
+    height: clamp(100px, 32vw, 120px);
+  }
+
+  .info-body {
+    padding: 12px 12px 14px;
+  }
+
+  .action-row {
+    padding-left: 2%;
   }
 
   .detail-btn {
-    width: 100%;
     text-align: center;
-    margin-left: 0;
   }
 }
+
 </style>

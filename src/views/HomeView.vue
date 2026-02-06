@@ -92,7 +92,7 @@ const panelTitle = '丰富内容，持续更新'
 const stats = [
   { label: '地图', value: '100+' },
   { label: '模型', value: '150+' },
-  { label: '自定义内容', value: '20+' },
+  { label: '自定义内容', value: '80+' },
 ]
 
 const featureEyebrow = 'Features'
@@ -108,7 +108,7 @@ const features = [
   },
   {
     title: '丰富玩法',
-    desc: 'MG娱乐对抗，多地图轮换',
+    desc: '主营娱乐对抗，多地图轮换，空闲时自动更换闯关图池',
     icon: GameIcon,
     accent: 'linear-gradient(135deg, #7c3aed, #c084fc)',
   },

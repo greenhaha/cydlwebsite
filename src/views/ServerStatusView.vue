@@ -9,7 +9,7 @@
       <section class="page-hero">
         <div class="title-block">
           <div class="title-eyebrow-row">
-            <p class="eyebrow">HLYM LIVE STATUS</p>
+            <p class="eyebrow">SERVER STATUS</p>
             <n-tag
               v-if="totalServers > 0"
               :type="onlineServers === totalServers ? 'success' : 'warning'"
@@ -26,6 +26,7 @@
               立即刷新
             </n-button>
             <span class="hero-meta">上次更新 {{ lastUpdated || '--' }}</span>
+            <a class="hero-link" href="https://servers.upkk.com/swagger/" target="_blank" rel="noopener">预览图来自 Upkk·公开API</a>
           </div>
         </div>
         <div v-if="showSummary" class="hero-util-card">
@@ -176,8 +177,7 @@ import ServerPreviewCard from '@/components/ServerStatus/ServerPreviewCard.vue'
 // 服务器配置：名称 + 地址；空地址表示占位待配置
 interface ServerConfig { name: string; address: string }
 const serverConfigs: ServerConfig[] = [
-  { name: '娱乐对抗', address: '110.42.41.225:27015' },
-  { name: '活动专用', address: '待公开' }
+  { name: 'CS2-娱乐对抗', address: '110.42.41.225:27015' }
 ]
 const serverAddresses = serverConfigs.map(c => c.address)
 const bgImageUrl = 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg5.gif'
@@ -539,6 +539,18 @@ onUnmounted(() => {
   color: var(--theme-muted);
 }
 
+.hero-link {
+  font-size: 12px;
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hero-link:hover {
+  color: #60a5fa;
+  text-decoration: underline;
+}
+
 .stat-value {
   font-size: 20px;
   font-weight: 700;
@@ -556,12 +568,12 @@ onUnmounted(() => {
 }
 
 .status-card {
-  background: var(--theme-card-bg);
-  border: 1px solid var(--theme-border);
-  border-radius: 32px;
-  padding: 28px;
-  box-shadow: var(--theme-card-shadow);
-  backdrop-filter: blur(14px);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .summary-bar {
@@ -680,7 +692,9 @@ onUnmounted(() => {
 
 .preview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 320px));
+  justify-content: start;
+  align-items: start;
   gap: 18px;
   margin-top: 12px;
   margin-bottom: 30px;
@@ -693,27 +707,6 @@ onUnmounted(() => {
   border: 1px dashed var(--theme-border);
   border-radius: 18px;
   background: var(--theme-secondary-bg);
-}
-
-:deep(.preview-card) {
-  background: var(--theme-card-bg) !important;
-  border: 1px solid var(--theme-border) !important;
-  color: var(--theme-text) !important;
-  box-shadow: var(--theme-card-shadow) !important;
-}
-
-:deep(.preview-card .name) {
-  color: var(--theme-text) !important;
-}
-
-:deep(.preview-card .map),
-:deep(.preview-card .meta),
-:deep(.preview-card .ping-unknown) {
-  color: var(--theme-muted) !important;
-}
-
-:deep(.preview-card .ping-bar) {
-  background: var(--theme-secondary-bg) !important;
 }
 
 .skeleton-blocks {
@@ -1237,9 +1230,10 @@ onUnmounted(() => {
     font-size: 36px;
   }
 
-    .status-card {
-    padding: 20px;
-    border-radius: 24px;
+  .preview-grid {
+    grid-template-columns: 1fr;
+    justify-content: stretch;
+    gap: 14px;
   }
 
 

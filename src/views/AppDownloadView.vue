@@ -96,7 +96,7 @@
 <script setup lang="ts">
 import { NButton, NTag, useMessage } from 'naive-ui'
 
-const appName = '黄粱一梦社区'
+const appName = '黄粱一梦'
 const apkUrl = 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/apks/hlymcn/hlymcn-1.0.0.apk'
 const version = 'V1.0.0'
 const updatedAt = '2026-02-01'
