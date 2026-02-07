@@ -87,8 +87,6 @@ const themeOverrides: GlobalThemeOverrides = {
             <n-layout-header v-if="shouldShowHeader" class="n-layout-header absolute top-0 left-0 right-0 z-1">
               <div class="w-full flex align-middle"><HeaderMenu /></div>
 
-              <!-- <div><RouterLink to="/">Home</RouterLink></div>
-              <div><RouterLink to="/about">About</RouterLink></div> -->
             </n-layout-header>
             <n-layout-content class="min-h-[calc(100vh)]">
               <RouterView />

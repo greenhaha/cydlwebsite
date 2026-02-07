@@ -8,6 +8,7 @@ export interface ServerData {
   online: boolean
   name: string | null
   map: string | null
+  mapImage?: string | null
   gameType: string | null
   players: number
   maxPlayers: number

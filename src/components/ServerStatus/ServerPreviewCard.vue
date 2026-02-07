@@ -49,6 +49,7 @@ interface ServerDataLite {
   online: boolean
   name: string | null
   map?: string | null
+  mapImage?: string | null
   players: number
   maxPlayers: number
   bots?: number
@@ -68,9 +69,10 @@ const effectivePing = computed(() => props.server.ping ?? props.server.queryDura
 const pingText = computed(() => (effectivePing.value != null ? `${effectivePing.value}ms` : '--'))
 const mapFull = computed(() => props.server.map || '未知地图')
 const mapImageUrl = computed(() => {
-  const mapName = props.server.map?.trim()
-  if (!mapName) return null
-  return `https://servers.upkk.com/mapimage/${encodeURIComponent(mapName)}.webp`
+  const direct = props.server.mapImage?.trim()
+  if (!direct) return null
+  if (direct.startsWith('//')) return `https:${direct}`
+  return direct
 })
 const hasMapImage = computed(() => !!mapImageUrl.value && !imageError.value)
 const playersText = computed(() => {

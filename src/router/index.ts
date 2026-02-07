@@ -69,14 +69,6 @@ const router = createRouter({
       meta: { requiresAuth: true }, // 需要登录
     },
     {
-      path: '/lottery-test',
-      name: 'lottery-test',
-      // route level code-splitting
-      // this generates a separate chunk for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/LotteryTestView.vue'),
-    },
-    {
       path: '/challenge',
       name: 'challenge',
       // route level code-splitting
@@ -152,14 +144,10 @@ const router = createRouter({
       component: () => import('../views/HotpointsExchangeView.vue'),
       meta: { requiresAuth: true, hideFooter: true }, // 次级页面
     },
-    // 临时移除不存在的ActivityTestView路由
     // {
-    //   path: '/activity-test',
-    //   name: 'activity-test',
     //   // route level code-splitting
     //   // this generates a separate chunk for this route
     //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/ActivityTestView.vue'),
     // },
     {
       path: '/app-download',
