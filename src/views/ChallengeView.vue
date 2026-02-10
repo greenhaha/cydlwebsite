@@ -17,7 +17,7 @@
       <div class="fixed top-0 left-0 right-0 z-30 bg-black/30 backdrop-blur-xl border-b border-white/10">
         <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <RouterLink
-            to="/"
+            to="/home"
             class="inline-flex items-center px-6 py-3 text-white/90 hover:text-white transition-all duration-300 rounded-xl hover:bg-white/10 bg-black/20 border border-white/20 hover:border-white/30 backdrop-blur-sm"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -88,7 +88,7 @@
               </RouterLink>
 
               <RouterLink
-                to="/"
+                to="/home"
                 class="w-full py-2 px-4 text-white/80 hover:text-white transition-colors inline-block"
               >
                 回到主页
@@ -125,7 +125,7 @@ onMounted(async () => {
   if (authStore.isAuthenticated) {
     status.value = 'success'
     // 延迟跳转
-    setTimeout(() => router.push('/'), 1800)
+    setTimeout(() => router.push('/home'), 1800)
     return
   }
 
@@ -142,7 +142,7 @@ onMounted(async () => {
       authStore.setToken(qpToken)
       await authStore.getCurrentUser()
       status.value = 'success'
-      setTimeout(() => router.push('/'), 1800)
+      setTimeout(() => router.push('/home'), 1800)
       return
     } catch (e) {
       console.error('使用URL Token获取用户失败:', e)
@@ -157,7 +157,7 @@ onMounted(async () => {
     try {
       await authStore.getCurrentUser()
       status.value = 'success'
-      setTimeout(() => router.push('/'), 1800)
+      setTimeout(() => router.push('/home'), 1800)
       return
     } catch (e) {
       console.error('本地 token 校验失败:', e)
@@ -170,7 +170,7 @@ onMounted(async () => {
     try {
       await authStore.getCurrentUser()
       status.value = 'success'
-      setTimeout(() => router.push('/'), 1800)
+      setTimeout(() => router.push('/home'), 1800)
       return
     } catch (e) {
       console.error('success 标志存在但拉取用户失败', e)

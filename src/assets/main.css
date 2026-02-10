@@ -3,7 +3,7 @@
 #app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 :root {
@@ -23,6 +23,7 @@
   --theme-footer-text: rgba(148, 163, 184, 0.9);
   --theme-footer-link: rgba(219, 234, 254, 0.95);
   --theme-body-bg: #0b1120;
+  --footer-visual: url('/footer.png');
 }
 
 :root[data-theme='light'] {

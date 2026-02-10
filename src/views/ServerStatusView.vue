@@ -171,14 +171,11 @@ import { ref, computed, watch, onUnmounted } from 'vue'
 import { NButton, NTag, useMessage } from 'naive-ui'
 import { useMultiServerStatus } from '@/composables/useMultiServerStatus'
 import ServerPreviewCard from '@/components/ServerStatus/ServerPreviewCard.vue'
+import { serverConfigs as rawServerConfigs, type ServerConfig } from '@/const/servers'
 
-// 配置需要展示的服务器地址（可扩展）
-// 服务器配置：名称 + 地址；空地址表示占位待配置
-interface ServerConfig { name: string; address: string }
-const serverConfigs: ServerConfig[] = [
-  { name: 'CS2-娱乐对抗', address: '110.42.41.225:27015' }
-]
-const serverAddresses = serverConfigs.map(c => c.address)
+// 服务器配置：统一从常量管理（过滤空地址）
+const serverConfigs: ServerConfig[] = rawServerConfigs.filter((config) => config.address?.trim())
+const serverAddresses = serverConfigs.map(c => c.address.trim())
 const bgImageUrl = 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg5.gif'
 
 const { loading, error, serverDataList, lastUpdated, fetchServers } = useMultiServerStatus(serverAddresses)

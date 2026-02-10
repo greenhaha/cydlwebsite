@@ -14,7 +14,7 @@
       <div class="fixed top-0 left-0 right-0 z-30 bg-black/60 backdrop-blur-md border-b border-white/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <RouterLink
-            to="/"
+            to="/home"
             class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/20 bg-black/30"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,7 +209,7 @@ const handleLogin = async () => {
     await authStore.login(loginForm.value.username, loginForm.value.password)
 
     // 登录成功，跳转到主页
-    router.push('/')
+    router.push('/home')
   } catch (error) {
     // 错误已经在store中处理
     console.error('登录失败:', error)
@@ -262,7 +262,7 @@ const handleSteamLogin = async () => {
 // 页面加载时检查是否已登录
 onMounted(() => {
   if (authStore.isAuthenticated) {
-    router.push('/')
+    router.push('/home')
   }
 })
 </script>

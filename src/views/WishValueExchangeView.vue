@@ -15,7 +15,7 @@
         <div class="w-full !mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div class="flex items-center justify-between">
             <RouterLink
-              to="/"
+              to="/home"
               class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-350 rounded-lg hover:bg-white/20 bg-black/30"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

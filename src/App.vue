@@ -20,7 +20,7 @@ const route = useRoute()
 
 // Header 显示逻辑：仅主导航页面显示
 const headerWhitelist = new Set([
-  '/',
+  '/home',
   '/models',
   '/faq',
   '/registration',
@@ -83,15 +83,15 @@ const themeOverrides: GlobalThemeOverrides = {
     <n-message-provider>
       <n-dialog-provider>
         <n-space vertical size="large">
-          <n-layout class="relative">
+          <n-layout class="relative flex flex-col min-h-screen">
             <n-layout-header v-if="shouldShowHeader" class="n-layout-header absolute top-0 left-0 right-0 z-1">
               <div class="w-full flex align-middle"><HeaderMenu /></div>
 
             </n-layout-header>
-            <n-layout-content class="min-h-[calc(100vh)]">
+            <n-layout-content class="flex-1">
               <RouterView />
             </n-layout-content>
-            <n-layout-footer v-if="shouldShowFooter" class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
+            <n-layout-footer v-if="shouldShowFooter" class="w-full"><AppFooter /></n-layout-footer>
             <FloatingQuickActions />
           </n-layout>
         </n-space>
@@ -133,16 +133,20 @@ export default defineComponent({
 
 n-layout-footer {
   text-align: center;
-  padding: 16px;
-  display: flex;
+  padding: 0;
+  display: block;
 }
 
 n-layout-content {
-  background-color: #fff;
-  min-height: calc(100vh - 64px);
+  flex: 1;
+  background-color: transparent;
+  min-height: 0;
 }
+
 n-layout {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>
 

@@ -7,6 +7,15 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      redirect: '/portal',
+    },
+    {
+      path: '/portal',
+      name: 'portal',
+      component: () => import('../views/PortalView.vue'),
+    },
+    {
+      path: '/home',
       name: 'home',
       component: HomeView,
     },
@@ -183,7 +192,7 @@ router.beforeEach(async (to, from, next) => {
   // 检查是否为游客页面（已登录用户不应访问）
   if (to.matched.some(record => record.meta.requiresGuest)) {
     if (authStore.isAuthenticated) {
-      next('/')
+      next('/home')
       return
     }
   }

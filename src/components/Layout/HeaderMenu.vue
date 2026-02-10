@@ -1,60 +1,70 @@
 ﻿<template>
   <header :class="['floating-header', { hidden: headerHidden, elevated: headerElevated }]">
     <div class="header-surface">
-      <div class="brand-block">
-        <div class="brand-mark"><img src="/favicon.ico" alt="logo" class="brand-logo" /></div>
-        <div class="brand-text">
-          <span class="brand-title">{{ copy.brandTitle }}</span>
-          <span class="brand-subtitle">{{ copy.brandSubtitle }}</span>
-        </div>
-      </div>
-
-      <nav v-if="!isMobile" class="nav-links">
-        <RouterLink
-          v-for="item in navItems"
-          :key="item.key"
-          :to="item.to"
-          class="nav-link"
-          :class="{ active: isActive(item.path) }"
-        >
-          <n-icon size="16" class="nav-icon">
-            <component :is="item.icon" />
-          </n-icon>
-          <span>{{ item.label }}</span>
+      <div class="header-inner">
+        <RouterLink to="/portal" class="brand-link" aria-label="进入导航页">
+          <div class="brand-block">
+            <div class="brand-mark"><img src="/favicon.ico" alt="logo" class="brand-logo" /></div>
+            <div class="brand-text">
+              <span class="brand-title">{{ copy.brandTitle }}</span>
+              <span class="brand-subtitle">{{ copy.brandSubtitle }}</span>
+            </div>
+          </div>
         </RouterLink>
-      </nav>
 
-      <div class="action-block">
-        <div v-if="!authStore.isAuthenticated" class="auth-actions">
-          <n-button @click="goToLogin" size="small" type="primary" class="auth-btn" ghost>
-            {{ copy.login }}
-          </n-button>
-          <n-button @click="goToRegister" size="small" type="primary" class="auth-btn">
-            {{ copy.register }}
-          </n-button>
+        <nav v-if="!isMobile" class="nav-links">
+          <RouterLink
+            v-for="item in navItems"
+            :key="item.key"
+            :to="item.to"
+            class="nav-link"
+            :class="{ active: isActive(item.path) }"
+          >
+            <n-icon size="16" class="nav-icon">
+              <component :is="item.icon" />
+            </n-icon>
+            <span>{{ item.label }}</span>
+          </RouterLink>
+        </nav>
+
+        <div class="action-block">
+          <button class="theme-toggle" type="button" @click="toggleTheme">
+            <n-icon size="18" class="theme-icon">
+              <component :is="themeIcon" />
+            </n-icon>
+            <span>{{ themeLabel }}</span>
+          </button>
+          <div v-if="!authStore.isAuthenticated" class="auth-actions">
+            <n-button @click="goToLogin" size="small" type="primary" class="auth-btn" ghost>
+              {{ copy.login }}
+            </n-button>
+            <n-button @click="goToRegister" size="small" type="primary" class="auth-btn">
+              {{ copy.register }}
+            </n-button>
+          </div>
+          <div v-else class="user-area">
+            <n-dropdown :options="userMenuOptions" @select="handleUserMenuSelect">
+              <button class="user-trigger" type="button">
+                <span class="user-avatar">
+                  <svg class="user-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </span>
+                <span class="user-name hidden md:block">{{ authStore.user?.username }}</span>
+                <n-icon size="16" class="user-chevron">
+                  <ChevronDownIcon />
+                </n-icon>
+              </button>
+            </n-dropdown>
+          </div>
         </div>
-        <div v-else class="user-area">
-          <n-dropdown :options="userMenuOptions" @select="handleUserMenuSelect">
-            <button class="user-trigger" type="button">
-              <span class="user-avatar">
-                <svg class="user-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </span>
-              <span class="user-name hidden md:block">{{ authStore.user?.username }}</span>
-              <n-icon size="16" class="user-chevron">
-                <ChevronDownIcon />
-              </n-icon>
-            </button>
-          </n-dropdown>
-        </div>
+
+        <button v-if="isMobile" class="mobile-toggle" type="button" @click="drawerVisible = true">
+          <n-icon size="20">
+            <MenuIcon />
+          </n-icon>
+        </button>
       </div>
-
-      <button v-if="isMobile" class="mobile-toggle" type="button" @click="drawerVisible = true">
-        <n-icon size="20">
-          <MenuIcon />
-        </n-icon>
-      </button>
     </div>
   </header>
 
@@ -98,6 +108,9 @@
               {{ copy.logout }}
             </button>
           </template>
+          <button class="sheet-user" type="button" @click="toggleTheme">
+            {{ themeLabel }}
+          </button>
         </div>
       </div>
     </div>
@@ -112,10 +125,12 @@ import {
   Heart as HeartIcon,
   Home as HomeIcon,
   LogOut as LogOutIcon,
+  Moon as MoonIcon,
   Menu as MenuIcon,
   Person as PersonIcon,
   PhonePortrait as PhonePortraitIcon,
   Server as ServerIcon,
+  Sunny as SunIcon,
   WomanSharp as ModelIcon,
   Trophy as TrophyIcon,
   Videocam as VideocamIcon,
@@ -132,7 +147,7 @@ function renderIcon(icon: Component) {
 
 const copy = {
   brandTitle: '黄粱一梦',
-  brandSubtitle: 'HLYMCN',
+  brandSubtitle: '灵魂の雕塑',
   login: '登录',
   register: '注册',
   mobileMenu: '导航',
@@ -141,7 +156,7 @@ const copy = {
 }
 
 const navItems = [
-  { key: 'home', label: '首页', path: '/', to: { name: 'home', params: { lang: 'zh-CN' } }, icon: HomeIcon },
+  { key: 'home', label: '首页', path: '/home', to: { name: 'home', params: { lang: 'zh-CN' } }, icon: HomeIcon },
   { key: 'models', label: '模型图鉴', path: '/models', to: { path: '/models' }, icon: ModelIcon },
   { key: 'faq', label: '常见问题', path: '/faq', to: { path: '/faq' }, icon: AlertCircleIcon },
   { key: 'registration', label: '签到', path: '/registration', to: { path: '/registration' }, icon: BookIcon },
@@ -169,6 +184,7 @@ export default defineComponent({
     const isMobile = ref(false)
     const headerHidden = ref(false)
     const headerElevated = ref(false)
+    const theme = ref(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark')
     let lastScrollY = 0
 
     const userMenuOptions = ref([
@@ -220,14 +236,23 @@ export default defineComponent({
           break
         case 'logout':
           authStore.logout()
-          router.push('/')
+          router.push('/home')
           break
       }
       drawerVisible.value = false
     }
 
+    const toggleTheme = () => {
+      theme.value = theme.value === 'dark' ? 'light' : 'dark'
+      document.documentElement.setAttribute('data-theme', theme.value)
+      localStorage.setItem('theme', theme.value)
+    }
+
+    const themeIcon = computed(() => (theme.value === 'dark' ? MoonIcon : SunIcon))
+    const themeLabel = computed(() => (theme.value === 'dark' ? '暗色' : '亮色'))
+
     const isActive = (path: string) => {
-      if (path == '/') return route.path == '/'
+      if (path == '/home') return route.path == '/home'
       return route.path.startsWith(path)
     }
 
@@ -265,6 +290,9 @@ export default defineComponent({
       isActive,
       headerHidden,
       headerElevated,
+      toggleTheme,
+      themeIcon,
+      themeLabel,
     }
   },
 })
@@ -273,10 +301,10 @@ export default defineComponent({
 <style scoped>
 .floating-header {
   position: fixed;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(1280px, calc(100% - 32px));
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
   z-index: 300;
   transition: transform 0.18s ease, opacity 0.18s ease;
   will-change: transform, opacity;
@@ -284,29 +312,36 @@ export default defineComponent({
 
 
 .floating-header.hidden {
-  transform: translate(-50%, -140%);
+  transform: translateY(-100%);
   opacity: 0;
 }
 
 
 .header-surface {
-  height: 64px;
+  height: 72px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
-  padding: 0 20px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--theme-footer-bg) 0%, rgba(2, 6, 23, 0.85) 80%, rgba(88, 28, 135, 0.08) 100%);
-  border: 1px solid var(--theme-border);
-  box-shadow: 0 16px 36px rgba(2, 6, 23, 0.28);
+  padding: 0 16px;
+  border-radius: 0;
+  background: var(--theme-card-bg);
+  border-bottom: 1px solid var(--theme-border);
+  box-shadow: 0 16px 30px rgba(2, 6, 23, 0.22);
   backdrop-filter: blur(14px);
   animation: headerFade 0.22s ease;
 }
 
+.header-inner {
+  width: min(1280px, calc(100% - 32px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
 
 .floating-header.elevated .header-surface {
-  box-shadow: 0 20px 45px rgba(2, 6, 23, 0.5);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.35);
 }
 
 .brand-block {
@@ -314,6 +349,19 @@ export default defineComponent({
   align-items: center;
   gap: 12px;
   min-width: 0;
+}
+
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-link:focus-visible {
+  outline: 2px solid rgba(148, 163, 184, 0.6);
+  outline-offset: 4px;
+  border-radius: 12px;
 }
 
 .brand-mark {
@@ -362,11 +410,8 @@ export default defineComponent({
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--theme-border);
-  border-radius: 999px;
+  gap: 4px;
+  padding: 0;
 }
 
 
@@ -374,8 +419,8 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 999px;
+  padding: 8px 12px;
+  border-radius: 10px;
   color: var(--theme-muted);
   font-size: 13px;
   font-weight: 600;
@@ -384,13 +429,13 @@ export default defineComponent({
 }
 
 .nav-link.active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(147, 51, 234, 0.95));
-  color: #fff;
-  box-shadow: 0 8px 18px rgba(59, 130, 246, 0.28);
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--theme-text);
+  box-shadow: inset 0 0 0 1px var(--theme-border);
 }
 
 .nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(148, 163, 184, 0.14);
   color: var(--theme-text);
 }
 
@@ -408,6 +453,19 @@ export default defineComponent({
 .auth-actions {
   display: flex;
   gap: 10px;
+}
+
+:deep(.theme-toggle) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-secondary-bg);
+  color: var(--theme-text);
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 :deep(.auth-btn.n-button) {
@@ -435,7 +493,7 @@ export default defineComponent({
   width: 30px;
   height: 30px;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.9), rgba(168, 85, 247, 0.9));
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(96, 165, 250, 0.95));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -525,8 +583,9 @@ export default defineComponent({
 }
 
 .sheet-link.active {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(147, 51, 234, 0.95));
-  color: #fff;
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--theme-text);
+  box-shadow: inset 0 0 0 1px var(--theme-border);
 }
 
 .sheet-link:hover {
@@ -579,22 +638,32 @@ export default defineComponent({
 }
 
 @media (max-width: 960px) {
+  .header-inner {
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .action-block {
+    margin-left: auto;
+  }
+
+  .mobile-toggle {
+    margin-left: 6px;
+  }
+
   .nav-links {
     display: none;
   }
 
-  .action-block {
+  .auth-actions,
+  .user-area {
     display: none;
   }
 }
 
 :root[data-theme='light'] .header-surface {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 65%, rgba(226, 232, 240, 0.6) 100%);
-  box-shadow: 0 18px 36px rgba(148, 163, 184, 0.25);
-}
-
-:root[data-theme='light'] .nav-links {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 30px rgba(148, 163, 184, 0.2);
 }
 
 :root[data-theme='light'] .mobile-toggle {
@@ -606,4 +675,3 @@ export default defineComponent({
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
-
