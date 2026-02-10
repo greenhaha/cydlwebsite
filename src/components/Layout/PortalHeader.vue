@@ -292,12 +292,7 @@ export default defineComponent({
   }
 
   .portal-nav {
-    order: 0;
-    width: auto;
-    flex: 1;
-    justify-content: center;
-    gap: 6px;
-    margin: 0 12px;
+    display: none;
   }
 
   .portal-actions {

@@ -11,7 +11,7 @@ import {
   NDialogProvider,
 } from 'naive-ui'
 import { RouterView, useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import AppFooter from './components/Layout/AppFooter.vue'
 import HeaderMenu from './components/Layout/HeaderMenu.vue'
 import FloatingQuickActions from './components/common/FloatingQuickActions.vue'
@@ -33,6 +33,26 @@ const shouldShowHeader = computed(() => headerWhitelist.has(route.path))
 
 // Footer 显示逻辑：只有 meta.hideFooter = true 的路由隐藏，其余显示
 const shouldShowFooter = computed(() => route.matched.every(r => !r.meta?.hideFooter))
+const footerReady = ref(false)
+
+const scheduleFooterReveal = async () => {
+  footerReady.value = false
+  await nextTick()
+  requestAnimationFrame(() => {
+    footerReady.value = true
+  })
+}
+
+onMounted(() => {
+  scheduleFooterReveal()
+})
+
+watch(
+  () => route.fullPath,
+  () => {
+    scheduleFooterReveal()
+  }
+)
 
 const themeOverrides: GlobalThemeOverrides = {
   Menu: {
@@ -82,16 +102,16 @@ const themeOverrides: GlobalThemeOverrides = {
   <n-config-provider preflight-style-disabled :theme-overrides="themeOverrides">
     <n-message-provider>
       <n-dialog-provider>
-        <n-space vertical size="large">
-          <n-layout class="relative flex flex-col min-h-screen">
+        <n-space vertical size="large" class="app-shell">
+          <n-layout class="app-layout relative">
             <n-layout-header v-if="shouldShowHeader" class="n-layout-header absolute top-0 left-0 right-0 z-1">
               <div class="w-full flex align-middle"><HeaderMenu /></div>
 
             </n-layout-header>
-            <n-layout-content class="flex-1">
+            <n-layout-content class="app-content">
               <RouterView />
             </n-layout-content>
-            <n-layout-footer v-if="shouldShowFooter" class="w-full"><AppFooter /></n-layout-footer>
+            <n-layout-footer v-if="shouldShowFooter && footerReady" class="app-footer"><AppFooter /></n-layout-footer>
             <FloatingQuickActions />
           </n-layout>
         </n-space>
@@ -153,5 +173,27 @@ n-layout {
 <style>
 body {
   overflow-x: hidden; /* 确保整个页面没有横向滚动条 */
+}
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+
+.app-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1 1 auto;
+  min-height: 60vh;
+}
+
+.app-footer {
+  width: 100%;
 }
 </style>
