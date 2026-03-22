@@ -91,6 +91,11 @@ export interface SteamCompleteRegisterData {
   message?: string
 }
 
+export interface SteamRegisterPrefillData {
+  steamId64: string
+  qqId?: string | null
+}
+
 export interface ApiResponse<T> {
   success: boolean
   message: string
@@ -380,8 +385,45 @@ export const authApi = {
     }
   },
 
+  // 查询 Steam 待注册预填信息（例如服务器侧已绑定QQ）
+  async getSteamRegisterPrefill(payload: { steamId64: string; steamTicket: string }): Promise<SteamRegisterPrefillData> {
+    try {
+      const response = await fetch('/api/auth/steam/register-prefill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+
+      type PrefillRaw = {
+        success?: boolean
+        message?: string
+        data?: SteamRegisterPrefillData
+        steamId64?: string
+        qqId?: string | null
+      }
+      const json: PrefillRaw = await response.json()
+      if (!json.success) {
+        throw new Error(json.message || '获取Steam注册预填信息失败')
+      }
+      if (json.data) {
+        return json.data
+      }
+      return {
+        steamId64: json.steamId64 || payload.steamId64,
+        qqId: json.qqId ?? null
+      }
+    } catch (error) {
+      console.error('获取Steam注册预填信息失败:', error)
+      throw error
+    }
+  },
+
   // 完成 Steam 待注册
-  async completeSteamRegister(payload: { steamId64: string; steamTicket: string; username: string; password: string; email?: string }): Promise<SteamCompleteRegisterData> {
+  async completeSteamRegister(payload: { steamId64: string; steamTicket: string; username: string; password: string; email?: string; qqId?: string }): Promise<SteamCompleteRegisterData> {
     // 注意：Steam 完成注册接口目前后端路径为 /api/auth/steam/complete-register（无 /v1 前缀），
     // 且返回结构为 { success:boolean, token, user, steamProfile?, message? }，并非统一的 ApiResponse 包装。
     // 这里直接使用 fetch，避开 API_BASE_URL 叠加造成的 404。

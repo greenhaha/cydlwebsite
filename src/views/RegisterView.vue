@@ -288,7 +288,8 @@ const handleRegister = async () => {
         steamTicket: registerForm.value.steamTicket,
         username: registerForm.value.username,
         password: registerForm.value.password,
-        email: registerForm.value.email || undefined
+        email: registerForm.value.email || undefined,
+        qqId: registerForm.value.qqId || undefined
       })
       // 设置 token 并跳转成功页
       authStore.setToken(data.token)
@@ -337,6 +338,17 @@ onMounted(() => {
     // 给一个建议用户名（可被修改）: steam + 后 8 位
     const suffix = sId.slice(-8)
     registerForm.value.username = `steam${suffix}`
+
+    // 若该 Steam 在服务器侧已绑定 QQ，则自动预填，减少手填错误
+    authApi.getSteamRegisterPrefill({ steamId64: sId, steamTicket: sTicket })
+      .then((prefill) => {
+        if (prefill.qqId && !registerForm.value.qqId) {
+          registerForm.value.qqId = prefill.qqId
+        }
+      })
+      .catch((error) => {
+        console.warn('Steam 注册预填信息获取失败:', error)
+      })
   }
 })
 </script>
