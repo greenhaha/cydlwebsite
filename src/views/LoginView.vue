@@ -2,8 +2,8 @@
   <div class="login-page">
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
-      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-           style="background-image: url('/src/assets/image/bg1.webp')">
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+           style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
       </div>
       <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
     </div>
@@ -13,8 +13,8 @@
       <!-- 顶部导航 -->
       <div class="fixed top-0 left-0 right-0 z-30 bg-black/60 backdrop-blur-md border-b border-white/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <RouterLink 
-            to="/"
+          <RouterLink
+            to="/home"
             class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/20 bg-black/30"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +98,7 @@
                 >
                 <span class="ml-2 text-white/80 text-sm text-shadow">记住我</span>
               </label> -->
-              
+
             </div>
 
             <!-- 登录按钮 -->
@@ -159,7 +159,7 @@
           <div class="text-center">
             <p class="text-white/80 text-sm text-shadow">
               还没有账户？
-              <RouterLink 
+              <RouterLink
                 to="/register"
                 class="text-blue-400 hover:text-blue-300 font-medium transition-colors ml-1"
               >
@@ -204,12 +204,12 @@ const handleLogin = async () => {
   try {
     // 清除之前的错误
     authStore.clearError()
-    
+
     // 执行登录
     await authStore.login(loginForm.value.username, loginForm.value.password)
-    
+
     // 登录成功，跳转到主页
-    router.push('/')
+    router.push('/home')
   } catch (error) {
     // 错误已经在store中处理
     console.error('登录失败:', error)
@@ -221,8 +221,9 @@ const handleSteamLogin = async () => {
   try {
     steamLoading.value = true
     authStore.clearError()
-    
+
     // 调用后端获取Steam登录URL
+    // 注意：Steam 认证控制器后端当前基础路径为 /api/auth/steam (没有 /v1)。如后端未来改为 /api/v1/auth/steam 需同步此处。
     const response = await fetch('/api/auth/steam/login', {
       method: 'GET',
       headers: {
@@ -230,20 +231,20 @@ const handleSteamLogin = async () => {
         'Content-Type': 'application/json'
       }
     })
-    
+
     if (!response.ok) {
       const errorText = await response.text()
       console.error('HTTP Error:', response.status, errorText)
       throw new Error(`HTTP ${response.status}: 获取Steam登录URL失败`)
     }
-    
+
     const data = await response.json()
     console.log('Steam login response:', data)
-    
+
     if (!data.success) {
       throw new Error(data.message || 'Steam登录失败')
     }
-    
+
     // 重定向到Steam登录页面
     window.location.href = data.loginUrl
   } catch (error) {
@@ -261,7 +262,7 @@ const handleSteamLogin = async () => {
 // 页面加载时检查是否已登录
 onMounted(() => {
   if (authStore.isAuthenticated) {
-    router.push('/')
+    router.push('/home')
   }
 })
 </script>

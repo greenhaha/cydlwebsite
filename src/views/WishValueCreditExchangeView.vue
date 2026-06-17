@@ -3,7 +3,7 @@
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-           style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
+           style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
       </div>
     </div>
     <div class="pointer-events-none fixed inset-0 z-0"></div>
@@ -90,7 +90,7 @@
             <!-- 祈愿值余额 -->
             <div class="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg p-6 border border-purple-400/30">
               <div class="flex items-center justify-center !mb-4">
-                <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-12 h-12" alt="祈愿值">
+                <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-12 h-12" alt="祈愿值">
               </div>
               <h4 class="text-white font-bold text-lg text-center !mb-2">祈愿值</h4>
               <div class="text-center">
@@ -270,7 +270,7 @@
                 <div class="flex items-center space-x-2">
                   <img
                     v-if="record.fromType === 'wish'"
-                    src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png"
+                    src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png"
                     class="w-8 h-8"
                     alt="祈愿值"
                   >
@@ -289,7 +289,7 @@
 
                   <img
                     v-if="record.exchangeType === 'CREDIT_TO_WISH' || record.toType === 'wish'"
-                    src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png"
+                    src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png"
                     class="w-8 h-8"
                     alt="祈愿值"
                   >

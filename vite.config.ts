@@ -1,12 +1,12 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [vue(), vueDevTools()],
+export default defineConfig(({ mode }) => ({
+  plugins: [vue(), mode === 'development' && vueDevTools()].filter(Boolean) as Plugin[],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -28,4 +28,10 @@ export default defineConfig({
       },
     },
   },
-})
+  build: {
+    // Keep source maps off in production for faster loads and smaller bundles.
+    sourcemap: false,
+    // Skip compressed size reporting to speed up builds.
+    reportCompressedSize: false,
+  },
+}))

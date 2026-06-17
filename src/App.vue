@@ -8,22 +8,51 @@ import {
   NLayoutHeader,
   NSpace,
   NMessageProvider,
+  NDialogProvider,
 } from 'naive-ui'
 import { RouterView, useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import AppFooter from './components/Layout/AppFooter.vue'
 import HeaderMenu from './components/Layout/HeaderMenu.vue'
+import FloatingQuickActions from './components/common/FloatingQuickActions.vue'
 
 const route = useRoute()
 
-// Header 显示逻辑：某些沉浸式页面隐藏顶部导航
-const shouldShowHeader = computed(() => {
-  const hiddenHeaderRoutes = ['/anniversary', '/challenge', '/lottery', '/anniversary-preheating', '/wish-credit-exchange', '/wish-exchange', '/activity', '/hotpoints-exchange']
-  return !hiddenHeaderRoutes.includes(route.path)
-})
+// Header 显示逻辑：仅主导航页面显示
+const headerWhitelist = new Set([
+  '/home',
+  '/models',
+  '/faq',
+  '/registration',
+  '/server-status',
+  '/gifts',
+  '/contribute',
+  '/app-download',
+])
+const shouldShowHeader = computed(() => headerWhitelist.has(route.path))
 
 // Footer 显示逻辑：只有 meta.hideFooter = true 的路由隐藏，其余显示
 const shouldShowFooter = computed(() => route.matched.every(r => !r.meta?.hideFooter))
+const footerReady = ref(false)
+
+const scheduleFooterReveal = async () => {
+  footerReady.value = false
+  await nextTick()
+  requestAnimationFrame(() => {
+    footerReady.value = true
+  })
+}
+
+onMounted(() => {
+  scheduleFooterReveal()
+})
+
+watch(
+  () => route.fullPath,
+  () => {
+    scheduleFooterReveal()
+  }
+)
 
 const themeOverrides: GlobalThemeOverrides = {
   Menu: {
@@ -41,26 +70,52 @@ const themeOverrides: GlobalThemeOverrides = {
     itemIconColorActiveHorizontal: '#FFFFFFFF',
     itemIconColorActiveHoverHorizontal: '#FFFFFFFF',
   },
+  Select: {
+    color: 'var(--theme-secondary-bg)',
+    textColor: 'var(--theme-text)',
+    placeholderColor: 'var(--theme-muted)',
+    border: '1px solid var(--theme-border)',
+    borderHover: '1px solid var(--theme-border)',
+    borderActive: '1px solid var(--theme-border)',
+    menuColor: 'var(--theme-card-bg)',
+    optionColorPending: 'var(--theme-secondary-bg)',
+    optionColorActive: 'var(--theme-secondary-bg)',
+    optionColorSelected: 'var(--theme-secondary-bg)',
+    optionTextColor: 'var(--theme-text)',
+    optionTextColorActive: 'var(--theme-text)',
+    optionTextColorSelected: 'var(--theme-text)',
+    optionCheckColor: '#22c55e',
+  },
+  InternalSelection: {
+    color: 'var(--theme-secondary-bg)',
+    textColor: 'var(--theme-text)',
+    placeholderColor: 'var(--theme-muted)',
+    border: '1px solid var(--theme-border)',
+    borderHover: '1px solid var(--theme-border)',
+    borderActive: '1px solid var(--theme-border)',
+  },
+
 }
 </script>
 
 <template>
   <n-config-provider preflight-style-disabled :theme-overrides="themeOverrides">
     <n-message-provider>
-      <n-space vertical size="large">
-        <n-layout class="relative">
-          <n-layout-header v-if="shouldShowHeader" class="n-layout-header absolute top-0 left-0 right-0 z-1">
-            <div class="w-full flex align-middle"><HeaderMenu /></div>
+      <n-dialog-provider>
+        <n-space vertical size="large" class="app-shell">
+          <n-layout class="app-layout relative">
+            <n-layout-header v-if="shouldShowHeader" class="n-layout-header absolute top-0 left-0 right-0 z-1">
+              <div class="w-full flex align-middle"><HeaderMenu /></div>
 
-            <!-- <div><RouterLink to="/">Home</RouterLink></div>
-            <div><RouterLink to="/about">About</RouterLink></div> -->
-          </n-layout-header>
-          <n-layout-content class="min-h-[calc(100vh)]">
-            <RouterView />
-          </n-layout-content>
-          <n-layout-footer v-if="shouldShowFooter" class="absolute left-0 right-0 bottom-0"><AppFooter /></n-layout-footer>
-        </n-layout>
-      </n-space>
+            </n-layout-header>
+            <n-layout-content class="app-content">
+              <RouterView />
+            </n-layout-content>
+            <n-layout-footer v-if="shouldShowFooter && footerReady" class="app-footer"><AppFooter /></n-layout-footer>
+            <FloatingQuickActions />
+          </n-layout>
+        </n-space>
+      </n-dialog-provider>
     </n-message-provider>
   </n-config-provider>
 </template>
@@ -77,38 +132,68 @@ export default defineComponent({
     NLayoutHeader,
     NLayoutFooter,
     NSpace,
+    NDialogProvider,
   },
 })
 </script>
 <style scoped>
 .n-layout-header {
-  height: 64px;
-  padding: 0 50px;
-  color: #fff;
-  line-height: 64px;
-  /* background: #ebebeb; */
-  background-color: #001529;
+  height: 0;
+  padding: 0;
+  color: var(--theme-text);
+  line-height: 0;
+  background-color: transparent;
   width: 100vw;
   display: flex;
+  z-index: 50;
 }
+
+
+
 
 n-layout-footer {
   text-align: center;
-  padding: 16px;
-  display: flex;
+  padding: 0;
+  display: block;
 }
 
 n-layout-content {
-  background-color: #fff;
-  min-height: calc(100vh - 64px);
+  flex: 1;
+  background-color: transparent;
+  min-height: 0;
 }
+
 n-layout {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>
 
 <style>
 body {
   overflow-x: hidden; /* 确保整个页面没有横向滚动条 */
+}
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+
+.app-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1 1 auto;
+  min-height: 60vh;
+}
+
+.app-footer {
+  width: 100%;
 }
 </style>

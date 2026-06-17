@@ -146,5 +146,6 @@ export const contributeList ={
           "name": "服主",
           "supportDescription": "打酱油的"
       }
-  ]
+  ],
+  "specialThanks": []
 }

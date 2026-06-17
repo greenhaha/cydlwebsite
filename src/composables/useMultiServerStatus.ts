@@ -5,7 +5,7 @@ import type { ServerData } from '@/types/serverStatus'
  * 原始接口各段落可能出现的字段（批量接口中服务器对象的宽松结构）
  * 抽离在函数外，避免每次调用重复创建类型定义。
  */
-interface BasicInfo { online?: boolean; name?: string; map?: string; game_type?: string; password_protected?: boolean }
+interface BasicInfo { online?: boolean; name?: string; map?: string; map_image?: string; game_type?: string; password_protected?: boolean }
 interface PerformanceInfo { current_players?: number; max_players?: number; bots?: number; vac_enabled?: boolean; anti_cheat?: string; utilization_percent?: number }
 interface ConnectionInfo { address?: string; ping?: number; query_duration?: number }
 interface RawData { game?: string; numplayers?: number; maxplayers?: number; numbots?: number; secure?: boolean; version?: string; playerCount?: number; maxPlayers?: number; botCount?: number; vac?: boolean }
@@ -20,6 +20,8 @@ interface RawServer {
   ping?: number
   name?: string
   map?: string
+  mapImage?: string
+  map_image?: string
   password?: boolean
   connect?: string
   query?: QueryInfo
@@ -42,6 +44,7 @@ const createEmptyServerData = (): ServerData => ({
   online: false,
   name: null,
   map: null,
+  mapImage: null,
   gameType: null,
   players: 0,
   maxPlayers: 0,
@@ -146,6 +149,7 @@ export const useMultiServerStatus = (serverAddresses: string[]) => {
       online: derivedOnline,
       name: basicInfo.name || raw.name || null,
       map: basicInfo.map || raw.map || null,
+      mapImage: raw.mapImage || raw.map_image || basicInfo.map_image || null,
       gameType: basicInfo.game_type || rawData.game || null,
       players: playersVal,
       maxPlayers: maxPlayersVal,

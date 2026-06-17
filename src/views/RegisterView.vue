@@ -2,8 +2,8 @@
   <div class="register-page">
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
-      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-           style="background-image: url('/src/assets/image/bg1.webp')">
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+           style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
       </div>
       <div class="home-grass pointer-events-none fixed inset-0 z-0"></div>
     </div>
@@ -13,8 +13,8 @@
       <!-- 顶部导航 -->
       <div class="fixed top-0 left-0 right-0 z-30 bg-black/60 backdrop-blur-md border-b border-white/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <RouterLink 
-            to="/"
+          <RouterLink
+            to="/home"
             class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/20 bg-black/30"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,7 +60,7 @@
                 type="text"
                 required
                 class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
-                placeholder="请输入用户名"
+                placeholder="请输入用户名（仅支持英文开头加数字）"
               >
             </div>
 
@@ -207,7 +207,7 @@
           <div class="text-center">
             <p class="text-white/80 text-sm text-shadow">
               已有账户？
-              <RouterLink 
+              <RouterLink
                 to="/login"
                 class="text-blue-400 hover:text-blue-300 font-medium transition-colors ml-1"
               >
@@ -226,6 +226,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { authApi } from '@/services/api'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -238,8 +239,10 @@ const registerForm = ref({
   confirmPassword: '',
   steamId64: '',
   qqId: '',
-  acceptTerms: false
+  acceptTerms: false,
+  steamTicket: ''
 })
+const steamPending = ref(false)
 
 // 密码显示控制
 const showPassword = ref(false)
@@ -270,31 +273,48 @@ const handleRegister = async () => {
   try {
     // 清除之前的错误
     authStore.clearError()
-    
+
     // 检查密码确认
     if (registerForm.value.password !== registerForm.value.confirmPassword) {
       authStore.error = '两次输入的密码不一致'
       return
     }
-    
+
     // 执行注册
-    await authStore.register({
-      username: registerForm.value.username,
-      email: registerForm.value.email,
-      password: registerForm.value.password,
-      confirmPassword: registerForm.value.confirmPassword,
-      steamId64: registerForm.value.steamId64 || undefined,
-      qqId: registerForm.value.qqId || undefined
-    })
-    
+    if (steamPending.value) {
+      // 走 steam 完成注册流程
+      const data = await authApi.completeSteamRegister({
+        steamId64: registerForm.value.steamId64,
+        steamTicket: registerForm.value.steamTicket,
+        username: registerForm.value.username,
+        password: registerForm.value.password,
+        email: registerForm.value.email || undefined,
+        qqId: registerForm.value.qqId || undefined
+      })
+      // 设置 token 并跳转成功页
+      authStore.setToken(data.token)
+      await authStore.getCurrentUser()
+      router.push('/login/success')
+      return
+    } else {
+      await authStore.register({
+        username: registerForm.value.username,
+        email: registerForm.value.email,
+        password: registerForm.value.password,
+        confirmPassword: registerForm.value.confirmPassword,
+        steamId64: registerForm.value.steamId64 || undefined,
+        qqId: registerForm.value.qqId || undefined
+      })
+    }
+
     // 注册成功
     registerSuccess.value = true
-    
+
     // 3秒后跳转到登录页面
     setTimeout(() => {
       router.push('/login')
     }, 3000)
-    
+
   } catch (error) {
     // 错误已经在store中处理
     console.error('注册失败:', error)
@@ -304,7 +324,31 @@ const handleRegister = async () => {
 // 页面加载时检查是否已登录
 onMounted(() => {
   if (authStore.isAuthenticated) {
-    router.push('/')
+    router.push('/home')
+    return
+  }
+  // 解析 URL 查询参数 (steamId64 & steamTicket)
+  const query = router.currentRoute.value.query
+  const sId = query.steamId64 as string | undefined
+  const sTicket = query.steamTicket as string | undefined
+  if (sId && sTicket) {
+    steamPending.value = true
+    registerForm.value.steamId64 = sId
+    registerForm.value.steamTicket = sTicket
+    // 给一个建议用户名（可被修改）: steam + 后 8 位
+    const suffix = sId.slice(-8)
+    registerForm.value.username = `steam${suffix}`
+
+    // 若该 Steam 在服务器侧已绑定 QQ，则自动预填，减少手填错误
+    authApi.getSteamRegisterPrefill({ steamId64: sId, steamTicket: sTicket })
+      .then((prefill) => {
+        if (prefill.qqId && !registerForm.value.qqId) {
+          registerForm.value.qqId = prefill.qqId
+        }
+      })
+      .catch((error) => {
+        console.warn('Steam 注册预填信息获取失败:', error)
+      })
   }
 })
 </script>

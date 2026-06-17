@@ -1,41 +1,39 @@
 # CS2 黄粱一梦社区服 - 官方网站
 
-## 🎮 项目简介
+## 🎯 项目简介
+这是 CS2 黄粱一梦社区服的官方前端站点，提供服务器状态、活动中心、模型图鉴、礼物展示、贡献者、签到/抽奖/挑战、兑换与个人中心等功能的现代化 Web 应用。
 
-CS2 黄粱一梦社区服官方网站，为玩家提供服务器状态查看、周年庆活动、签到礼品等功能的现代化 Web 应用。
+## ✅ 主要功能
+- 🛰️ **服务器状态**：在线/离线、人数、延迟、地图信息与预览图，支持详情面板与一键加入
+- 🎯 **活动中心**：活动入口、玩法说明与奖励展示
+- 🎁 **礼物与直播展示**：礼物页内容与社区展示
+- 🧩 **模型图鉴**：模型搜索、标签筛选、阵营筛选、排序与预览
+- 📅 **签到/抽奖/挑战**：每日签到、抽奖、挑战玩法（需登录）
+- 💎 **积分/热度兑换**：愿望值与积分兑换、热度兑换（需登录）
+- 👤 **账户系统**：登录/注册、Steam 登录成功页、个人中心
+- 📦 **APP 下载**：安卓客户端下载入口
+- ❓ **FAQ/贡献者**：常见问题与贡献者展示
 
-## ✨ 主要功能
-
-- 🖥️ **实时服务器状态监控** - 查看服务器在线状态、玩家数量、延迟等信息
-- 🎉 **周年庆活动页面** - 沉浸式周年庆体验，包含活动详情和奖励展示
-- 📝 **玩家签到系统** - 每日签到获取奖励
-- 🎁 **礼品展示** - 游戏内物品和奖励展示
-- 📚 **常见问题解答** - 帮助玩家快速解决问题
-- 👥 **贡献者展示** - 感谢社区贡献者
-- 🏆 **模型图鉴** - 游戏模型和皮肤展示
-
-## 🛠️ 技术栈
-
-- **前端框架**: Vue 3.5.13 + TypeScript 5.8
-- **UI 组件库**: Naive UI 2.41.0
-- **样式框架**: TailwindCSS 4.0.17
-- **图标库**: @vicons/ionicons5, @vicons/tabler
-- **路由管理**: Vue Router 4.5.0
+## 🧩 技术栈
+- **框架**: Vue 3.5.13 + TypeScript 5.8
+- **UI 组件**: Naive UI 2.41.0
 - **状态管理**: Pinia 3.0.1
-- **构建工具**: Vite 6.2.1
-- **包管理器**: pnpm 10.11.0
+- **路由**: Vue Router 4.5.0
+- **请求**: Axios 1.8.4
+- **样式**: TailwindCSS 4.0.17
+- **构建**: Vite 6.2.1
+- **包管理**: pnpm 10.11.0
 
 ## 🚀 快速开始
-
 ### 环境要求
 - Node.js 22+
 - pnpm 10.11.0+
 
-### 安装和运行
+### 安装与运行
 ```bash
 # 克隆项目
 git clone <repository-url>
-cd cydl-web
+cd cydlwebsite
 
 # 安装依赖
 pnpm install
@@ -50,7 +48,7 @@ pnpm build
 pnpm preview
 ```
 
-### 开发命令
+### 常用命令
 ```bash
 # 类型检查
 pnpm type-check
@@ -58,116 +56,78 @@ pnpm type-check
 # 代码格式化
 pnpm format
 
-# 代码检查和修复
+# 代码检查与修复
 pnpm lint
 ```
 
 ## 📁 项目结构
-
 ```
-cydl-web/
-├── public/                        # 静态资源
-├── src/
-│   ├── App.vue                    # 根组件
-│   ├── main.ts                    # 应用入口
-│   ├── assets/                    # 资源文件
-│   ├── components/                # 可复用组件
-│   │   ├── Layout/                # 布局组件
-│   │   ├── ServerStatus/          # 服务器状态组件集
-│   │   └── icons/                 # 图标组件
-│   ├── composables/               # 组合式函数
-│   ├── const/                     # 常量配置
-│   ├── router/                    # 路由配置
-│   ├── services/                  # API 服务
-│   ├── stores/                    # 状态管理
-│   ├── types/                     # TypeScript 类型定义
-│   └── views/                     # 页面组件
-├── .gitignore
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── tailwind.config.js
-└── README.md
+cydlwebsite/
+├─ public/                         # 静态资源
+├─ src/
+│  ├─ App.vue                      # 根组件
+│  ├─ main.ts                      # 应用入口
+│  ├─ assets/                      # 资源文件
+│  ├─ components/                  # 复用组件
+│  │  ├─ Layout/                   # 布局组件
+│  │  ├─ ServerStatus/             # 服务器状态卡片
+│  │  └─ common/                   # 通用组件
+│  ├─ composables/                 # 组合式逻辑
+│  ├─ const/                       # 常量配置
+│  ├─ router/                      # 路由配置
+│  ├─ services/                    # API 服务
+│  ├─ stores/                      # 状态管理
+│  ├─ types/                       # TS 类型
+│  └─ views/                       # 页面组件
+└─ README.md
 ```
 
-## 🎯 核心页面
-
+## 🧭 核心页面
 ### 首页 (`/`)
-- 网站介绍和导航
-- 快速访问各功能模块
+- 站点介绍与核心能力概览
 
 ### 服务器状态 (`/server-status`)
-- 实时服务器在线状态
-- 玩家数量和详细信息
-- 服务器连接地址
-- 一键连接到游戏服务器
+- 多服务器批量查询
+- 地图信息与预览图
+- 详情面板、玩家列表与连接信息
 
-### 周年庆 (`/anniversary`)
-- 全屏沉浸式体验（隐藏导航栏）
-- 背景视频和动画效果
-- 活动详情和奖励展示
-- 参与入口和社区互动
+### 模型图鉴 (`/models`)
+- 搜索、标签/阵营筛选、排序与预览
 
-### 周年庆预热 (`/anniversary-preheating`)
-- 周年庆预告和倒计时
-- 预热活动信息
+### 活动中心 (`/activity`)
+- 活动入口与奖励信息（需登录）
 
-### 其他功能页面
-- `/registration` - 签到页面
-- `/faq` - 常见问题
-- `/gifts` - 礼物展示
-- `/models` - 模型图鉴
-- `/contribute` - 贡献者
+### 签到/抽奖/挑战
+- `/registration`：每日签到（需登录）
+- `/lottery`：抽奖（需登录）
+- `/challenge`：挑战玩法（需登录）
 
-## 🔧 开发亮点
+### 兑换与个人中心
+- `/wish-exchange`：愿望值兑换（需登录）
+- `/wish-credit-exchange`：积分兑换（需登录）
+- `/hotpoints-exchange`：热度兑换（需登录）
+- `/profile`：个人中心（需登录）
 
-### 1. 组件化架构
-- 采用单一职责原则，每个组件功能明确
-- 高度可重用的组件设计
-- 完整的 TypeScript 类型支持
-
-### 2. 响应式设计
-- 支持桌面端和移动端
-- 自适应布局和交互
-- 移动端优化的抽屉式菜单
-
-### 3. 性能优化
-- Vite 快速构建
-- 按需加载和代码分割
-- 组件懒加载
-
-### 4. 用户体验
-- 流畅的页面动画
-- 实时数据更新
-- 友好的错误处理和加载状态
-
-## 🎨 设计特色
-
-### 视觉效果
-- 现代化的渐变背景
-- 玻璃拟态 (Glassmorphism) 设计
-- 流畅的动画过渡效果
-- 游戏主题的配色方案
-
-### 交互体验
-- 悬停效果和微动画
-- 响应式触摸友好的操作
-- 直观的信息层级展示
-- 一键复制服务器地址
+### 其它页面
+- `/gifts`：礼物展示/直播入口
+- `/faq`：常见问题
+- `/contribute`：贡献者
+- `/app-download`：APP 下载
+- `/login` `/register` `/login/success`：登录注册流程
 
 ## 🔌 API 集成
-
 ### 服务器状态 API
 ```typescript
-// 获取服务器详细信息
-GET /api/v1/cs2/server/details
+// 批量查询服务器状态
+GET /api/v1/cs2/servers/batch?servers=ip:port,ip:port
 
-// 响应数据结构
+// 响应结构（节选）
 interface ServerResponse {
   basic_info: {
     online: boolean
     name: string
     map: string
+    map_image: string | null
     password_protected: boolean
   }
   performance: {
@@ -179,103 +139,66 @@ interface ServerResponse {
   connection: {
     address: string
     ping: number
-    query_duration: number
+    query_duration: number | null
   }
   players: Player[]
   timestamp: string
 }
 ```
 
-## 🏗️ 架构设计
-
-### 组合式 API
-使用 Vue 3 Composition API 提供更好的逻辑复用：
-
+## 🧱 架构说明
+### 组合式逻辑
+使用 `useMultiServerStatus` 进行多服务器批量查询与状态聚合。
 ```typescript
-// useServerStatus.ts
-export const useServerStatus = () => {
+// composables/useMultiServerStatus.ts
+export const useMultiServerStatus = (serverAddresses: string[]) => {
   const loading = ref(false)
-  const serverData = ref<ServerData>()
-  
-  const fetchServerStatus = async () => {
-    // 获取服务器状态逻辑
+  const serverDataList = ref<ServerData[]>([])
+  const fetchServers = async () => {
+    // 批量拉取服务器状态
   }
-  
-  return { loading, serverData, fetchServerStatus }
+  return { loading, serverDataList, fetchServers }
 }
 ```
 
 ### 类型安全
-完整的 TypeScript 类型定义确保开发期间的类型安全：
-
 ```typescript
 // types/serverStatus.ts
 export interface ServerData {
   online: boolean
   name: string | null
+  map: string | null
+  mapImage?: string | null
   players: number
   maxPlayers: number
-  // ...更多字段
+  ping: number | null
+  // ...
 }
 ```
 
-## 🌐 部署
-
-### 环境变量
-```env
-# API 基础地址
-VITE_API_BASE_URL=https://api.example.com
-
-# 服务器地址
-VITE_SERVER_ADDRESS=43.138.75.104:27015
-```
-
-### 构建和部署
+## 📦 部署
 ```bash
-# 构建生产版本
 pnpm build
-
-# 生成的文件在 dist/ 目录
-# 可部署到任何静态文件服务器
+# 产物输出到 dist/，可部署至任意静态服务器
 ```
 
-## 🤝 贡献指南
-
-### 开发规范
-1. 遵循 Vue 3 Composition API 最佳实践
-2. 使用 TypeScript 进行类型安全开发
-3. 遵循 ESLint 和 Prettier 配置
-4. 组件设计遵循单一职责原则
-5. 添加适当的注释和文档
-
-### 提交规范
+## 🧾 提交规范
 ```bash
-# 功能开发
-git commit -m "feat: 添加新功能描述"
-
-# 问题修复
-git commit -m "fix: 修复问题描述"
-
-# 样式调整
-git commit -m "style: 样式调整描述"
-
-# 重构代码
-git commit -m "refactor: 重构描述"
+git commit -m "feat: add new feature"
+git commit -m "fix: resolve issue"
+git commit -m "style: adjust UI"
+git commit -m "refactor: cleanup code"
 ```
 
 ## 📝 更新日志
+### v1.0.0 (Current)
+- ✅ 服务器状态页重构与地图预览支持
+- ✅ 活动中心/签到/抽奖/挑战流程完善
+- ✅ 模型图鉴与筛选体验升级
+- ✅ 账户与兑换功能接入
 
-### v0.0.0 (Current)
-- ✨ 初始版本发布
-- 🎮 服务器状态监控功能
-- 🎉 周年庆活动页面
-- 📱 完整的移动端适配
-- 🔧 组件化重构完成
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+## 📄 许可
+项目遵循 MIT License。
 
 ---
-
-**感谢所有为 CS2 黄粱一梦社区服做出贡献的开发者和玩家！** 🎮✨
+**感谢所有为 CS2 黄粱一梦社区服做出贡献的开发者与玩家。**

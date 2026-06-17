@@ -3,7 +3,7 @@
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-           style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg2.webp')">
+           style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg2.webp')">
       </div>
       <!-- 渐变遮罩层 -->
       <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80"></div>
@@ -17,7 +17,7 @@
       <div class="fixed top-0 left-0 right-0 z-30 bg-black/30 backdrop-blur-xl border-b border-white/10">
         <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <RouterLink
-            to="/"
+            to="/home"
             class="inline-flex items-center px-6 py-3 text-white/90 hover:text-white transition-all duration-300 rounded-xl hover:bg-white/10 bg-black/20 border border-white/20 hover:border-white/30 backdrop-blur-sm"
           >
             <svg class="w-5 h-5 !mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,7 +143,7 @@
               <div class="stat-card">
                 <div class="stat-icon">💎</div>
                 <div class="stat-value">{{ activityPoints || 0 }}</div>
-                <div class="stat-label">活动积分</div>
+                <div class="stat-label">活动积分（已结束）</div>
                 <div class="stat-sublabel">活动服获取积分</div>
                 <div class="stat-glow"></div>
               </div>
@@ -152,7 +152,7 @@
               <div class="stat-card">
                 <div class="stat-icon">🔥</div>
                 <div class="stat-value">{{ hotpointsValue || 0 }}</div>
-                <div class="stat-label">热度值</div>
+                <div class="stat-label">热度值（已结束）</div>
                 <div class="stat-sublabel">活动积分 : 热度值 = 10 : 1</div>
                 <div class="stat-glow"></div>
               </div>
@@ -161,7 +161,7 @@
               <div class="stat-card">
                 <div class="stat-icon">⏰</div>
                 <div class="stat-value">{{ formatPlayTime(userPlayTime) }}</div>
-                <div class="stat-label">游玩时长</div>
+                <div class="stat-label">全服游玩时长</div>
                 <div class="stat-sublabel">总时长</div>
                 <div class="stat-glow"></div>
               </div>
@@ -172,7 +172,7 @@
           <div ref="exchangeSection" class="exchange-section !mb-12">
             <div class="section-header">
               <h3 class="section-title">兑换中心</h3>
-              <p class="section-subtitle">使用祈愿值兑换精美皮肤和道具</p>
+              <p class="section-subtitle">使用祈愿值兑换皮肤和道具</p>
             </div>
 
             <!-- 用户积分显示区域 -->
@@ -301,8 +301,8 @@
           <!-- 第四部分：全服排名 -->
           <div class="server-rankings !mb-12">
             <div class="section-header">
-              <h3 class="section-title">活动排行榜</h3>
-              <p class="section-subtitle">活动服中的部分数据排名</p>
+              <h3 class="section-title">全服排行榜</h3>
+              <p class="section-subtitle">TOP3</p>
             </div>
 
             <div v-if="isLoadingRankings" class="loading-container">
@@ -397,8 +397,8 @@
           <!-- 第五部分：游玩时长排行榜 -->
           <div class="playtime-rankings !mb-12">
             <div class="section-header">
-              <h3 class="section-title">游玩时长排行榜</h3>
-              <p class="section-subtitle">感谢各位玩家的陪伴与支持！</p>
+              <h3 class="section-title">全服游玩时长排行榜</h3>
+              <p class="section-subtitle">TOP10</p>
             </div>
 
             <div v-if="isLoadingPlayTimeRankings" class="loading-container">
@@ -430,7 +430,7 @@
               </div>
             </div>
 
-            <!-- 感谢语 -->
+            <!-- 感谢语
             <div class="thanks-section">
               <div class="thanks-card">
                 <div class="text-4xl !mb-4">❤️</div>
@@ -441,7 +441,7 @@
                 </p>
                 <div class="text-2xl !mt-4">🎮✨🚀</div>
               </div>
-            </div>
+            </div> -->
           </div>
 
         </div>
@@ -487,23 +487,23 @@ const playTimeRanking = ref<K4TimesPlayerRankingInfo[]>([])
 // 精选奖品数据（轮播展示）
 const featuredPrizes = ref([
   {
-    name: '[周年庆限定]lime',
+    name: '往期活动奖品：[周年庆限定]lime',
     description: '捐赠人oVo，周年庆限定皮肤，活动期间限时兑换',
-    image: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lime_1.png',
+    image: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lime_1.png',
     price: 1000,
     rarity: '换肤模型'
   },
   // {
   //   name: '史诗级换肤模型',
   //   description: '精美史诗级角色皮肤，展现你的独特品味',
-  //   image: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp',
+  //   image: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp',
   //   price: 3000,
   //   rarity: '史诗'
   // },
   // {
   //   name: '稀有级换肤模型',
   //   description: '经典稀有级角色皮肤，性价比超高的选择',
-  //   image: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp',
+  //   image: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp',
   //   price: 1500,
   //   rarity: '稀有'
   // }

@@ -3,7 +3,7 @@
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-           style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
+           style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
       </div>
     </div>
     <div class="pointer-events-none fixed inset-0 z-0"></div>
@@ -15,7 +15,7 @@
         <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div class="flex items-center justify-between">
             <RouterLink 
-              to="/"
+              to="/home"
               class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-350 rounded-lg hover:bg-white/20 bg-black/30"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,19 +126,19 @@
               v-for="index in [0, 1, 2,3]" 
               :key="index"
               class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform hover:scale-105  mr-2"
-              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
+              style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
               :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
             >
               <!-- 奖品图标/祈愿值 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full flex flex-col items-center justify-center">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
+                  <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
+                  <span style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
                 </div>
                 <div v-else-if="prizes[index].type === 'item'" class="text-center w-full h-full flex justify-center ">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp" style="height: 60%; margin-top: 10px; " alt="道具">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}</span>
+                  <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp" style="height: 60%; margin-top: 10px; " alt="道具">
+                  <span style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}</span>
                 </div>
                 <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
               </div>
@@ -147,7 +147,7 @@
               <div 
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
-                style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
+                style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
@@ -202,15 +202,15 @@
               v-for="index in [10, 11,]" 
               :key="index"
               class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform hover:scale-105  mb-2"
-              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
+              style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
               :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
             >
               <!-- 奖品图标/祈愿值 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full flex flex-col items-center justify-center">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
+                  <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
+                  <span style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
                 </div>
                 <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
               </div>
@@ -219,7 +219,7 @@
               <div 
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
-                style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
+                style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
@@ -273,15 +273,15 @@
               v-for="index in [4, 5,]" 
               :key="index"
               class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat   mb-2 transition-transform hover:scale-105"
-              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png') ; background-size: 100% 100%;"
+              style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png') ; background-size: 100% 100%;"
               :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
             >
               <!-- 奖品图标/祈愿值 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full flex flex-col items-center justify-center">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
+                  <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
+                  <span style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
                 </div>
                 <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
               </div>
@@ -290,7 +290,7 @@
               <div 
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
-                style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
+                style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
@@ -344,15 +344,15 @@
               v-for="index in [ 6, 7, 8, 9]" 
               :key="index"
               class="relative !m-1 lottery-box w-35 h-35 bg-cover bg-center bg-no-repeat cursor-pointer transition-transform hover:scale-105"
-              style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
+              style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybg.png'); background-size: 100% 100%;"
               :class="{ 'animate-pulse border-4 border-yellow-400': isSpinning && currentIndex === index }"
               @click="selectPrize(index)"
             >
               <!-- 奖品图标/祈愿值 -->
               <div class="absolute inset-0 flex items-center justify-center">
                 <div v-if="prizes[index].type === 'points'" class="text-center w-full h-full flex flex-col items-center justify-center">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
-                  <span style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
+                  <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-[70%] h-[70%] mx-auto !mb-6" alt="祈愿值">
+                  <span style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/icon.png'); background-size: 100% 100%;" class="text-xs font-bold text-[white] drop-shadow-lg absolute bottom-2 left-0 block w-full text-center block py-2 ">{{ prizes[index].value }}祈愿值</span>
                 </div>
                 <div v-else class="text-xl drop-shadow-lg">{{ prizes[index].icon }}</div>
               </div>
@@ -361,7 +361,7 @@
               <div 
                 v-if="winningIndex === index && showWinEffect"
                 class="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ping"
-                style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
+                style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/light.png')"
               ></div>
               
               <!-- 强化中奖效果 -->
@@ -432,7 +432,7 @@
           >
             <!-- 抽奖按钮背景图 -->
             <div class="w-32 h-32 bg-cover bg-center bg-no-repeat mx-auto transition-transform duration-300 group-hover:scale-105 group-disabled:scale-95 group-disabled:opacity-60"
-                 style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybtn.png'); background-size: 100% 100%;">
+                 style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/lottoybtn.png'); background-size: 100% 100%;">
             </div>
           </button>
           
@@ -548,13 +548,13 @@
                 <div class="w-16 h-16 !mr-4  bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg flex items-center justify-center mr-4 border border-purple-400/30">
                   <img 
                     v-if="record.prizeType === 'item'" 
-                    src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp" 
+                    src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp" 
                     class="w-12 h-12 object-contain" 
                     alt="物品"
                   >
                   <img 
                     v-else
-                    src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" 
+                    src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" 
                     class="w-12 h-12 object-contain" 
                     alt="祈愿值"
                   >
@@ -654,18 +654,18 @@ const currentActivityPrizes = ref<LotteryPrize[]>([])
 
 // 棋盘奖品配置 - 按棋盘位置排列（12个格子）
 const prizes = ref([
-  { type: 'points', value: 10000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '巨额祈愿值' },  // 0
-  { type: 'points', value: 5000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '大额祈愿值' },   // 1
-  { type: 'item', value: '模型皮肤', icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp', name: '稀有皮肤' }, // 2
-  { type: 'points', value: 20, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '少量祈愿值' },     // 3
-  { type: 'points', value: 1000, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '丰厚祈愿值' },  // 4
-  { type: 'points', value: 500, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '优质祈愿值' },   // 5
-  { type: 'points', value: 300, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '良好祈愿值' },   // 6
-  { type: 'points', value: 50, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '微量祈愿值' },    // 7
-  { type: 'points', value: 150, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '普通祈愿值' },  // 8
-  { type: 'points', value: 100, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '基础祈愿值' },  // 9
-  { type: 'points', value: 50, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '微量祈愿值' },    // 10
-  { type: 'points', value: 20, icon: 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '少量祈愿值' }     // 11
+  { type: 'points', value: 10000, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '巨额祈愿值' },  // 0
+  { type: 'points', value: 5000, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '大额祈愿值' },   // 1
+  { type: 'item', value: '模型皮肤', icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/eika_mode.webp', name: '稀有皮肤' }, // 2
+  { type: 'points', value: 20, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '少量祈愿值' },     // 3
+  { type: 'points', value: 1000, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '丰厚祈愿值' },  // 4
+  { type: 'points', value: 500, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '优质祈愿值' },   // 5
+  { type: 'points', value: 300, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '良好祈愿值' },   // 6
+  { type: 'points', value: 50, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '微量祈愿值' },    // 7
+  { type: 'points', value: 150, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '普通祈愿值' },  // 8
+  { type: 'points', value: 100, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '基础祈愿值' },  // 9
+  { type: 'points', value: 50, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '微量祈愿值' },    // 10
+  { type: 'points', value: 20, icon: 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png', name: '少量祈愿值' }     // 11
 ])
 
 // 大富翁棋盘路径顺序 (0->1->2->3->4->5->6->7->8->9->10->11->0...)

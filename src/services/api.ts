@@ -66,8 +66,34 @@ export interface AuthResponse {
     isActive: boolean
     qqId?: string
     steamId64?: string
-    lastLoginAt?: string
+    lastLoginTime?: string  // 实际后端字段
+    lastLoginAt?: string    // 兼容旧命名（如果后端曾用过）
   }
+}
+
+// Steam 用户资料（与后端 steamProfile 对应字段，全部可选）
+export interface SteamUserProfile {
+  steamId?: string
+  personaName?: string
+  profileUrl?: string
+  avatar?: string
+  avatarMedium?: string
+  avatarFull?: string
+  realName?: string
+  countryCode?: string
+}
+
+// 完成 Steam 待注册返回的数据
+export interface SteamCompleteRegisterData {
+  token: string
+  user: ValidateTokenResponse
+  steamProfile?: SteamUserProfile
+  message?: string
+}
+
+export interface SteamRegisterPrefillData {
+  steamId64: string
+  qqId?: string | null
 }
 
 export interface ApiResponse<T> {
@@ -139,7 +165,8 @@ export interface UserProfileResponse {
   isActive: boolean
   qqId?: string
   steamId64?: string
-  lastLoginAt?: string
+  lastLoginTime?: string
+  lastLoginAt?: string // 兼容
 }
 
 export interface ValidateTokenResponse {
@@ -150,7 +177,8 @@ export interface ValidateTokenResponse {
   isActive: boolean
   qqId?: string
   steamId64?: string
-  lastLoginAt?: string
+  lastLoginTime?: string
+  lastLoginAt?: string // 兼容
 }
 
 // 抽奖相关类型定义
@@ -211,6 +239,110 @@ export interface LotteryPrize {
   probability: number
 }
 
+export type ShowcaseType = 'LIVE' | 'VIDEO'
+
+export type ShowcaseStatus = 'PUBLISHED' | 'REVIEWING' | 'REJECTED'
+
+export interface ShowcaseResponse {
+  id: number
+  type: ShowcaseType
+  status: ShowcaseStatus
+  title: string
+  author: string
+  coverUrl?: string
+  originalUrl: string
+  submittedBy?: string
+  submitterId?: number
+  submitterTag?: string | null
+  submitterTagColor?: string | null
+  createdAt: string
+}
+
+export interface ShowcaseAdminProfile {
+  admin: boolean
+  email?: string | null
+  tag?: string | null
+  tagColor?: string | null
+}
+
+export interface PagedResponse<T> {
+  items: T[]
+  total: number
+  page: number
+  size: number
+  hasNext: boolean
+}
+
+export interface ShowcaseListParams {
+  type?: ShowcaseType
+  status?: ShowcaseStatus
+  page?: number
+  size?: number
+}
+
+export const showcaseApi = {
+  async list(params: ShowcaseListParams = {}) {
+    const { type, status, page, size } = params
+    const searchParams = new URLSearchParams()
+    if (type) searchParams.append('type', type)
+    if (status) searchParams.append('status', status)
+    if (page !== undefined) searchParams.append('page', String(page))
+    if (size !== undefined) searchParams.append('size', String(size))
+    const query = searchParams.toString()
+    const response = await apiRequest<ApiResponse<PagedResponse<ShowcaseResponse>>>(
+      `/showcases${query ? `?${query}` : ''}`
+    )
+    if (!response.success || !response.data) {
+      throw new Error(response.message || '获取投稿列表失败')
+    }
+    return response.data
+  },
+  async submit(type: ShowcaseType, url: string) {
+    const response = await apiRequest<ApiResponse<ShowcaseResponse>>('/showcases', {
+      method: 'POST',
+      body: JSON.stringify({ type, url }),
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || '投稿失败')
+    }
+    return response.data
+  },
+  async update(id: number, payload: { url: string }) {
+    const response = await apiRequest<ApiResponse<ShowcaseResponse>>(`/showcases/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || '更新失败')
+    }
+    return response.data
+  },
+  async remove(id: number) {
+    const response = await apiRequest<ApiResponse<null>>(`/showcases/${id}`, {
+      method: 'DELETE',
+    })
+    if (!response.success) {
+      throw new Error(response.message || '删除失败')
+    }
+  },
+  async adminProfile() {
+    const response = await apiRequest<ApiResponse<ShowcaseAdminProfile>>('/showcases/admin/profile')
+    if (!response.success || !response.data) {
+      throw new Error(response.message || '查询管理员信息失败')
+    }
+    return response.data
+  },
+  async refresh(type?: ShowcaseType) {
+    const params = type ? `?type=${type}` : ''
+    const response = await apiRequest<ApiResponse<null>>(`/showcases/refresh${params}`, {
+      method: 'POST',
+    })
+    if (!response.success) {
+      throw new Error(response.message || '刷新失败')
+    }
+  },
+}
+
 // 认证API
 export const authApi = {
   // 用户登录
@@ -249,6 +381,96 @@ export const authApi = {
       }
     } catch (error) {
       console.error('注册失败:', error)
+      throw error
+    }
+  },
+
+  // 查询 Steam 待注册预填信息（例如服务器侧已绑定QQ）
+  async getSteamRegisterPrefill(payload: { steamId64: string; steamTicket: string }): Promise<SteamRegisterPrefillData> {
+    try {
+      const response = await fetch('/api/auth/steam/register-prefill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+
+      type PrefillRaw = {
+        success?: boolean
+        message?: string
+        data?: SteamRegisterPrefillData
+        steamId64?: string
+        qqId?: string | null
+      }
+      const json: PrefillRaw = await response.json()
+      if (!json.success) {
+        throw new Error(json.message || '获取Steam注册预填信息失败')
+      }
+      if (json.data) {
+        return json.data
+      }
+      return {
+        steamId64: json.steamId64 || payload.steamId64,
+        qqId: json.qqId ?? null
+      }
+    } catch (error) {
+      console.error('获取Steam注册预填信息失败:', error)
+      throw error
+    }
+  },
+
+  // 完成 Steam 待注册
+  async completeSteamRegister(payload: { steamId64: string; steamTicket: string; username: string; password: string; email?: string; qqId?: string }): Promise<SteamCompleteRegisterData> {
+    // 注意：Steam 完成注册接口目前后端路径为 /api/auth/steam/complete-register（无 /v1 前缀），
+    // 且返回结构为 { success:boolean, token, user, steamProfile?, message? }，并非统一的 ApiResponse 包装。
+    // 这里直接使用 fetch，避开 API_BASE_URL 叠加造成的 404。
+    try {
+      const response = await fetch('/api/auth/steam/complete-register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+
+      // 定义一个最小的可兼容类型，避免使用 any
+      type SteamCompleteRaw = {
+        success?: boolean
+        token?: string
+        user?: ValidateTokenResponse
+        steamProfile?: SteamUserProfile
+        message?: string
+        data?: {
+          token?: string
+          user?: ValidateTokenResponse
+          steamProfile?: SteamUserProfile
+          message?: string
+        }
+      }
+      const json: SteamCompleteRaw = await response.json()
+      if (!json.success) {
+        throw new Error(json.message || 'Steam 注册失败')
+      }
+
+      // 兼容两种结构：直接返回(token,user,...) 或 包在 data 里
+      const token = json.token ?? json.data?.token
+      const user = json.user ?? json.data?.user
+      const steamProfile = json.steamProfile ?? json.data?.steamProfile
+      const message = json.message ?? json.data?.message
+
+      if (!token || !user) {
+        throw new Error('返回数据缺少 token 或 user')
+      }
+
+      localStorage.setItem('authToken', token)
+      return { token, user, steamProfile, message }
+    } catch (error) {
+      console.error('Steam 完成注册失败:', error)
       throw error
     }
   },
@@ -421,6 +643,38 @@ export const bindingApi = {
   }
 }
 
+// Steam 绑定辅助 API（自动绑定版）
+export const steamBindApi = {
+  async getBindLoginUrl(): Promise<string> {
+    // 允许后端两种结构：统一包装 / 或直接返回
+    // 新方案：后端改为 /bind-start，返回 { success:true, loginUrl, bindSessionId }
+    const resp = await apiRequest<unknown>('/auth/steam/bind-start', { method: 'GET' })
+    // 可能是统一包装，也可能直接 {success:true, loginUrl:"..."}
+    if (typeof resp === 'object' && resp !== null) {
+      // 直接结构
+      const direct = resp as { success?: boolean; loginUrl?: string; message?: string; data?: { loginUrl?: string } }
+      if (direct.success && direct.data?.loginUrl) return direct.data.loginUrl
+      if (direct.success && direct.loginUrl) return direct.loginUrl
+      if ('success' in direct) throw new Error(direct.message || '获取Steam绑定登录URL失败')
+      if (direct.loginUrl) return direct.loginUrl
+    }
+    throw new Error('获取Steam绑定登录URL失败')
+  },
+  async completeBind(steamId64: string, ticket: string): Promise<{ steamId64:string; remainingCount:number; message?:string }> {
+    const raw = await apiRequest<unknown>('/auth/steam/complete-bind', {
+      method: 'POST',
+      body: JSON.stringify({ steamId64, ticket })
+    })
+    if (typeof raw === 'object' && raw !== null) {
+      const variant = raw as { success?: boolean; data?: { steamId64:string; remainingCount:number; message?:string }; steamId64?:string; remainingCount?:number; message?:string }
+      if (variant.success && variant.data) return variant.data
+      if (variant.success && variant.steamId64) return { steamId64: variant.steamId64, remainingCount: variant.remainingCount ?? 0, message: variant.message }
+      if (variant.success === false) throw new Error(variant.message || 'Steam绑定失败')
+    }
+    throw new Error('Steam绑定失败')
+  }
+}
+
 // 贡献者相关类型定义
 export interface Supporter {
   name: string
@@ -430,6 +684,7 @@ export interface Supporter {
 export interface ContributeResponse {
   donors: Supporter[]
   techSupporters: Supporter[]
+  specialThanks: Supporter[]
 }
 
 // 贡献者API
@@ -443,6 +698,185 @@ export const contributeApi = {
       throw error
     }
   },
+}
+
+export interface SponsorVerifyData {
+  found: boolean
+  valid: boolean
+  orderId: string
+  status?: number
+  afdianUserId?: string
+  afdianUserPrivateId?: string
+  afdianUserName?: string
+  sourceUserId?: string
+  planId?: string
+  sponsorType?: string
+  sponsorContent?: string
+  sponsorItem?: string
+  month?: number
+  totalAmount?: string
+  showAmount?: string
+  remark?: string
+  redeemed?: boolean
+  itemInserted?: boolean
+  steamId64?: string
+  userId?: number
+  username?: string
+  message?: string
+}
+
+export interface SponsorChangeRequestRow {
+  id: number
+  userId: number
+  username?: string
+  currentAfdianUserId?: string
+  targetAfdianUserId?: string
+  targetAfdianUserName?: string
+  orderId?: string
+  status?: string
+  createTime?: string
+}
+
+export interface SponsorChangeRequestCreate {
+  orderId: string
+}
+
+export interface SponsorChangeRequestAction {
+  requestId: number
+  note?: string
+}
+
+export interface SponsorAdminRow {
+  orderId: string
+  username?: string
+  userId?: number
+  steamId64?: string
+  afdianUserId?: string
+  afdianUserPrivateId?: string
+  afdianUserName?: string
+  sourceUserId?: string
+  planId?: string
+  sponsorType?: string
+  sponsorContent?: string
+  sponsorItem?: string
+  month?: number
+  totalAmount?: string
+  showAmount?: string
+  status?: number
+  claimed?: boolean
+  redeemTime?: string
+}
+
+export interface SponsorAdminItem {
+  id: number
+  name: string
+  itemValue: string
+}
+
+export interface SponsorAdminAddRequest {
+  steamId64: string
+  sponsorType: string
+  sponsorContent: string
+  sponsorItem: string
+  displayName: string
+}
+
+export const sponsorApi = {
+  async verify(orderId: string): Promise<SponsorVerifyData> {
+    const response = await apiRequest<ApiResponse<SponsorVerifyData>>('/sponsor/verify', {
+      method: 'POST',
+      body: JSON.stringify({ orderId })
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'verify failed')
+    }
+    return response.data
+  },
+  async redeem(orderId: string): Promise<SponsorVerifyData> {
+    const response = await apiRequest<ApiResponse<SponsorVerifyData>>('/sponsor/redeem', {
+      method: 'POST',
+      body: JSON.stringify({ orderId })
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'redeem failed')
+    }
+    return response.data
+  },
+  async me(): Promise<SponsorVerifyData | null> {
+    const response = await apiRequest<ApiResponse<SponsorVerifyData>>('/sponsor/me')
+    if (!response.success) {
+      throw new Error(response.message || 'me failed')
+    }
+    return response.data ?? null
+  },
+  async adminList(): Promise<SponsorAdminRow[]> {
+    const response = await apiRequest<ApiResponse<SponsorAdminRow[]>>('/sponsor/admin/list')
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'admin list failed')
+    }
+    return response.data
+  },
+  async adminItems(): Promise<SponsorAdminItem[]> {
+    const response = await apiRequest<ApiResponse<SponsorAdminItem[]>>('/sponsor/admin/items')
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'admin items failed')
+    }
+    return response.data
+  },
+  async adminAdd(payload: SponsorAdminAddRequest): Promise<SponsorVerifyData> {
+    const response = await apiRequest<ApiResponse<SponsorVerifyData>>('/sponsor/admin/add', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'admin add failed')
+    }
+    return response.data
+  },
+  async adminRevoke(orderId: string): Promise<void> {
+    const response = await apiRequest<ApiResponse<null>>('/sponsor/admin/revoke', {
+      method: 'POST',
+      body: JSON.stringify({ orderId })
+    })
+    if (!response.success) {
+      throw new Error(response.message || 'revoke failed')
+    }
+  },
+  async changeRequest(orderId: string): Promise<SponsorChangeRequestRow> {
+    const response = await apiRequest<ApiResponse<SponsorChangeRequestRow>>('/sponsor/change-request', {
+      method: 'POST',
+      body: JSON.stringify({ orderId })
+    })
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'change request failed')
+    }
+    return response.data
+  },
+  async adminChangeRequests(): Promise<SponsorChangeRequestRow[]> {
+    const response = await apiRequest<ApiResponse<SponsorChangeRequestRow[]>>('/sponsor/admin/change-requests')
+    if (!response.success || !response.data) {
+      throw new Error(response.message || 'change request list failed')
+    }
+    return response.data
+  },
+  async adminApproveChange(requestId: number, note?: string): Promise<void> {
+    const response = await apiRequest<ApiResponse<null>>('/sponsor/admin/change-requests/approve', {
+      method: 'POST',
+      body: JSON.stringify({ requestId, note })
+    })
+    if (!response.success) {
+      throw new Error(response.message || 'approve failed')
+    }
+  },
+  async adminRejectChange(requestId: number, note?: string): Promise<void> {
+    const response = await apiRequest<ApiResponse<null>>('/sponsor/admin/change-requests/reject', {
+      method: 'POST',
+      body: JSON.stringify({ requestId, note })
+    })
+    if (!response.success) {
+      throw new Error(response.message || 'reject failed')
+    }
+  }
 }
 
 // 抽奖API

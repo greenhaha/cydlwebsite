@@ -3,7 +3,7 @@
     <!-- 专属背景 -->
     <div class="fixed inset-0 w-full h-full">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-           style="background-image: url('https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
+           style="background-image: url('https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/bg1.webp')">
       </div>
     </div>
     <div class="pointer-events-none fixed inset-0 z-0"></div>
@@ -15,7 +15,7 @@
         <div class="w-full !mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div class="flex items-center justify-between">
             <RouterLink
-              to="/"
+              to="/home"
               class="inline-flex items-center px-4 py-2 text-white/90 hover:text-white transition-colors duration-350 rounded-lg hover:bg-white/20 bg-black/30"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,7 +28,7 @@
             <div v-if="authStore.isAuthenticated" class="flex items-center space-x-3">
               <!-- 祈愿值显示 -->
               <div class="flex items-center h-[50px] !mr-4 space-x-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg border border-purple-400/50">
-                <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-6 h-6" alt="祈愿值">
+                <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-6 h-6" alt="祈愿值">
                 <span class="text-yellow-300 font-bold">{{ userWishPoints }}</span>
                 <span class="text-white/80 text-sm">祈愿值</span>
               </div>
@@ -156,7 +156,7 @@
               <!-- 价格 -->
               <div class="flex items-center justify-between !mb-4">
                 <div class="flex items-center space-x-2">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-5 h-5" alt="祈愿值">
+                  <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-5 h-5" alt="祈愿值">
                   <span class="text-yellow-300 font-bold text-lg">{{ good.wishPoints }}</span>
                 </div>
                 <span class="text-gray-400 text-sm" v-if="!good.canExchange">已兑换</span>
@@ -221,7 +221,7 @@
               </div>
               <div class="text-right">
                 <div class="flex items-center space-x-1">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-4 h-4" alt="祈愿值">
+                  <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-4 h-4" alt="祈愿值">
                   <span class="text-yellow-300 font-bold">-{{ record.wishPointsUsed || 0 }}</span>
                 </div>
                 <span
@@ -256,7 +256,7 @@
               <div class="text-left !ml-4">
                 <h4 class="text-white font-medium">{{ selectedGood.name }}</h4>
                 <div class="flex items-center space-x-2 mt-1">
-                  <img src="https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-4 h-4" alt="祈愿值">
+                  <img src="https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/qiyun.png" class="w-4 h-4" alt="祈愿值">
                   <span class="text-yellow-300 font-bold">{{ selectedGood.wishPoints }}</span>
                 </div>
               </div>
@@ -564,7 +564,7 @@ const loadExchangeHistory = async () => {
 // 处理图片错误
 const handleImageError = (event: Event) => {
   const target = event.target as HTMLImageElement
-  target.src = 'https://greenhaha.oss-cn-beijing.aliyuncs.com/frontend/assets/image/image-gallery.png'
+  target.src = 'https://hlympic.oss-cn-beijing.aliyuncs.com/frontend/assets/image/image-gallery.png'
 }
 
 // 格式化日期时间

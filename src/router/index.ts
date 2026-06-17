@@ -7,6 +7,15 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      redirect: '/portal',
+    },
+    {
+      path: '/portal',
+      name: 'portal',
+      component: () => import('../views/PortalView.vue'),
+    },
+    {
+      path: '/home',
       name: 'home',
       component: HomeView,
     },
@@ -42,7 +51,6 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/GiftView.vue'),
-      meta: { requiresAuth: true }, // 需要登录
     },
     {
       path: '/contribute',
@@ -68,14 +76,6 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/LotteryView.vue'),
       meta: { requiresAuth: true }, // 需要登录
-    },
-    {
-      path: '/lottery-test',
-      name: 'lottery-test',
-      // route level code-splitting
-      // this generates a separate chunk for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/LotteryTestView.vue'),
     },
     {
       path: '/challenge',
@@ -153,15 +153,19 @@ const router = createRouter({
       component: () => import('../views/HotpointsExchangeView.vue'),
       meta: { requiresAuth: true, hideFooter: true }, // 次级页面
     },
-    // 临时移除不存在的ActivityTestView路由
     // {
-    //   path: '/activity-test',
-    //   name: 'activity-test',
     //   // route level code-splitting
     //   // this generates a separate chunk for this route
     //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/ActivityTestView.vue'),
     // },
+    {
+      path: '/app-download',
+      name: 'app-download',
+      // route level code-splitting
+      // this generates a separate chunk for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AppDownloadView.vue'),
+    },
   ],
 })
 
@@ -188,7 +192,7 @@ router.beforeEach(async (to, from, next) => {
   // 检查是否为游客页面（已登录用户不应访问）
   if (to.matched.some(record => record.meta.requiresGuest)) {
     if (authStore.isAuthenticated) {
-      next('/')
+      next('/home')
       return
     }
   }
